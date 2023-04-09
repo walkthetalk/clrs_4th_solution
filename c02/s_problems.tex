@@ -1,0 +1,322 @@
+\startsubject[
+  title={Problems},
+]
+%p2-1
+\startPROBLEM
+在歸並排序中對小數列使用插入排序。
+
+雖然最壞情況下，歸并排序運行時間為 $\Theta(n\lg n)$，
+而插入排序為 $\Theta(n^2)$，
+但在許多機器上對於小規模問題，
+由於插入排序的常係數很小，
+反而比歸并排序還要快一些。
+因此在歸并排序中，儅子問題規模足夠小時，
+可以改用插入排序來處理。
+嘗試改進歸并排序，
+對於 $n/k$ 個子數列分別進行插入排序，
+然後再用標準的歸并算法進行合并。
+其中 $k$ 待定。
+\startigBase[a]
+
+\item 證明對 $n/k$ 個長度爲 $k$ 的子列進行插入排序，所需時間最長為 $\Theta(nk)$。
+
+\startANSWER
+設對長度爲 $k$ 的數列進行插入排序所用時間爲 \m{a k^2 + b k + c}，則總時間爲：
+\startformula
+\frac{n}{k}(a k^2 + b k + c) = a n k + b n + \frac{c n}{k} = \Theta(nk)
+\stopformula
+\stopANSWER
+
+\item 證明歸並這些子列所需時間最多為 $\Theta(n \lg(n/k))$。
+
+\startANSWER
+對 $a$ 個長度爲 $k$ 的子列進行歸並排序所需時間爲：
+\startformula
+T(a) = \startcases
+\NC 0	\NC \text{若 $a = 1$，} \NR
+\NC 2 T(a/2) + a k \NC \text{若 $a = 2^p$， $p > 0$。} \NR
+\stopcases
+\stopformula
+
+設 $G(a) = \frac{T(a)}{a}$，則：
+\startsplitformula\startalign
+\NC G(a)	\NC = \frac{T(a)}{a} \NR
+\NC 		\NC = \frac{2 T(a/2) + a k}{a} \NR
+\NC		\NC = \frac{T(a/2)}{a/2} + k \NR
+\NC		\NC = G(a/2) + k \NR
+\stopalign\stopsplitformula
+即
+\startformula
+G(a) = \startcases
+\NC 0	\NC \text{若 $a = 1$，}\NR
+\NC G(a/2) + k \NC \text{若 $a = 2^p$， $p > 0$。} \NR
+\stopcases
+\stopformula
+
+設 $H(p) = G(2^p)$，則：
+\startsplitformula\startalign
+\NC H(p)	\NC = G(2^p) \NR
+\NC		\NC = G(2^p/2) + k \NR
+\NC		\NC = G(2^{p-1}) + k \NR
+\NC		\NC = H(p-1) + k \NR
+\stopalign\stopsplitformula
+即
+\startformula
+H(p) = \startcases
+\NC 0	\NC \text{若 $p = 0$，} \NR
+\NC H(p-1) + k \NC \text{若 $p > 0$。} \NR
+\stopcases
+\stopformula
+
+\startsplitformula\startalign
+\NC H(p) \NC = k p \NR
+\NC G(2^p) \NC = kp \NR
+\NC G(a) \NC = k \lg(a) \NR
+\NC \frac{T(a)}{a} \NC = k \lg(a) \NR
+\NC T(a) \NC = k a \lg(a) \NR
+\NC T(\frac{n}{k}) \NC = k \frac{n}{k} \lg(\frac{n}{k}) \NR
+\NC		\NC = n \lg(\frac{n}{k}) \NR
+\NC     \NC \Theta(n \lg(n/k)) \NR
+\stopalign\stopsplitformula
+\stopANSWER
+
+\item 假定修改後的算法運行時間爲 $\Theta(nk+n \lg(n/k))$，
+$k$ 最大爲多少時（作爲 $n$ 的函式），新算法與原歸並排序算法所用時間相同？
+
+\startANSWER
+\startsplitformula\startalign
+\NC k \NC = \lg(n) \NR
+\NC \Theta(nk + n \lg(n/k)) \NC = \Theta(n \lg(n) + n \lg(\frac{n}{\lg(n)}) \NR
+\NC			\NC = \Theta(n \lg(n)) \NR
+\stopalign\stopsplitformula
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+%p2-2
+\startPROBLEM
+冒泡排序的正確性
+
+冒泡排序通俗易懂，但效率不高。
+他通過重複交換兩個（次序顛倒的）相鄰元素的方式進行排序。
+例程 \ALGO{BUBLLE-SORT} 對數列 $A[1:n]$ 進行排序。
+
+\CLRSH{BUBBLE-SORT(A, n)}
+\startCLRSCODE
+for i = 1 to n - 1
+	for j = n downto i + 1
+		if A[j] < A[j - 1]
+			// 交換 $A[j]$ 和 $A[j - 1]$
+\stopCLRSCODE
+
+\startigBase[a]
+\item 在數列 $A$ 上執行 \ALGO{BUBBLE-SORT(A,n)} 後變爲數列 $A'$，
+要證明算法的正確性，
+除了要證明
+\startformula
+A'[1]\le A'[2]\le \cdots \le A'[n]
+\stopformula
+之外，還需要證明什麼？
+\stopigBase
+
+\startANSWER
+還需要證明排序完成後，新數列包含舊數列中的所有元素。
+\stopANSWER
+
+\startigBase[continue]
+\item 分析並證明內層 \CLRSCODE{for} 循環的循環不變性。
+要求使用本章所展示的證明方式。
+\stopigBase
+
+\startANSWER
+\TODO{略。}
+\stopANSWER
+
+\startigBase[continue]
+\item 利用上一問所證明的循環不變性的終止條件，
+分析外層循環的循環不變性，並以此證明不等式（2.5）。
+要求使用本章所展示的證明方式。
+\stopigBase
+
+\startANSWER
+\TODO{略。}
+\stopANSWER
+
+\startigBase[continue]
+\item 冒泡排序在最差情況下運行時間怎樣？
+與插入排序相比如何？
+\stopigBase
+
+\startANSWER
+冒泡排序的比較次數最多爲：$\sum_{i=1}^{n-1}{n-i} = \frac{n(n - 1)}{2}$，
+相應的交換次數也一樣，所以最壞情況下所用時間爲 $\Theta(n^2)$，
+與插入排序所用時間相同。
+
+通常，兩種算法最好情況下時間均爲 $\Theta(n)$，
+但是此處的實現卻爲 $\Theta(n^2)$。
+要想在最好情況下達到 $\Theta(n)$，
+在外部循環中，如果沒有發生任何交換就直接返回。
+
+另外，冒泡排序會比插入排序慢很多，
+因爲交換所引入的賦值操作太多了。
+\stopANSWER
+
+\stopPROBLEM
+
+%p2-3
+\startPROBLEM
+现有多项式：
+\startsplitformula\startmathalignment
+\NC P(x) \NC = \sum_{k=0}^{n} a_kx^k \NR
+\NC \NC = a_0 + a_1 x + a_2 x^2 + \cdots + a_{n-1}x^{n-1} + a_n x^n \NR
+\stopmathalignment\stopsplitformula
+给定系数 $a_0,a_1,a_2,\cdots,a_n$ 后，
+可以按 Horner 定律計算多項式的值：
+\startformula
+P(x) = a_0 + x(a_1 + x(a_2 + \cdots + x(a_{n-1} + xa_n) \cdots))
+\stopformula
+具體實現如下：
+
+\CLRSH{HORNER(A, n, x)}
+\startCLRSCODE
+p = 0
+for i = n downto 0
+	p = A[i] + x \cdot p
+return p
+\stopCLRSCODE
+
+\startigBase[a]
+\item 用 $\Theta$ 表示此例程的運行時間。
+
+\startANSWER
+$\Theta(n)$
+\stopANSWER
+
+\item 按此多項式的原始定義來計算，需要多少時間？
+
+\startANSWER
+\startCLRSCODE
+p = 0
+for i = 0 to n
+	m = 1
+	for k = 1 to i
+		m = m \cdot x
+	p = p + A[i] \cdot m
+\stopCLRSCODE
+所用時間爲 $\Theta(n^2)$。
+\stopANSWER
+
+\item 分析 \ALGO{HORNER} 的循環不變性。
+每次迭代前：
+\startformula
+y = \sum_{k=0}^{n-(i+1)} A_{k+i+1}\cdot x^k
+\stopformula
+將空多項式求和結果定義爲 0。
+以本章循環不變性的證明方式，
+證明最終結果爲：
+\startformula
+y = \sum_{k=0}^n a_kx^k
+\stopformula
+
+\startANSWER
+每次迭代完成後：
+\startsplitformula\startalign
+\NC p \NC = A_i + x \sum_{k=0}^{n-(i+1)}A_{k+i+1}x^k \NR
+\NC	\NC = A_i x^0 + \sum_{k=0}^{n-i-1}A_{k+i+1}x^{k+1} \NR
+\NC	\NC = A_i x^0 + \sum_{k=1}^{n-i}A_{k+i}x^{k} \NR
+\NC	\NC = \sum_{k=0}^{n-i}A_{k+i}x^{k} \NR
+\stopalign\stopsplitformula
+最後一次 $i$ 爲 $0$，
+代入上式可得 $p = \sum_{k=0}^{n}a_{k}x^{k}$。
+\stopANSWER
+
+\stopigBase
+
+\stopPROBLEM
+
+%p2-4
+\startPROBLEM[problem:inversion]
+逆序對（Inversion)
+
+數列 $A[1:n]$ 中的 $n$ 個數各不相同。
+如果 $i<j$ 且 $A[i]>A[j]$，
+則稱 $(i,j)$ 為 $A$ 的逆序對。
+\startigBase[a]
+\item 列出數列 $\langle 2,3,8,6,1\rangle$ 中的五個逆序對。
+
+\startANSWER
+$(2,1),(3,1),(8,6),(8,1),(6,1)$
+\stopANSWER
+
+\item 如果數列 $A$ 中所有元素全部取自集合 $\{1,2,\cdots,n\}$，
+如何使 $A$ 中的逆序對最多，最多是多少？
+
+\startANSWER
+$\langle n, n-1, \cdots, 1\rangle$，
+其逆序對數目爲 $(n-1)+(n-2)+\cdots+1=\frac{n(n-1)}{2}$。
+\stopANSWER
+
+\item 插入排序的運行時間與數列中逆序對的數目有什麼關系？
+試驗證你的結論。
+
+\startANSWER
+$\Theta(n+d)$，其中 $d$ 爲逆序對的數目，
+$n$ 爲外層循環所用時間。
+\stopANSWER
+
+\item 給出算法以確定數列中逆序對的數目。
+要求最壞情況下所用時間爲 $\Theta(n\lg n)$，
+$n$為數列中元素數目。
+
+\startANSWER
+用歸并排序解決此問題。
+空間占用為 $\Theta(n)$。
+最差運行時間爲 $\Theta(n\lg n)$。
+
+\CLRSH{INVERSIONS_COUNT(A, p, r)}
+\startCLRSCODE
+if p < r
+	inversions = 0
+	q = (p + r) / 2
+	inversions += \ALGO{INVERSIONS-COUNT(A, p, q)}
+	inversions += \ALGO{INVERSIONS-COUNT(A, q + 1, r)}
+	inversions += \ALGO{INVERSIONS-MERGE(A, p, q, r)}
+	return inversions
+else
+	return 0
+\stopCLRSCODE
+
+\CLRSH{INVERSIONS_MERGE(A, p, q, r)}
+\startCLRSCODE
+n_1 = q - p + 1
+n_2 = r - q
+// let $L[1..n_1]$ and $R[1..n_2]$ be new arrays
+for i = 1 to n_1
+	L[i] = A[p + i - 1]
+for j = 1 to n_2
+	R[j] = A[q + j]
+i = 1
+j = 1
+for k = p to r
+	if i > n_1
+		A[k] = R[j]
+		j = j + 1
+	else if j > n_2
+		A[k] = L[i]
+		i = i + 1
+	else if L[i] \le R[j]
+		A[k] = L[i]
+		i = i + 1
+	else
+		A[k] = R[j]
+		j = j + 1
+		inversions += n_1 - i
+return inversions
+\stopCLRSCODE
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+\stopsubject

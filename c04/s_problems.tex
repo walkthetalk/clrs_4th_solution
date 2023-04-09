@@ -1,0 +1,695 @@
+\startsubject[
+  title={Problems},
+]
+
+%p4-1
+\startPROBLEM（遞迴示例）
+對於下列遞迴式，給出 $T(n)$ 的漸進上緊界和下緊界，
+並驗證其正確性。
+\startigBase[n]
+% a
+\item $T(n) = 2 T(n/2) + n^3$
+
+\startANSWER
+$\Theta(n^3)$ （主定理）
+\stopANSWER
+
+% b
+\item $T(n) = T(8n/11) + n$
+
+\startANSWER
+$\Theta(n)$ （主定理， $\log_{11/8} 1 = 0$）
+\stopANSWER
+
+% c
+\item $T(n) = 16 T(n/4) + n^2$
+
+\startANSWER
+$\Theta(n^2\lg n)$ （主定理）
+\stopANSWER
+
+% d
+\item $T(n) = 4 T(n/2) + n^2\lg n$
+
+\startANSWER
+$\Theta(n^2\lg^2 n)$ （主定理）
+\stopANSWER
+
+% e
+\item $T(n) = 8 T(n/3) + n^2$
+
+\startANSWER
+$\Theta(n^2)$ （主定理）
+\stopANSWER
+
+% f
+\item $T(n) = 7 T(n/2) + n^2\lg n$
+
+\startANSWER
+$\Theta(n^{\log_2 7})$ （主定理）
+\stopANSWER
+
+% g
+\item $T(n)=2T(n/4) + \sqrt{n}$
+
+\startANSWER
+$\Theta(n^{1/2}\lg n)$ （主定理）
+\stopANSWER
+
+% h
+\item $T(n) = T(n-2) + n^2$
+
+\startANSWER
+$T(n) = n^2 + T(n-2)
+  = n^2 + (n-2)^2 + T(n-4)
+  = \sum_{i=0}^{n/2}(n-2i)^2 = \Theta(n^3)$
+\stopANSWER
+\stopigBase
+\stopPROBLEM
+
+%p4-2
+\startPROBLEM（參數傳遞代價）
+本書中自始至終假設：過程調用中的參數傳遞花費常量時間，
+即使傳遞一個有 $N$ 個元素的數列亦是如此。
+在大多數系統中，這個假設是成立的，因爲傳遞的是數列的指標，而非數列本身。
+本題討論三種參數傳遞策略：
+\startigBase[n]
+\item 通過指標傳遞數列。時間爲 $\Theta(1)$。
+\item 通過復制元素傳遞數列。時間爲 $\Theta(N)$，其中 $N$ 是數列的規模。
+\item 傳遞數列時，只復制過程可能存取的子區域。若子數列包含 $n$ 個元素，則時間爲 $\Theta(n)$。
+\stopigBase
+
+分別給出這三種策略下，
+下列三個算法最壞情況下的運行時間遞迴式 $T_{a1}(N,n), T_{a2}(N,n),\cdots,T_{c3}(N,n)$，
+並求解：
+\startigBase[a]
+% a
+\startitem[parameter_pass_cost_item]
+在有序數列中查找元素的遞迴二分查找算法（參見\inexercise[bin_search]）。
+\stopitem
+\startANSWER
+\startigBase[n]
+\item $T(N,n) = T(N,n/2) + c = \Theta(\lg n)$
+\item $T(N,n) = T(N,n/2) + cN = T(N,n/4) + 2cN = \sum_{i=0}^{\lg n - 1}(2^i cN/2^i) = cN\lg n = \Theta(N\lg n)$
+\item $T(N,n) = T(N,n/2) + cn = \Theta(n)$
+\stopigBase
+\stopANSWER
+
+% b
+\startitem
+節 2.3.1 中的 \ALGO{MERGE-SORT} 算法。
+\stopitem
+\startANSWER
+\startigBase[n]
+\item $T(N,n) = 2T(N,n/2) + cn = \Theta(n\lg{n})$
+\item
+\startsplitformula\startmathalignment
+\NC T(N,n) \NC= 2T(N,n/2) + cn + 2N \NR
+\NC      \NC= 2(2T(N,n/4) + cn/2 + 2N) + cn + 2N \NR
+\NC      \NC= 4T(N,n/4) + 2cn + (2+4)N \NR
+\NC      \NC= 4(2T(N,n/8) + c(n/4) + 2N) + 2cn + (2+4)N \NR
+\NC      \NC= 8T(N,n/8) + 3cn + (2+4+8)N \NR
+\NC      \NC= \cdots \NR
+\NC      \NC= nT(1) + cn\lg n + N(n-2) \NR
+\NC      \NC=\Theta(Nn) \NR
+\stopmathalignment\stopsplitformula
+\item $T(N,n) = 2T(N,n/2) + cn + n = 2T(N,n/2) + (c+1)n = \Theta(n\lg{n})$
+\stopigBase
+\stopANSWER
+
+% c
+\startitem
+節 4.1 中的 \ALGO{MATRIX-MULTIPLY-RECURSIVE}。即公式（4.9）：
+\startformula
+T(n)=8T(n/2)+\Theta(1)
+\stopformula
+\stopitem
+\startANSWER
+\startigBase[n]
+\item $T(N,n) = 8T(N,n/2) + \Theta(1) = \Theta(n^3)$
+\item $T(N,n) = 8T(N,n/2) + \Theta(N^2) = \Theta(n N^2)$
+\item $T(N,n) = 8T(N,n/2) + \Theta(n^2) = \Theta(n^3)$
+\stopigBase
+\stopANSWER
+\stopigBase
+\stopPROBLEM
+
+%p4-3
+\startPROBLEM（通過更改變量來求解遞迴式）
+有時，可以通過代數變換將一些陌生的遞迴式變成常見的形式。
+下面我們就用這種方法來求解遞迴式：
+\startformula
+T(n)=2T(\sqrt{n})+\Theta(\lg n)	\hfill (4.25)
+\stopformula
+\startigBase[a]
+% a
+\startitem
+令 $m=\lg n$， $S(m)=T(2^m)$。
+用 $m$ 和 $S(m)$ 重寫遞迴式（4.25）。
+\stopitem
+\startANSWER
+$S(m)=2S(m/2)+\Theta(m)$
+\stopANSWER
+
+% b
+\startitem
+求解 $S(m)$。
+\stopitem
+\startANSWER
+$S(m)=\Theta(m\lg m)$。
+\stopANSWER
+
+% c
+\startitem
+利用 $S(m)$ 的解證明 $T(n)=\Theta(\lg n \lg\lg n)$。
+\stopitem
+\startANSWER
+$T(n)=S(m)=\Theta(m\lg m)=\Theta(\lg n\lg\lg n)$
+\stopANSWER
+
+% d
+\startitem
+畫出（4.25）的遞迴樹，並解釋爲什麼 $T(n)=\lg n\lg\lg n$。
+\stopitem
+\startANSWER
+遞迴數的每一層都是 $\lg n$，一共 $\lg\lg n$ 層。
+\stopANSWER
+
+利用此方法求解下列遞迴式：
+% e
+\startitem
+$T(n)=2T(\sqrt{n}) + \Theta(1)$
+\stopitem
+\startANSWER
+$T(n)=\Theta(\lg\lg n)$
+\stopANSWER
+
+% f
+\startitem
+$T(n)=3T(\sqrt[3]{n}) + \Theta(n)$
+\stopitem
+\startANSWER
+令 $m=\log_3 n$， $S(m)=T(3^m)$：
+\startformula
+S(m)=T(3^m)=3S(m/3) + \Theta(3^m)
+\stopformula
+$T(n)=\Theta(n)$
+\stopANSWER
+\stopigBase
+\stopPROBLEM
+
+%p4-4
+\startPROBLEM（更多遞迴式例子）
+對於下列遞迴式，給出 $T(n)$ 的漸進上緊界和下緊界，
+並驗證其正確性。
+\startigBase[a]
+\item $T(n) = 4T(n/3) + n\lg{n}$
+
+\startANSWER
+$\Theta(n^{\log_3 4})$
+\stopANSWER
+
+\item $T(n) = 3T(n/3) + n/\lg{n}$
+
+\startANSWER
+$\Theta(n \lg \lg n)$ （參見\initem[Tnlgn]）
+\stopANSWER
+
+\item $T(n) = 8T(n/2) + n^3\sqrt{n}$
+
+\startANSWER
+$\Theta(n^2\sqrt{n}) = \Theta(n^{2.5})$ \hfill（主定理 \m{\log_2{4} = 2 < 2.5}）
+\stopANSWER
+
+% d
+\item $T(n) = 2T(n/2 - 2) + n/2$
+
+\startANSWER
+可以忽略 $-2$，用主定理可得 $\Theta(n\lg{n})$。
+\stopANSWER
+
+% e
+\item[item:Tnlgn] $T(n) = 2T(n/2) + n/\lg{n}$
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC T(n) \NC= 2T(n/2) + \frac{n}{\lg{n}} \NR
+\NC      \NC= 4(n/4) + 2\frac{n/2}{\lg(n/2)} + \frac{n}{\lg{n}} \NR
+\NC      \NC= 4T(n/4) + \frac{n}{\lg{n} - 1} + \frac{n}{\lg{n}} \NR
+\NC      \NC= nT(1) + \sum_{i=0}^{\lg{n} - 1}\frac{n}{\lg{n}-i} \NR
+\NC      \NC= nT(1) + n\sum_{i=1}^{\lg{n}}\frac{1}{\lg{n}} \NR
+\NC      \NC= \Theta(n\lg\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% f
+\item $T(n) = T(n/2) + T(n/4) + T(n/8) + n$
+
+\startANSWER
+猜測 $T(n)=\Theta(n)$：
+\startsplitformula\startmathalignment
+\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \le (7/8)cn + n \le cn = O(n) \quad (c \ge 8) \NR
+\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \ge (7/8)cn + n \ge cn = \Omega(n) \quad (c \le 8) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% g
+\item $T(n) = T(n - 1) + 1/n$
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC T(n) \NC= T(n-1) + 1/n \NR
+\NC      \NC= \frac{1}{n} + \frac{1}{n-1} + T(n-2) \NR
+\NC      \NC= \frac{1}{n} + \frac{1}{n-1} + \frac{1}{n-2} + T(n-3) \NR
+\NC      \NC= \sum_{i=0}^{n-1}\frac{1}{n-i} \NR
+\NC      \NC= \sum_{i=1}^n\frac{1}{i} \NR
+\NC      \NC= \Theta(\lg{n})
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% h
+\item $T(n) = T(n - 1) + \lg{n}$
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC T(n) \NC= \lg{n} + T(n-1) \NR
+\NC      \NC= \lg{n} + \lg{n-1} + T(n-2) \NR
+\NC      \NC= \sum_{i=0}^{n-1}\lg(n - i) \NR
+\NC      \NC= \sum_{i=1}^{n}\lg{i} \NR
+\NC      \NC= \lg(n!) \NR
+\NC      \NC= \Theta(n\lg{n}) \qquad \text{$n^{n/2}\le n! \le n^n$} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% i
+\item $T(n) = T(n - 2) + 1/\lg n$
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC T(n) \NC= \frac{1}{\lg{n}} + \frac{1}{\lg(n-2)} + \cdots + \frac{1}{\lg 2} + c\NR
+\NC      \NC= \sum_{i=1}^{n/2}\frac{1}{\lg(2i)} \NR
+\NC      \NC= \Theta(\lg\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% j
+\item $T(n) = \sqrt{n}T(\sqrt{n}) + n$
+
+\startANSWER
+猜測 $T(n)=\Theta(n\lg\lg n)$，
+即 $c_1 n\lg\lg n\le T(n) \le c_2 n\lg\lg{n}$，
+其中 $c_1>0,c_2>0$：
+\startsplitformula\startmathalignment
+\NC T(n) \NC= \sqrt{n}c\sqrt{n}\lg\lg\sqrt{n} + n \NR
+\NC      \NC= cn\lg\lg\sqrt{n} + n \NR
+\NC      \NC= cn\lg\frac{\lg{n}}{2} + n \NR
+\NC      \NC= cn\lg\lg{n} - cn\lg{2} + n \NR
+\NC      \NC= cn\lg\lg{n} + (1 - c)n \NR
+\stopmathalignment\stopsplitformula
+因此 $c_1<1,c_2>1$ 時，有 $T(n)=\Theta(n\lg\lg n)$。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+%p4-5
+\startPROBLEM[problem:generating_function] （Fibonacci 數）
+本題討論遞迴式（3.22）所定義的 Fibonacci 數的性質。
+我們將使用生成函數技術來求解 Fibonacci 遞迴式。
+\emph{生成函數 generating function}（又稱\emph{形式冪級數 formal power series}） ${\cal F}$ 定義爲：
+\startsplitformula\startmathalignment
+\NC {\cal F}(z) \NC= \sum_{i=0}^{\infty}F_iz^i \NR
+\NC                \NC= 0 + z + z^2 + 2z^3 + 3z^4 + 5z^5 + 8z^6 + 13z^7 + 21z^8 + \cdots \NR
+\stopmathalignment\stopsplitformula
+其中 $F_i$ 是第 $i$ 個 Fibonacci 數。
+
+附遞迴式（3.22）：
+\startsplitformula\startmathalignment
+\NC F_0 \NC = 0 \NR
+\NC F_1 \NC = 1 \NR
+\NC F_i \NC = F_{i-1} + F_{i-2} \qquad \text{若 \m{i \ge 2}} \NR
+\stopmathalignment\stopsplitformula
+
+\startigBase[a]
+\item 證明： ${\cal F}(z) = z + z{\cal F}(z) + z^2{\cal F}(z)$。
+
+\startANSWER
+% a
+\startsplitformula\startmathalignment
+\NC  \NC z + z{\cal F}(z) + z^2{\cal F}(Z) \NR
+\NC =\NC z + z\sum_{i=0}^{\infty}F_iz^i + z^2\sum_{i=0}^{\infty}F_iz^i \NR
+\NC =\NC z + \sum_{i=1}^{\infty}F_{i-1}z^i + \sum_{i=2}^{\infty}F_{i-2}z^i \NR
+\NC =\NC z + F_1z + \sum_{i=2}^{\infty}(F_{i-1} + F_{i-2})z^i \NR
+\NC =\NC z + F_1z + \sum_{i=2}^{\infty}F_iz^i \NR
+\NC =\NC {\cal F}(z) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% b
+\startitem 證明：\startsplitformula\startmathalignment
+\NC {\cal F}(z) \NC= \frac{z}{1 - z - z^2} \NR
+\NC                \NC= \frac{z}{(1 - \phi z)(1 - \hat\phi z)} \NR
+\NC                \NC= \frac{1}{\sqrt5}\Big(\frac{1}{1 - \phi z} - \frac{1}{1 - \hat{\phi} z}\Big) \NR
+\stopmathalignment\stopsplitformula
+
+其中 $\phi$ 是黃金比例， $\hat{\phi}$ 是其共軛：
+\startsplitformula\startmathalignment
+\NC     \phi \NC= \frac{1 + \sqrt5}{2} = 1.61803\ldots \NR
+\NC \hat\phi \NC= \frac{1 - \sqrt5}{2} = -0.61803\ldots \NR
+\stopmathalignment\stopsplitformula
+\stopitem
+
+\startANSWER
+只需注意到 $\phi - \hat\phi = \sqrt5$， $\phi + \hat\phi = 1$， $\phi\hat\phi = -1$：
+\startsplitformula\startmathalignment
+\NC  \NC {\cal F}(z) \NR
+\NC =\NC \frac{{\cal F}(z)(1 - z - z^2)}{1 - z - z^2} \NR
+\NC =\NC \frac{{\cal F}(z) - z{\cal F}(z) - z^2{\cal F}(z) - z + z}{1 - z - z^2} \NR
+\NC =\NC \frac{{\cal F}(z) - {\cal F}(z) + z}{1 - z - z^2} \NR
+\NC =\NC \frac{z}{1 - z - z^2} \hfill (1)\NR
+\NC =\NC \frac{z}{1 - (\phi + \hat\phi)z + \phi\hat\phi z^2} \NR
+\NC =\NC \frac{z}{(1 - \phi z)(1 - \hat\phi z)} \hfill (2)\NR
+\NC =\NC \frac{\sqrt5 z}{\sqrt5 (1 - \phi z)(1 - \hat\phi z)} \NR
+\NC =\NC \frac{(\phi - \hat\phi)z + 1 - 1}{\sqrt5 (1 - \phi z)(1 - \hat\phi z)} \NR
+\NC =\NC \frac{(1 - \hat\phi z) - (1 - \phi z)}{\sqrt5 (1 - \phi z)(1 - \hat\phi z)} \NR
+\NC =\NC \frac{1}{\sqrt5}\Big(\frac{1}{1 - \phi z} - \frac{1}{1 - \hat\phi z}\Big) \hfill (3)\NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startitem
+證明：
+\startformula
+{\cal F}(z) = \sum_{i=0}^{\infty}\frac{1}{\sqrt5}(\phi^i - \hat{\phi}^i)z^i
+\stopformula
+
+可以直接使用公式（A.7）（不必證明），其生成函數版爲 $\sum_{k=0}^{\infty}x^k=1/(1-x)$。
+由於此公式包含一個生成函數， $x$ 是形式變量，而不是一個具體值，
+所以你無需擔心是否收斂，
+同樣也不必擔心公式（A.7）中的限制條件 $\abs{x}<1$，
+這兩項在此都沒意義。
+\stopitem
+
+\startANSWER
+如果 $\abs{x}<1$，則 $\frac{1}{1 - x} = \sum_{k=0}^{\infty}x^k$。因此：
+\startsplitformula\startmathalignment
+\NC {\cal F}(z)
+    \NC= \frac{1}{\sqrt5}\Big(\frac{1}{1 - \phi z} - \frac{1}{1 - \hat\phi z}\Big) \NR
+\NC \NC= \frac{1}{\sqrt5}\Big(\sum_{i=0}^{\infty}\phi^i z^i - \sum_{i=0}^{\infty}\hat{\phi}^i z^i\Big) \NR
+\NC \NC= \sum_{i=0}^{\infty}\frac{1}{\sqrt5}(\phi^i - \hat{\phi}^i) z^i\NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% d
+\startitem 利用上一項的結果證明：
+對於 $i>0$， $F_i = \phi^i / \sqrt5$，結果舍入到最近整數。
+（\hint $\abs{\hat\phi}<1$）
+\stopitem
+
+\startANSWER
+\startformula
+{\cal F}(z) = \sum_{i=0}^{\infty}\alpha_iz^i \quad\text{其中} \alpha_i = \frac{\phi^i - \hat{\phi}^i}{\sqrt5}
+\stopformula
+
+由於 \m{\alpha_i = F_i}，即：
+\startformula
+F_i = \frac{\phi^i - \hat{\phi}^i}{\sqrt5}  = \frac{\phi^i}{\sqrt5} - \frac{\hat{\phi}^i}{\sqrt5}
+\stopformula
+
+對於 \m{i = 0}， \m{\phi^i/\sqrt5 = (\sqrt5 + 5)/10 > 0.5}；
+對於 \m{i > 2}， \m{|{\hat\phi}^i| < 0.5}。
+\stopANSWER
+
+% e
+\startitem
+證明：對於 $i\ge 0$，有 $F_{i+2}\ge \phi^i$。
+\stopitem
+
+\startANSWER
+用歸納法，如果對於 $F_i,F_{i+1}$ 均成立，則：
+\startsplitformula\startmathalignment
+\NC F_{i+2}
+    \NC = F_i + F_{i+1} \NR
+\NC \NC \ge \phi^{i-2} + \phi^{i-1} \NR
+\NC \NC = \phi^{i-2} (1+\phi) \NR
+\stopmathalignment\stopsplitformula
+即證明 $1+\phi\ge \phi^2$ 即可，顯然成立。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+%p4-6
+\startPROBLEM（芯片檢測）
+Diogenes教授有 $n$ 片應該完全一樣的集成電路芯片，原理上可以用來相互檢測。
+教授的測試夾具同時只能容納兩塊芯片。
+當夾具裝載上時，每塊芯片都會檢測另一塊，並報告他是好是壞。
+一塊好的芯片總能準確報告另一塊芯片的好壞，
+但壞芯片報告的結果不可信。
+因此，可能會產生 4 種檢測結果：
+
+\bTABLE[align=center]
+\bTABLEhead\bTR
+	\bTH 芯片 A 報告 \eTH
+	\bTH 芯片 B 報告 \eTH
+	\bTH 結論 \eTH
+\eTR\eTABLEhead
+\bTABLEbody\bTR
+	\bTD B 是好的 \eTD
+	\bTD A 是好的 \eTD
+	\bTD 兩片都是好的，或都是壞的 \eTD
+\eTR\bTR
+	\bTD B 是好的 \eTD
+	\bTD A 是壞的 \eTD
+	\bTD 至少一塊是壞的 \eTD
+\eTR\bTR
+	\bTD B 是壞的 \eTD
+	\bTD A 是好的 \eTD
+	\bTD 至少一塊是壞的 \eTD
+\eTR\bTR
+	\bTD B 是壞的 \eTD
+	\bTD A 是壞的 \eTD
+	\bTD 至少一塊是壞的 \eTD
+\eTR\eTABLEbody
+\eTABLE
+
+\startigBase[a]
+% a
+\item 證明：如果超過 $n/2$ 塊芯片是壞的，
+按這種結對檢測方法，任何策略都不能確定哪些芯片是好的。
+假定壞芯片可以合謀欺騙教授。
+
+\startANSWER
+假定有 $g < n/2$ 塊好芯片。
+而其餘同樣數量的壞芯片可以表現出與好芯片類似的行爲。
+也就是說，這些壞芯片可以相互識別爲好芯片，並將其餘芯片識別爲壞的。
+由於這兩組芯片表現出來的行爲一樣，無從區分，也就無法識別哪塊是好芯片。
+\stopANSWER
+
+現在設計算法來識別芯片的好壞，
+假定好芯片多於 $n/2$ 塊。
+首先，要確定如何識別好芯片。
+
+% b
+\item 證明:
+$\floor{n/2}$ 次結對測試足以將問題規模縮減一半。
+即如何利用 $\floor{n/2}$ 次結對檢測獲得一個集合，
+此集合最多有 $\ceil{n/2}$ 塊芯片，
+而且一多半都是好的。
+
+\startANSWER
+將芯片分成兩組進行比較。如果結果是第一種（都是好的或都是壞的）我們可以取其一，否則兩塊都棄用。
+當兩塊都棄用時，我們至少移除了一塊壞芯片，當然可能同時移除了一塊好芯片。
+而當我們選用其中一塊時，好芯片數目多於壞芯片（兩塊都是好芯片的對數更多，因爲好芯片多於壞芯片）。
+現在我們最多有 \m{n/2} 塊芯片，其中至少一半是好的。
+\stopANSWER
+
+% c
+\item 利用上一項的結果，如何識別好芯片？
+給出遞迴式，用來表示結對檢測的次數，並求解。
+
+\startANSWER
+遞迴式爲 $T(n) = T(n/2) + n/2$。
+由主定理可知其解爲 $\Theta(n)$。
+找到一個好的後，我們可以用他與其他芯片進行結對檢測，即進行 $\Theta(n)$ 次運算。
+\stopANSWER
+
+現在考慮一下如何識別好芯片。
+
+% d
+\startitem
+如果可以再進行 $\Theta(n)$ 次結對檢測，如何將所有好芯片都識別出來？
+\stopitem
+
+\startANSWER
+找到一個好芯片後，用此芯片與其他所有芯片進行結對檢測，
+即用這個好芯片去檢測其他所有芯片，最多還需 $n-1$ 次檢測，
+就可以將所有好芯片都識別出來。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+%p4-7
+\startPROBLEM（Monge 陣列）
+對一個 $m\times n$ 的實數陣列 $A$，
+如果 $i,j,k,l$ 只要滿足 $1\le i < k \le m$ 和 $1\le j < l \le n$，下式就成立：
+\startformula
+A[i, j] + A[k, l] \le A[i, l] + A[k, j]
+\stopformula
+那麼稱 $A$ 爲 \emph{Monge 陣列}。
+換句話說，在 Monge 陣列中任選兩行和兩列，對於交叉點上的 4 個元素，
+左上角和右下角兩個元素之和總是小於等於左下角和右上角元素之和。
+例如，下面就是一個 Monge 陣列：
+\startsplitformula\startmatrix
+\NC 10 \NC 17 \NC 13 \NC 28 \NC 23 \NR
+\NC 17 \NC 22 \NC 16 \NC 29 \NC 23 \NR
+\NC 24 \NC 28 \NC 22 \NC 34 \NC 24 \NR
+\NC 11 \NC 13 \NC  6 \NC 17 \NC  7 \NR
+\NC 45 \NC 44 \NC 32 \NC 37 \NC 23 \NR
+\NC 36 \NC 33 \NC 19 \NC 21 \NC  6 \NR
+\NC 75 \NC 66 \NC 51 \NC 53 \NC 34 \NR
+\stopmatrix\stopsplitformula
+
+\startigBase[a]
+% a
+\startitem 證明：若一個陣列是 Monge 陣列，
+當且儘當對所有 $i=1,2,\ldots,m-1$ 和 $j = 1,2,\ldots,n-1$ 都有
+\startformula
+A[i,j] + A[i+1,j+1] \le A[i,j+1] + A[i+1,j]
+\stopformula
+(\hint 對於“當”的部分，分別對行和列使用歸納法)
+\stopitem
+
+\startANSWER
+“儘當”的部分是顯然的，由 Monge 陣列的定義可知。
+而對於“當”的部分，先用歸納法證明：
+\startsplitformula\startmathalignment[n=1]
+\NC A[i,j] + A[i+1, j+1] \le A[i,j+1] + A[i+1, j] \NR
+\NC \Downarrow \NR
+\NC A[i,j] + A[k, j+1] \le A[i, j+1] + A[k,j] \NR
+\stopmathalignment\stopsplitformula
+其中 \m{i<k}。
+
+第一步， \m{k=i+1}，由已知條件顯然成立。
+歸納時，我們假設對於 $k$ 成立，我們需要證明對於 $k+1$ 仍然成立。
+\startsplitformula\startmathalignment[n=1]
+\NC A[i, j] + A[k, j+1] \le A[i, j+1] + A[k, j] \quad (assumption) \NR
+\NC A[k, j] + A[k+1, j+1] \le A[k, j+1] + A[k+1, j] \quad (given) \NR
+\NC \Downarrow \NR
+\NC A[i, j] + A[k, j+1] + A[k, j] + A[k+1, j+1] \le A[i, j+1] + A[k, j] + A[k, j+1] + A[k+1, j] \NR
+\NC \Downarrow \NR
+\NC A[i, j] + A[k+1, j+1] \le A[i, j+1] + A[k+1, j] \NR
+\stopmathalignment\stopsplitformula
+
+類似，用歸納法可以證明如果對於 $l$ 成立，那麼對於 $l+1$ 也成立。
+
+綜上，“當”的部分得證。
+\stopANSWER
+
+% b
+\startitem
+如下陣列並不是 Monge 陣列，改變其中一個元素，使其成爲 Monge 陣列。
+（\hint 用上一項的結果）
+\startsplitformula\startmatrix
+\NC 37 \NC 23 \NC 22 \NC 32 \NR
+\NC 21 \NC  6 \NC  7 \NC 10 \NR
+\NC 53 \NC 34 \NC 30 \NC 31 \NR
+\NC 32 \NC 13 \NC  9 \NC  6 \NR
+\NC 43 \NC 21 \NC 15 \NC  8 \NR
+\stopmatrix\stopsplitformula
+\stopitem
+
+\startANSWER
+\startsplitformula\startmatrix
+\NC 37 \NC 23 \NC \bf 24 \NC 32 \NR
+\NC 21 \NC  6 \NC  7 \NC 10 \NR
+\NC 53 \NC 34 \NC 30 \NC 31 \NR
+\NC 32 \NC 13 \NC  9 \NC  6 \NR
+\NC 43 \NC 21 \NC 15 \NC  8 \NR
+\stopmatrix\stopsplitformula
+\stopANSWER
+
+% c
+\item 令 $f(i)$ 表示第 $i$ 行中最左最小元素的列下標。
+證明：對任意 $m\times n$ 的 Monge 陣列，
+\startformula
+f(1)\le f(2)\le\cdots\le f(m)
+\stopformula
+
+\startANSWER
+令 $i$ 和 $j$ 分別爲行 $a$ 和 $b$ 中的最左最小元素的列下標，其中 $a < b$。
+假設 $i>j$，則：
+\startformula
+A[j, a] + A[i, b] \le A[i, a] + A[j, b]
+\stopformula
+但是\startsplitformula\startmathalignment
+\NC A[j, a] \ge A[i, a] \NC \quad (A[i,a] \text{ 最小}) \NR
+\NC A[i, b] \ge A[j, b] \NC \quad (A[j,b] \text{ 最小}) \NR
+\stopmathalignment\stopsplitformula
+隱含\startsplitformula\startmathalignment[n=1]
+\NC A[j, a] + A[i, b] \ge A[i, a] + A[j, b] \NR
+\NC \Downarrow \NR
+\NC A[j, a] + A[i, b] = A[i, a] + A[j, b] \NR
+\stopmathalignment\stopsplitformula
+又分別隱含\startsplitformula\startmathalignment
+\NC A[j, b] < A[i, b] \Rightarrow A[i, a] > A[j, a] \NC \Rightarrow A[i,a] \text{ 不是最小} \NR
+\NC A[j, b] = A[i, b] \NC \Rightarrow A[j,b] \text{ 不是最左最小} \NR
+\stopmathalignment\stopsplitformula
+
+推出矛盾，因此假設 \m{i>j} 不成立，即 \m{i\le j}。
+可以得出結論：
+\startformula
+a < b \Rightarrow f(a) \le f(b)
+\stopformula
+即 \m{f(1)\le f(2)\le\cdots\le f(m)}。
+\stopANSWER
+
+% d
+\startitem
+下面的分治算法可用於找出 $m\times n$ Monge 陣列 $A$ 中每行的最左最小元素：
+
+提取 $A$ 的偶數行構造其子矩陣 $A'$。
+遞迴確定 $A'$ 每行的最左最小元素。
+然後找出 $A$ 的奇數行最左最小元素。
+
+如何在 $O(m+n)$ 時間內找出 $A$ 的奇數行最左最小元素？
+（假定已知偶數行的最左最小元素）
+\stopitem
+
+\startANSWER
+如果 $\mu_i$ 是第 $i$ 行最左最小元素的列坐標，
+由上一項可知 $\mu_{i-1} \le \mu_i \le \mu_{i+1}$。
+
+對於 $i = 2k+1$，其中 $k\ge 0$，
+我們只需要比較此行中列坐標從 $\mu_{i-1}$ 到 $\mu_{i+1}$ 中的這些元素，
+最多 $\mu_{i+1}-\mu_{i-1} + 1$ 步就可以找出 $\mu_i$。
+\startsplitformula\startmathalignment
+\NC T(m, n) \NC= \sum_{i=0}^{m/2-1}\Big(\mu_{2i + 2} - \mu_{2i} + 1\Big) \NR
+\NC \NC= \sum_{i=0}^{m/2-1}\mu_{2i+2} - \sum_{i=0}^{m/2-1}\mu_{2i} + m/2 \NR
+\NC \NC= \sum_{i=1}^{m/2}\mu{2i} - \sum_{i=0}^{m/2-1}\mu{2i} + m/2 \NR
+\NC \NC= \mu_m - \mu_0 + m/2 \NR
+\NC \NC= n + m/2 \NR
+\NC \NC= O(m + n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% e
+\item 給出上一項中所述算法運行時間的遞迴式。
+並證明其解爲 $O(m+n\log{m})$。
+
+\startANSWER
+“分”所用時間爲 $O(1)$，“治”所用時間爲 $T(m/2)$，合並所用時間爲 $O(m+n)$。
+\startsplitformula\startmathalignment
+\NC T(m, n) \NC= T(m/2, n) + cn + dm \NR
+\NC      \NC= cn + dm + cn + dm/2 + cn + dm/4 + \cdots \NR
+\NC      \NC= \sum_{i=0}^{\lg{m}-1}cn + \sum_{i=0}^{\lg{m}-1}\frac{dm}{2^i} \NR
+\NC      \NC= cn\lg{m} + dm\sum_{i=0}^{\lg{m} - 1}\frac{1}{2^i} \NR
+\NC      \NC< cn\lg{m} + 2dm \NR
+\stopmathalignment\stopsplitformula
+因此 $T(m,n)=O(m+n\log m)$。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM
+
+\stopsubject

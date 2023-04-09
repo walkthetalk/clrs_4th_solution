@@ -1,0 +1,97 @@
+\startsection[
+  title={Proof of the master theorem},
+]
+
+%e4.6-1
+\startEXERCISE
+證明 $\sum_{j=0}^{\lfloor \log_b n\rfloor}(\log_b n - j)^k = \Omega(\log_b^{k+1}n)$。
+\stopEXERCISE
+\startANSWER
+\startsplitformula\startmathalignment
+\NC f(n) \NC = \sum_{j=0}^{\lfloor \log_b n\rfloor}(\log_b n -j)^k \NR
+\NC \NC \ge \sum_{j=0}^{\lfloor \log_b n\rfloor}(\lfloor\log_b n\rfloor -j)^k \NR
+\NC \NC \ge \sum_{j=0}^{\lfloor \log_b n\rfloor} j^k \NR
+\NC \NC = \sum_{j=1}^{\lfloor \log_b n\rfloor}j^k \NR
+\NC \NC = \Omega((\lfloor\log_b n\rfloor)^{k+1}) \qquad \text{附錄 A.1-5}\NR
+\NC \NC = \Omega(\log_b^{k+1}n) \qquad \text{參見\inexercise[floorceil_theta]}\NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+%e4.6-2
+\startEXERCISE \DIFFICULT
+主定理中第三種情況被過分強調了，
+即定理 4.3 中第三種情況不需要 $f(n) = \Omega(n^{\log_b{a} + \epsilon})$。
+證明：
+
+對於某個常數 $c<1$，
+正則條件 $af(n/b)\le cf(n)$ 成立本身就意味着：
+存在常數 $\epsilon > 0$，
+使得 $f(n) = \Omega(n^{\log_b{a} + \epsilon})$。
+\stopEXERCISE
+\startANSWER
+證明如下，參見\simpleurl{http://math.stackexchange.com/questions/510897/why-does-afn-b-cfn-for-c-1-imply-that-fn-omegan-log-ba-ep}：
+\startsplitformula\startmathalignment[n=1]
+\NC a f(n/b) \le cf(n) \NR
+\NC \alpha f(n/b) \le f(n) \quad \alpha = a/c \NR
+\NC \alpha f(n) \le f(nb) \NR
+\NC \alpha^i f(1) \le f(b^i) \NR
+\NC n = b^i \Rightarrow i = \log_{b}n \Rightarrow f(n) \ge \alpha^{\log_b{n}}f(1) = n^{\log_{b}\alpha} \NR
+\NC \alpha > a \Rightarrow \alpha = a + d \quad (c < 1, d > 0) \NR
+\NC \Rightarrow f(n) = n^{\log_b{a} + log_b{d}} = n^{\log_b{a}+\epsilon} \quad (\epsilon = \log_{b}d) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+%e4.6-3
+\startEXERCISE\DIFFICULT
+對於 $f(n)=\Theta(n^{\log_b a}/\lg n)$，
+證明公式（4.19）的解爲 $g(n)=\Theta(n^{\log_b a}\lg\lg n)$。
+同時，如果將 $f(n)$ 作爲主遞迴 $T(n)$ 的驅動函式，
+那麼 $T(n)=\Theta(n^{\log_b a}\lg\lg n)$。
+附公式（4.19）：
+\startformula
+g(n)=\sum_{j=0}^\floor{\log_b n} a^j f(n/b^j)
+\stopformula
+\stopEXERCISE
+\startANSWER
+證明如下，參見\simpleurl{https://zhuanlan.zhihu.com/p/529434777}。
+\startsplitformula\startmathalignment
+\NC g(n) \NC = \sum_{j=0}^\floor{\log_b n} a^j f(n/b^j) \NR
+\NC \NC = \sum_{j=0}^\floor{\log_b n} a^j \Theta\left(\frac{(\frac{n}{b^j})^{\log_b a}}{\lg\frac{n}{b^j}}\right) \NR
+\NC \NC = \sum_{j=0}^\floor{\log_b n} a^j \Theta\left(\frac{n^{\log_b a}}{a^j(\lg n - j\lg b)}\right) \NR
+\NC \NC = \Theta\left(\sum_{j=0}^\floor{\log_b n} \frac{n^{\log_b a}}{\lg n - j\lg b}\right) \NR
+\NC \NC = \Theta\left(\frac{n^{\log_b a}}{\lg b}\sum_{j=0}^\floor{\log_b n} \frac{1}{\log_b n - j}\right) \NR
+\stopmathalignment\stopsplitformula
+
+$\log_b n - 1 \le \floor{\log_b n} \le \log_b n \le \floor{\log_b n} + 1$
+\startsplitformula\startmathalignment
+\NC \sum_{j=0}^\floor{\log_b n}\frac{1}{\log_b n - j}
+    \NC > \sum_{j=0}^\floor{\log_b n}\frac{1}{\floor{\log_b n} + 1 - j} \NR
+\NC \NC = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{\floor{\log_b n} + 1} \NR
+\NC \NC > \ln(\floor{\log_b n} + 1) \qquad \text{（可以用歸納法證明）}\NR
+\stopmathalignment\stopsplitformula
+因此 $\sum_{j=0}^\floor{\log_b n}\frac{1}{\log_b n - j} = \Omega(\lg\lg n)$。
+
+又：
+\startsplitformula\startmathalignment
+\NC \sum_{j=0}^\floor{\log_b n}\frac{1}{\log_b n - j}
+    \NC = \sum_{j=0}^{\floor{\log_b n}-1}\frac{1}{\log_b n - j} + O(1) \NR
+\NC \NC \le \sum_{j=0}^{\floor{\log_b n}-1} \frac{1}{\log_b n - j} + O(1) \NR
+\NC \NC = 1 + \frac{1}{2} + \frac{1}{3} + \cdots + \frac{1}{\floor{\log_b n}} + O(1) \NR
+\NC \NC < \ln(\floor{\log_b n}) + 1 + O(1) \NR
+\stopmathalignment\stopsplitformula
+故 $\sum_{j=0}^\floor{\log_b n}\frac{1}{\log_b n - j} = O(\lg\lg n)$。
+
+由定理 3.1 可知： $\sum_{j=0}^\floor{\log_b n}\frac{1}{\log_b n - j} = \Theta(\lg\lg n)$。
+代入 $g(n)$ 得 $g(n)=\Theta(n^{\log_b a}\lg\lg n)$。
+
+若主遞迴式 $T(n)$ 使用 $f(n)$ 作爲驅動函式，
+則 $T(n) = aT(n/b) + \Theta(n^{\log_b a}/\lg n)$。
+由引理 4.2，解爲 $T(n)=\Theta(n^{\log_b a}) + \sum_{j=0}^\floor{\log_b n} a^j f(n/b^j)$。
+將 $g(n)$ 的解代入得：
+\startformula
+T(n)=\Theta(n^{\log_b a}) + \Theta(n^{\log_b a}\lg \lg n) = \Theta(n^{\log_b a}\lg\lg n)
+\stopformula
+問題得證。
+\stopANSWER
+
+\stopsection

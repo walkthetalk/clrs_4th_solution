@@ -1,0 +1,99 @@
+\startsection[
+  title={The master method for solving recurrences},
+]
+
+%e4.5-1
+\startEXERCISE
+用主定理求下列遞迴式的漸進緊確界。
+\startigBase[a]
+\item $T(n) = 2T(n/4) + 1$
+\item $T(n) = 2T(n/4) + \sqrt{n}$
+\item $T(n) = 2T(n/4) + n$
+\item $T(n) = 2T(n/4) + n^2$
+\stopigBase
+\stopEXERCISE
+\startANSWER
+\startigBase[a]
+\item case 1： $b=4,a=2,f(n)=1,\epsilon=1>0$， $\Theta(n^{\log_4{2}}) = \Theta(\sqrt{n})$
+\item case 2： $b=4,a=2,f(n)=\sqrt{n},k=0\ge 0$， $\Theta(n^{\log_4{2}}\lg{n}) = \Theta(\sqrt{n}\lg{n})$
+\item case 3： $b=4,a=2,f(n)=n,\epsilon=2>0$， $\Theta(n)$
+\item case 3： $b=4,a=2,f(n)=n^2,\epsilon=14>0$， $\Theta(n^2)$
+\stopigBase
+\stopANSWER
+
+%e4.5-2
+\startEXERCISE
+Caesar 教授想設計一個算法用於矩陣乘法，
+想讓其時間複雜度優於 Strassen 算法。
+他的算法使用分治策略，
+將每個矩陣分解爲 $n/4 \times n/4$ 個子矩陣，
+分解和合並步驟花費時間爲 $\Theta(n^2)$。
+他需要確定，這個算法需要創建多少個子問題，
+才能擊敗 Strassen 算法。
+如果他的算法創建 $a$ 個規模爲 $n/4$ 的子問題，
+則描述運行時間 $T(n)$ 的遞迴式爲 $T(n) = a T(n/4) + \Theta(n^2)$。
+這個算法要想漸進優於 Strassen 算法， $a$ 的最大整數值應爲多少？
+\stopEXERCISE
+\startANSWER
+當 $a < 16$ 時適用於主定理的第一種情況。
+此時，此算法 $T(n) = \Theta(n^{\log_4{a}})$。
+要想更快，需 $\log_4{a} < \log_{2}7$，其中 $a < 49$。
+因此， $a$ 的最大整數值爲 $15$。
+\stopANSWER
+
+%e4.5-3
+\startEXERCISE
+用主定理證明：二分查找遞迴式 $T(n) = T(n/2) + \Theta(1)$ 的解爲 $T(n) = \Theta(\lg n)$。
+（關於二分查找參見\inexercise[bin_search]）
+\stopEXERCISE
+\startANSWER
+適用主定理第二種情況：
+\startsplitformula\startmathalignment
+\NC a =\NC 1\NR
+\NC b =\NC 2\NR
+\NC f(n) =\NC \Theta(1) = \Theta(n^{\log_b^a}\lg^{k}n)\qquad \text{其中 $k=0$} \NR
+\NC T(n) =\NC \Theta(\lg n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+%e4.5-4
+\startEXERCISE
+現有函式 $f(n)=\lg n$。
+試分析：
+儘管 $f(n/2)<f(n)$，
+任意常數 $c<1$ 都無法滿足正則條件 $af(n/b)\le cf(n)$，
+其中 $a=1,b=2$。
+更進一步，任意 $\epsilon>0$，
+也無法滿足第三種情況中的條件 $f(n)=\Omega(n^{\log_b{a+\epsilon}})$。
+\stopEXERCISE
+\startANSWER
+\startformula
+af(n/b)=f(n/2)=\lg(n/2)=\lg n - 1 = f(n)-1\le cf(n)
+\stopformula
+如果 $c<1$，則 $(1-c)f(n)\le 1$，即 $f(n)\le \frac{1}{1-c}$，
+而無論 $c$ 有多小，總能找到 $n_0$，當 $n>n_0$ 時，使得 $f(n)>\frac{1}{1-c}$。
+因此 $af(n/b)\le cf(n)$ 無法成立。
+
+\startsplitformula\startmathalignment
+\NC f(n) \NC =\Omega(n^{\log_b{a+\epsilon}}) \NR
+\NC \NC \ge c n^{\lg\epsilon} \NR
+\stopmathalignment\stopsplitformula
+令 $k=\log_b{a+\epsilon}>0$，即 $\lg n \ge c n^k$。
+ $cn^k$ 增長速度要快於 $\lg n$。
+\stopANSWER
+
+%e4.5-5
+\startEXERCISE
+有函式 $f(n)=2^{\lceil \lg n\rceil}$，
+選擇適當的常數 $a,b,\epsilon$，
+可以使其滿足主定理第三種情況中所有條件（正則條件除外）。
+\stopEXERCISE
+\startANSWER
+令 $2^{k-1}< n\le 2^{k}$，則 $f(n)=2^k$，
+要想使得 $f(n)=\Omega(n^{\log_b{a+\epsilon}})$，
+需要滿足 $n^{\log_b{a+\epsilon}} < n\le f(n)$，
+即 $a+\epsilon < 0$，
+可以找到 $a>0,b>1,\epsilon>0$ 滿足此式。
+\stopANSWER
+
+\stopsection
