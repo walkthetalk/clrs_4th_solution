@@ -32,14 +32,13 @@
 %e6.3-3
 \startEXERCISE
 對於 \ALGO{BUILD-MAX-HEAP} 中第 2 行的循環控制變量 $i$ 而言，
-爲什麼要求他從 $\lfloor A.length/2 \rfloor$ 到 $1$ 遞減，
-而不是從 $1$ 到 $\lfloor A.length/2 \rfloor$ 遞增？
+爲什麼要求他從 $\lfloor n/2 \rfloor$ 到 $1$ 遞減，
+而不是從 $1$ 到 $\lfloor n/2 \rfloor$ 遞增？
 附：
 
 \CLRSH{BUILD-MAX-HEAP(A)}
 \startCLRSCODE
-A.heap-size = A.length
-for i =  ⌊A.length/2⌋ downto 1
+for i = \lfloor A.size/2\rfloor downto 1
   \ALGO{MAX-HEAPIFY(A, i)}
 \stopCLRSCODE
 \stopEXERCISE

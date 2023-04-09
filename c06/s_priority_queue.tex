@@ -36,10 +36,8 @@ A = \langle 15, 13, 9, 5, 12, 8, 7, 4, 0, 6, 2, 1 \rangle
 
 %e6.5-3
 \startEXERCISE
-要求用最小堆實現最小優先隊列，請寫出
-\ALGO{HEAP-MINIMUM}、
-\ALGO{HEAP-EXTRACT-MIN}、
-\ALGO{HEAP-DECREASE-KEY} 和 \ALGO{MIN-HEAP-INSERT} 的僞碼。
+要求用最小堆實現最小優先隊列，請寫出\ALGO{HEAP-MINIMUM}、
+\ALGO{HEAP-EXTRACT-MIN}、\ALGO{HEAP-DECREASE-KEY} 和 \ALGO{MIN-HEAP-INSERT} 的僞碼。
 \stopEXERCISE
 
 \startANSWER
@@ -50,11 +48,11 @@ return A[1]
 
 \CLRSH{HEAP-EXTRAC-MIN(A)}
 \startCLRSCODE
-if A.heap-size < 1
+if A.size < 1
 	// error "heap underflow"
 min = A[1]
-A[1] = A[A.heap-size]
-A.heap-size = A.heap-size - 1
+A[1] = A[A.size]
+A.size = A.size - 1
 \ALGO{MIN-HEAPIFY(A, 1)}
 \stopCLRSCODE
 
@@ -70,9 +68,9 @@ while i > 1 and A[\ALGO{PARENT(i)}] > A[i]
 
 \CLRSH{MIN-HEAP-INSERT(A, key)}
 \startCLRSCODE
-A.heap-size = A.heap-size + 1
-A[A.heap-size] = +\infty
-\ALGO{HEAP-DECREASE-KEY(A, A.heap-size, key)}
+A.size = A.size + 1
+A[A.size] = +\infty
+\ALGO{HEAP-DECREASE-KEY(A, A.size, key)}
 \stopCLRSCODE
 \stopANSWER
 
@@ -87,16 +85,16 @@ A[A.heap-size] = +\infty
 \CLRSH{MAX-HEAP-DECREASE-KEY(A, x, k)}
 \startCLRSCODE
 if k > A[x]
-	error "new key is bigger than current key"
+	// error "new key is bigger than current key"
 A[x] = k
 do
 	l = \ALGO{LEFT(x)}
 	r = \ALGO{RIGHT(x)}
 	// $A[b]$ 爲 $A[x],A[l],A[r]$ 三個元素中最大的
 	b = x
-	if l \le A.heap-size and A[b] < A[l]
+	if l \le A.size and A[b] < A[l]
 		b = l
-	if r \le A.heap-size and A[b] < A[r]
+	if r \le A.size and A[b] < A[r]
 		b = r
 
 	// $A[x]$ 是最大的，則終止
@@ -147,11 +145,11 @@ Uriah 教授建議將 \ALGO{MAX-HEAP-INCREASE-KEY} 中第 5～7 行的 \emph{whi
 \item 如果 \ALGO{PARENT(i)} 和 \ALGO{RIGHT(i)} 均存在，
 則 $A[\ALGO{PARENT(i)}].key \ge A[\ALGO{RIGHT(i)}].key$。
 
-\item 子數列 $A[1..A.heap-size]$ 滿足最大堆的性質，只有一個例外：
+\item 子數列 $A[1..A.size]$ 滿足最大堆的性質，只有一個例外：
 $A[i].key$ 可能大於 $A[\ALGO{PARENT(i)}].key$。
 \stopigBase
 可以假定調用 \ALGO{MAX-HEAP-INCREASE-KEY} 時，
-子數列 $A[1..A.heap-size]$ 滿足最大堆性質。
+子數列 $A[1..A.size]$ 滿足最大堆性質。
 \stopEXERCISE
 
 \startANSWER
@@ -214,8 +212,8 @@ A[i] = key
 \startANSWER
 \CLRSH{MAX-HEAP-DELETE(A, x)}
 \startCLRSCODE
-A[x] = A[A.heap-size]
-A.heap-size = A.heap-size - 1
+A[x] = A[A.size]
+A.size = A.size - 1
 MAX-HEAPIFY(A, x)
 \stopCLRSCODE
 \stopANSWER

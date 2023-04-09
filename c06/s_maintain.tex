@@ -50,11 +50,11 @@ $\alpha$ 最小是 $1/2$。
 \startCLRSCODE
 l = \ALGO{LEFT(i)}
 r = \ALGO{RIGHT(i)}
-if l ≤ A.heap-size and A[l] < A[i]
+if l ≤ A.size and A[l] < A[i]
 	smallest = l
 else
 	smallest = i
-if r ≤ A.heap-size and A[r] < A[i]
+if r ≤ A.size and A[r] < A[i]
 	smallest = r
 if smallest ≠ i
 	// 交換 $A[i]$ 和 $A[smallest]$
@@ -75,7 +75,7 @@ if smallest ≠ i
 
 %e6.2-5
 \startEXERCISE
-當 $i > A.heap-size / 2$ 時，調用 \ALGO{MAX-HEAPIFY(A, i)} 會有什麼結果？
+當 $i > A.size / 2$ 時，調用 \ALGO{MAX-HEAPIFY(A, i)} 會有什麼結果？
 \stopEXERCISE
 
 \startANSWER
@@ -96,11 +96,11 @@ if smallest ≠ i
 while true
 	l = \ALGO{LEFT(i)}
 	r = \ALGO{RIGHT(i)}
-	if l ≤ A.heap-size and A[l] < A[i]
+	if l ≤ A.size and A[l] < A[i]
 		largest = l
 	else
 		largest = i
-	if r ≤ A.heap-size and A[r] < A[i]
+	if r ≤ A.size and A[r] < A[i]
 		largest = r
 	if largest == i
 		return
