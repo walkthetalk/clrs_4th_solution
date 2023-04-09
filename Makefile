@@ -2,7 +2,7 @@ pdf_name := CLRS_solution
 doc_env  := book_cht
 dir_main := $(shell dirname $(shell readlink -fe $(lastword ${MAKEFILE_LIST})))
 
-include $(dir_main)/../scripts/common.mk
+include $(dir_main)/scripts/common.mk
 
 define clean_misc =
 	rm -f $(tex_name).aux $(tex_name).bbl $(tex_name).blg $(tex_name).log $(pdf_name).tuc
