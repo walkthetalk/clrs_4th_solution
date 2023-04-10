@@ -1,4 +1,4 @@
-input clrs
+input clrs;
 
 vardef merge(suffix A, Alength)(expr gsize, p, q, r, nondecrease, needdraw) :=
 image(

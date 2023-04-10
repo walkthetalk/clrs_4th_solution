@@ -1,5 +1,7 @@
 input TEX;
 
+input clrs;
+
 vardef rtlabel@#(expr strname, pos) text p =
 	label@#(TEX(strname), pos) p
 enddef;
@@ -139,6 +141,7 @@ vardef rectree(suffix A, B)(expr k, lvl) :=
 	Rx := 0;
 	rlc(A, C, D, Lx, Rx)(k, 0, lvl, yoffset);
 
+	% 底部最后一行
 	save s, lxdist, lcnt, ly;
 	pair s;
 	s := size_of_label(A[0]);
@@ -161,15 +164,21 @@ vardef rectree(suffix A, B)(expr k, lvl) :=
 		rtlabel(A[0], (xpart lpBegin, ly));
 	endfor
 
+	% 侧边
+	numeric minArrowLen;
+	minArrowLen := 4 * xgap;
 	bound_pos_x := max((xpart C[lvl])/2, Rx + (xpart s)/2) + xgap/2;
-	bound_pos_x_r := bound_pos_x + (width_of_labels(B)(lvl));
+	bound_pos_x_r := bound_pos_x + (width_of_labels(B)(lvl)) + xgap/2 + minArrowLen;
 	for i := lvl downto 1:
 		rtlabel.lft(B[i], (bound_pos_x_r, D[i]));
+		drawarrow (bound_pos_x, D[i])
+			-- (bound_pos_x_r - width_of_label(B[i]) - xgap/2, D[i])
+			withcolor clrsClB;
 	endfor;
-
 	rtlabel.lft(B[0], (bound_pos_x_r, ly));
-	show ",,,,,,,,,,,,,,,,,,,,,";
-	show (xpart C[lvl])/2;
+	drawarrow (bound_pos_x, ly)
+		-- (bound_pos_x_r - width_of_label(B[0]) - xgap/2, ly)
+		withcolor clrsClB;
 enddef;
 
 vardef width_of_label(expr lbl) :=

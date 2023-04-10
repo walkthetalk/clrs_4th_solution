@@ -1,4 +1,4 @@
-input insert_sort
+input insert_sort;
 
 numeric figidx;
 

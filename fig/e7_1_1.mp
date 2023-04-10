@@ -1,4 +1,4 @@
-input quick_sort
+input quick_sort;
 
 vardef imgSevenOneOne(expr recurselevel) :=
 image(

@@ -1,4 +1,4 @@
-input clrs
+input clrs;
 
 vardef insert_sort_step(suffix A, Alength)(expr gsize, j, nondecrease, needdraw) :=
 image(

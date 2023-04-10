@@ -8,22 +8,28 @@ define clean_misc =
 	rm -f $(tex_name).aux $(tex_name).bbl $(tex_name).blg $(tex_name).log $(pdf_name).tuc
 endef
 
-fig_srcs:=$(shell cd fig; find . -type f -name e\*.mp | cut -d '/' -f 2)
-fig_srcs+=$(shell cd fig; find . -type f -name p\*.mp | cut -d '/' -f 2)
-fig_incs:=$(shell cd fig; find . -type f -name "*.mp" | cut -d '/' -f 2 | grep -v "^[e|p]")
-#$(warning figincs is ${fig_incs})
+dir_fig:=${dir_main}/fig
+fig_srcs:=$(shell cd ${dir_fig}; find . -type f -name "*.mp" | cut -d '/' -f 2 | grep "^[e|p][0-9]")
+fig_dsts:=$(patsubst %.mp,$(output_dir)/%-1.pdf,$(fig_srcs))
 
-fig_pdfs:=$(patsubst %.mp,$(output_dir)/%-1.pdf,$(fig_srcs))
-fig_deps:=$(patsubst %.mp,${dir_main}/fig/%.mp,$(fig_incs))
+.PHONY: figs
+figs: ${fig_dsts}
 
-#$(warning fig srcs is ${fig_pdfs})
+${main_object}: ${fig_dsts}
 
-.PHONY: fig_pdfs
-fig_pdfs: ${fig_pdfs}
+fig_deps:=$(patsubst %.mp,${output_dir}/%.mp.d,$(fig_srcs))
+include ${fig_deps}
+${output_dir}/%.mp.d:
+	@set -e; \
+	TMP_DEPS="`./gen_deps_for_mp.sh ${dir_fig}/$*.mp`"; \
+	echo [gen dep] $*; \
+	echo -e "DEP_$*.mp:=$${TMP_DEPS}\n\
+${output_dir}/$*.mp.d: $${TMP_DEPS}\n\
+${output_dir}/$*-1.pdf: ${output_dir}/$*.mp.d $${TMP_DEPS}\n\
+" > $@
 
-${main_object}: ${fig_pdfs}
-
-$(output_dir)/%-1.pdf : ${dir_main}/fig/%.mp ${fig_deps}
+# 此处的依赖已在.d文件中写明，此处仅为拷贝命令使用
+$(output_dir)/%-1.pdf : ${DEP_%.mp}
 	@set -e; \
 	COMPILE_DIR=$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
 	echo [compile] $* at $${COMPILE_DIR}; \

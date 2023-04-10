@@ -1,4 +1,4 @@
-input bin_heap
+input bin_heap;
 
 vardef imgSixFiveOne(expr recurselevel) :=
 image(

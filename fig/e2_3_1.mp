@@ -1,4 +1,4 @@
-input merge_sort
+input merge_sort;
 
 beginfig(1);
 numeric gridsize;
