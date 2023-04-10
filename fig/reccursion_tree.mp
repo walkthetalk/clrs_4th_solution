@@ -6,15 +6,29 @@ vardef rtlabel@#(expr strname, pos) text p =
 	label@#(TEX(strname), pos) p
 enddef;
 
-vardef rlc(suffix A, C, D, lx, rx)(expr k, x_coord, lvl, y_offset) :=
+vardef rlc(suffix A, C, D, lblSize, lx, rx)(expr k, x_coord, lvl, y_offset) :=
 	save nextlvl_dist,next_x_coord;
 	save line_start,line_endy;
 
-	if x_coord < lx:
-		lx := x_coord;
+	% 最底層特殊處理，空label
+	save tmp;
+	numeric tmp;
+	if lvl > 0:
+		tmp := xpart lblSize[lvl]/2;
+	else:
+		tmp := 0;
 	fi;
-	if x_coord > rx:
-		rx := x_coord;
+	if unknown lx[lvl]:
+		lx[lvl] := 0;
+	fi;
+	if x_coord < lx[lvl]:
+		lx[lvl] := x_coord;
+	fi;
+	if unknown rx[lvl]:
+		rx[lvl] := 0;
+	fi;
+	if x_coord > rx[lvl]:
+		rx[lvl] := x_coord;
 	fi;
 
 	% lvl 0 僅佔位，沒有標籤
@@ -41,7 +55,7 @@ vardef rlc(suffix A, C, D, lx, rx)(expr k, x_coord, lvl, y_offset) :=
 			draw line_start -- (line_start/2 + line_end/2);
 			draw (line_start/2 + line_end/2) -- line_end dashed evenly scaled 0.5;
 		fi;
-		rlc(A,C,D, lx, rx)(k, next_x_coord, lvl-1, y_offset);
+		rlc(A,C,D, lblSize, lx, rx)(k, next_x_coord, lvl-1, y_offset);
 		next_x_coord := next_x_coord + nextlvl_dist;
 	endfor;
 	fi;
@@ -78,9 +92,10 @@ enddef;
 % cell_h: 層間連線的高度
 % xgap: 空隙寬度
 % yoffset: y 方向標籤與連線的距離
-vardef rlc_sizes(suffix A, C, D)(expr k, lvl, cell_h, xgap, yoffset) :=
-	for i := 1 upto lvl:
-		C[i] := (urcorner thelabel.urt(TEX(A[i]), (0,0))) + (xgap,0);
+vardef rlc_sizes(suffix A, C, D, lblSize)(expr k, lvl, cell_h, xgap, yoffset) :=
+	for i := 0 upto lvl:
+		lblSize[i] := size_of_label(A[i]);
+		C[i] := lblSize[i] + (xgap,0);
 	endfor;
 	% C[0] 特殊處理
 	C[0] := (xgap,0);
@@ -131,26 +146,25 @@ vardef rectree(suffix A, B)(expr k, lvl) :=
 	save xgap, yoffset, line_height;
 	xgap := width_of_label("m") / 2;
 	yoffset := (ypart size_of_label("m")) / 2;
-	line_height := (ypart size_of_label("m")) * 5;
-	save C, D, Lx, Rx;
+	line_height := (ypart size_of_label("m")) * 3;
+	save C, D, lblSize, Lx, Rx;
 	pair C[];
 	numeric D[];
-	rlc_sizes(A, C, D)(k,lvl, line_height, xgap, yoffset);
-	numeric Lx, Rx;
-	Lx := 0;
-	Rx := 0;
-	rlc(A, C, D, Lx, Rx)(k, 0, lvl, yoffset);
+	pair lblSize[];
+	numeric Lx[];
+	numeric Rx[];
+	rlc_sizes(A, C, D, lblSize)(k,lvl, line_height, xgap, yoffset);
+	rlc(A, C, D, lblSize, Lx, Rx)(k, 0, lvl, yoffset);
 
 	% 底部最后一行
 	save s, lxdist, lcnt, ly;
 	pair s;
-	s := size_of_label(A[0]);
-	s := s + (xgap, 0);
+	s := lblSize[0] + (xgap, 0);
 	numeric lcnt;
-	lcnt := floor((Rx - Lx) / xpart s);
+	lcnt := floor((Rx[0] - Lx[0]) / xpart s);
 	numeric lxdist;
 	if lcnt > 0:
-		lxdist := (Rx-Lx) / lcnt;
+		lxdist := (Rx[0]-Lx[0]) / lcnt;
 	else:
 		lxdist := 0;
 	fi;
@@ -158,7 +172,7 @@ vardef rectree(suffix A, B)(expr k, lvl) :=
 	ly := D[0] - line_height - 2 * yoffset - (ypart s)/2;
 	pair lpBegin, lpEnd;
 	for i := 0 upto lcnt:
-		lpBegin := (Lx + i * lxdist, D[0] - yoffset);
+		lpBegin := (Lx[0] + i * lxdist, D[0] - yoffset);
 		lpEnd := lpBegin - (0, line_height);
 		draw lpBegin -- lpEnd dashed evenly scaled 0.5;
 		rtlabel(A[0], (xpart lpBegin, ly));
@@ -167,16 +181,22 @@ vardef rectree(suffix A, B)(expr k, lvl) :=
 	% 侧边
 	numeric minArrowLen;
 	minArrowLen := 4 * xgap;
-	bound_pos_x := max((xpart C[lvl])/2, Rx + (xpart s)/2) + xgap/2;
-	bound_pos_x_r := bound_pos_x + (width_of_labels(B)(lvl)) + xgap/2 + minArrowLen;
+	numeric bound_pos_x[];
+	for i := lvl downto 0:
+		bound_pos_x[i] := Rx[i] + (xpart lblSize[i])/2 + xgap/2;
+	endfor;
+	bound_pos_x_r := bound_pos_x[0] + (width_of_labels(B)(lvl)) + xgap/2 + minArrowLen;
 	for i := lvl downto 1:
 		rtlabel.lft(B[i], (bound_pos_x_r, D[i]));
-		drawarrow (bound_pos_x, D[i])
+		drawarrow (bound_pos_x[i], D[i])
 			-- (bound_pos_x_r - width_of_label(B[i]) - xgap/2, D[i])
 			withcolor clrsClB;
 	endfor;
+
+	rtlabel.lft("\vdots", (bound_pos_x_r, D[0]));
+
 	rtlabel.lft(B[0], (bound_pos_x_r, ly));
-	drawarrow (bound_pos_x, ly)
+	drawarrow (bound_pos_x[0], ly)
 		-- (bound_pos_x_r - width_of_label(B[0]) - xgap/2, ly)
 		withcolor clrsClB;
 enddef;
