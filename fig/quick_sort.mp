@@ -1,3 +1,5 @@
+input clrs;
+
 vardef exchange(suffix A)(expr i, j) :=
 	save tmp;
 	numeric tmp;
@@ -28,20 +30,17 @@ image(
 
 	for i := 1 upto ALength:
 		color bgcolor;
-		color lblcolor;
-		bgcolor := white;
-		lblcolor := black;
+		bgcolor := clrsCfC;
 		if i = focus:	% focus is the most important
-			bgcolor := black;
-			lblcolor := white;
+			bgcolor := clrsCfD;
 		elseif (ls <= i) and (i < le):
-			bgcolor := 0.7 white;
+			bgcolor := clrsCfA;
 		elseif (rs <= i) and (i < re):
-			bgcolor := 0.3 white;
+			bgcolor := clrsCfB;
 		fi;
 		draw pelement shifted (gsize * 1.5 * i, 0) withcolor black withpen (pencircle scaled 0.2gsize);
 		fill pelement shifted (gsize * 1.5 * i, 0) withcolor bgcolor;
-		label(decimal(A[i]), (gsize * 1.5 * i, 0)) withcolor lblcolor;
+		label(decimal(A[i]), (gsize * 1.5 * i, 0));
 	endfor;
 )
 enddef;

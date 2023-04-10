@@ -321,12 +321,12 @@ function commands.clrsalgo(algoname)
 	end
 end
 \stopluacode
-\define[1]\ALGO{
-\ifmmode
-  \ctxlua{commands.clrsalgo([[#1]])}
-\else
-  \m{\ctxlua{commands.clrsalgo([[#1]])}}
-\fi
+\define[1]\ALGO{%
+\ifmmode%
+\ctxlua{commands.clrsalgo([[#1]])}%
+\else%
+\m{\ctxlua{commands.clrsalgo([[#1]])}}%
+\fi%
 }%
 
 \define[1]\TODO{#1}

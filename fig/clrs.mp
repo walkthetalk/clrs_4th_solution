@@ -4,6 +4,11 @@ clrsCfA := (0.95,0.9,0.7);
 % fill color 1
 color clrsCfB;
 clrsCfB := (0.7,0.9,1.0);
+% fill color 2
+color clrsCfC;
+clrsCfC := (0.95,0.95,0.9);
+color clrsCfD;
+clrsCfD := (0.95,0.95,0.6);
 
 % line color 0
 color clrsClA;

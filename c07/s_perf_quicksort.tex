@@ -1,0 +1,91 @@
+\startsection[
+  title=Performance of quicksort
+]
+
+%e7.2-1
+\startEXERCISE
+用代入法證明：遞迴式 $T(n)=T(n-1)+\Theta(n)$ 的解爲 $T(n)=\Theta(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+令 $\Theta(n)$ 爲 $c_2 n$，猜測 $T(n)\le c_1 n^2$：
+\startsplitformula\startmathalignment
+\NC T(n) \NC=   T(n-1) + c_2n \NR
+\NC      \NC\le c_1(n-1)^2 + c_2n \NR
+\NC      \NC=   c_1n^2 - 2c_1n + c_1 + c_2n \qquad (2c_1 > c_2, n \ge c_1/(2c_1 - c_2))\NR
+\NC      \NC\le c_1n^2 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+%e7.2-2
+\startEXERCISE
+當數列 $A$ 中的元素均相同時， \ALGO{QUICKSORT} 的時間復雜度是什麼？
+\stopEXERCISE
+
+\startANSWER
+時間復雜度爲 $\Theta(n^2)$，
+因爲 \ALGO{PARTITION} 時總有一邊爲空（參見\inexercise[same_partition]）。
+\stopANSWER
+
+%e7.2-3
+\startEXERCISE
+證明：當數列 $A$ 包含的元素不同，
+且按降序排列時， \ALGO{QUICKSORT} 的時間復雜度爲 $\Theta(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+\ALGO{PARTITION} 總是返回 $p$，即總有一邊是空。
+
+遞迴式仍爲 $T(n)=T(n-1)+\Theta(n)$。
+（即使 \emph{if} 塊內執行不到， \emph{for} 循環的執行次數不變，
+仍是 $\Theta(n)$。）
+\stopANSWER
+
+%e7.2-4
+\startEXERCISE
+銀行一般會按照交易時間記錄賬戶的交易情況。
+但是，很多人希望收到的銀行賬單是按支票號碼排列的。
+這是因爲，人們通常都是按照支票號碼的順序開支票，
+而商人也通常都是根據支票號碼的順序兌付支票。
+這一問題是將按交易時間排序的支票改成按支票號碼排序，
+實質上是對幾乎有序的輸入序列進行排序。
+請證明：在這個問題上， \ALGO{INSERTION-SORT} 的性能往往要優於 \ALGO{QUICKSORT}。
+\stopEXERCISE
+
+\startANSWER
+\ALGO{INSERTION-SORT} 的時間復雜度爲 $\Theta(n+d)$，其中 $d$ 爲逆序對的數目。
+在本例中， $d$ 的值幾乎爲 $0$，因此插入排序的時間幾乎是線性的。
+
+而在基本有序的情況下，大部分 \ALGO{PARTITION} 都會出現一邊爲空的情況。
+從而使得 \ALGO{QUICKSORT} 所用時間復雜度接近 $\Theta(n^2)$。
+\stopANSWER
+
+%e7.2-5
+\startEXERCISE
+假設快速排序的每一層所做的劃分比例都是 $\alpha : \beta$，
+其中 $\alpha+\beta=1$，且 $0<\alpha\le \beta < 1$ 且均爲常數。
+證明：在相應的遞迴樹中，葉子節點的最小深度大約是 $\log_{1/\alpha}{n}$，
+最大深度大約是 $\log_{1/\beta}{n}$（無需考慮整數舍入問題）。
+\stopEXERCISE
+
+\startANSWER
+令樹的最小深度是 $x$，則 $n\alpha^x\approx 1$，解得 $x\approx\log_{1/\alpha}{n}$。
+
+類似，令最大深度爲 $y$，則 $n\beta^y\approx 1$，解得 $y\approx\log_{1/\beta}{n}$。
+\stopANSWER
+
+%e7.2-6
+\startEXERCISE[exercise:const_part_probability]
+證明：有一隨機輸入數列，其元素各不相同，
+對於任何常數 $0<\alpha\le 1/2$，
+ \ALGO{PARTITION} 產生比 $1-\alpha : \alpha$ 更平衡的劃分的概率約爲 $1-2\alpha$。
+\stopEXERCISE
+
+\startANSWER
+將元素劃分成三部分，最小的 $\alpha n$ 個元素、最大的 $\alpha n$ 個元素，
+還有 $(1-2\alpha)n$ 個中間值元素。
+只有當 \ALGO{PARTITION} 所選的主元處於最後一個集合中時，所的劃分才比 $1-\alpha : \alpha$ 更平衡。
+其概率爲 $(1-2\alpha)n / n = (1-2\alpha)$。
+\stopANSWER
+
+\stopsection
