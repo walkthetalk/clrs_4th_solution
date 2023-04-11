@@ -28,12 +28,12 @@ ${output_dir}/$*.mp.d: $${TMP_DEPS}\n\
 ${output_dir}/$*-1.pdf: ${output_dir}/$*.mp.d $${TMP_DEPS}\n\
 " > $@
 
-# 此处的依赖已在.d文件中写明，此处仅为拷贝命令使用
-$(output_dir)/%-1.pdf : ${DEP_%.mp}
+# 此处需要拷贝文件，DEP_$*.mp的内容在依赖文件.d中
+$(output_dir)/%-1.pdf:
 	@set -e; \
 	COMPILE_DIR=$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
 	echo [compile] $* at $${COMPILE_DIR}; \
-	cp $^ $${COMPILE_DIR}/; \
+	cp ${DEP_$*.mp} $${COMPILE_DIR}/; \
 	cd $${COMPILE_DIR}; \
 	mptopdf $*.mp > /dev/null; \
 	cp *.pdf ${output_dir}/; \
