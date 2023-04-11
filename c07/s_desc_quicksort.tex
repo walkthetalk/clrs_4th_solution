@@ -44,9 +44,9 @@ i = p - 1
 for j = p to r - 1
 	if A[j] <= x
 		i = i + 1
-		// 交換 $A[i]$ 和 $A[j]$
+		\ALGO{SWAP(A[i],A[j])}
 i = i + 1
-// 交換 $A[i]$ 和 $A[r]$
+\ALGO{SWAP(A[i],A[r])}
 
 if i = r
 	return ⌊(p + r) / 2⌋

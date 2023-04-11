@@ -1,0 +1,87 @@
+%p7-2
+\startPROBLEM[problem:quicksort_with_equal]
+（Quicksort with equal element values）
+在節 7.4.2 對隨機化快速排序的分析中，
+我們假設輸入元素的值是互異的，
+本題中，我們來看看如果這一假設不成立會出現什麼情況。
+\startigBase[a]
+\item 如果所有輸入元素的值都相同，那麼隨機化快速排序的運行時間會是多少？
+\stopigBase
+
+\startANSWER
+運行時間是 $\Theta(n^2)$。所有的劃分都將是 $(n-1):1$
+ （參見\inexercise[same_partition]）。
+\stopANSWER
+
+\startigBase[a,continue]
+\item \ALGO{PARTITION} 過程返回一個數列下標 $q$，
+使得 $A[p..q-1]$ 中的每個元素都小於或等於 $A[q]$，
+而 $A[q+1..r]$ 中的每個元素都大於 $A[q]$。
+修改 \ALGO{PARTITION} 代碼來構造一個新的 \ALGO{PARTITION'(A, p, r)}，
+他將 $A[p..r]$ 中的元素排序後，
+返回值是兩個數列下標 $q$ 和 $t$，
+其中 $p\le q\le t\le r$，且：
+\startigBase
+\item $A[q..t]$ 中的所有元素都相等；
+\item $A[p..q-1]$ 中的所有元素都小於 $A[q]$；
+\item $A[t+1..r]$ 中的所有元素都大於 $A[q]$。
+\stopigBase
+與 \ALGO{PARTITION} 類似，新構造的 \ALGO{PARTITION'} 的時間復雜度是 $\Theta(r-p)$。
+\stopigBase
+
+\startANSWER
+\CLRSH{PARTITION'(A, p, r)}
+\startCLRSCODE
+x = A[r]
+q = p - 1
+t = q
+for j = p to r - 1
+	if A[j] <= x
+		if A[j] = x
+			q = q + 1
+			\ALGO{SWAP(A[q],A[j])}
+		t = t + 1
+		\ALGO{SWAP(A[t],A[j])}
+q = q + 1
+t = t + 1
+\ALGO{SWAP(A[t],A[r])}
+
+return q, t
+\stopCLRSCODE
+\stopANSWER
+
+\startigBase[a,continue]
+\item 將 \ALGO{RANDOMIZED-QUICKSORT} 過程改爲調用 \ALGO{PARTITION'}，
+並重新命名爲 \ALGO{RANDOMIZED-QUICKSORT'}。
+修改 \ALGO{QUICKSORT} 的代碼構造一個新的 \ALGO{QUICKSORT'(A, p, r)}，
+他調用 \ALGO{RANDOMIZED-PARTITION'}，
+並且只有分區內的元素互不相同時才做遞迴調用。
+\stopigBase
+
+\startANSWER
+\CLRSH{RANDOMIZED-QUICKSORT'(A, p, r)}
+\startCLRSCODE
+if p < r
+	q, t = \ALGO{PARTITION'(A, p, r)}
+	\ALGO{RANDOMIZED-QUICKSORT'(A, p, q - 1)}
+	\ALGO{RANDOMIZED-QUICKSORT'(A, t + 1, r)}
+\stopCLRSCODE
+
+\CLRSH{QUICKSORT'(A, p, r)}
+\startCLRSCODE
+if p < r
+	q, t = \ALGO{RANDOMIZED-PARTITION'(A, p, r)}
+	\ALGO{QUICKSORT'(A, p, q - 1)}
+	\ALGO{QUICKSORT'(A, t + 1, r)}
+\stopCLRSCODE
+\stopANSWER
+
+\startigBase[a,continue]
+\item 在 \ALGO{QUICKSORT'} 中，如何改變節 7.4.2 中的分析方法，
+才能避免所有元素互異這一假設？
+\stopigBase
+
+\startANSWER
+略。
+\stopANSWER
+\stopPROBLEM

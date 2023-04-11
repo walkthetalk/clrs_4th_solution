@@ -61,9 +61,11 @@ A.size = A.size - 1
 if key > A[i]
 	// error "new key is bigger than current key"
 A[i] = key
-while i > 1 and A[\ALGO{PARENT(i)}] > A[i]
-	// 交換 $A[i]$ 和 $A[\ALGO{PARENT(i)}]$
-	i = \ALGO{PARENT(i)}
+j = \ALGO{PARENT(i)}
+while i > 1 and A[j] > A[i]
+	\ALGO{SWAP(A[i],A[j])}
+	i = j
+	j = \ALGO{PARENT(i)}
 \stopCLRSCODE
 
 \CLRSH{MIN-HEAP-INSERT(A, key)}
@@ -102,9 +104,9 @@ do
 		break
 
 	if b = l
-		// 交換 $A[l]$ 和 $A[x]$
+		\ALGO{SWAP(A[1],A[x])}
 	else if b = r
-		// 交換 $A[r]$ 和 $A[x]$
+		\ALGO{SWAP(A[r],A[x])}
 
 	x = b	// 更新 $x$，進行下次迭代
 \stopCLRSCODE

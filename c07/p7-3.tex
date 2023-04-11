@@ -1,0 +1,105 @@
+%p7-3
+\startPROBLEM[problem:alt_quicksort_analysis]
+（Alternative quicksort analysis）
+在隨機化快速排序中，還有一種性能分析方法，
+這一方法關注於每一次單獨遞迴調用的期望運行時間，而不是比較的次數。
+\startigBase[a]
+\item 證明：給定一個大小爲 $n$ 的數列，任何特定元素被選爲主元的概率爲 $1/n$。
+利用這一點來定義指示器隨機變量 $X_i=I\{\text{第 $i$ 小的元素被選爲主元}\}$，
+那麼 $E[X_i]$ 是什麼？
+\stopigBase
+
+\startANSWER
+$E[X_i] = 1/n$。
+\stopANSWER
+
+\startigBase[a,continue]\startitem
+令 $T(n)$ 表示快速排序在大小爲 $n$ 的數列上的運行時間，證明：
+\setnumber[formula]{5}
+\placeformula
+\startformula
+E[T(n)] = E\left[\sum_{q=1}^nX_q(T(q-1) + T(n-q) + \Theta(n))\right]
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+令第 $q$ 小元素爲主元，則有 $n$ 種可能，每種概率爲 $X_q$。
+每種都會將數列劃分成 $(q-1):(n-q)$ 兩部分。
+\stopANSWER
+
+\startigBase[a,continue]\startitem
+證明公式可以重寫爲：
+\placeformula[formula:7_6]
+\startformula
+E[T(n)] = \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC E[T(n)] \NC= E\left[\sum_{q=1}^nX_q(T(q-1) + T(n-q) + \Theta(n))\right] \NR
+\NC         \NC= \sum_{q=1}^n\frac{1}{n}(E[T(q-1)] + E[T(n-q)] + \Theta(n)) \NR
+\NC         \NC= \frac{1}{n}\sum_{q=1}^nE[T(q-1)]
+             + \frac{1}{n}\sum_{q=1}^nE[T(n - q)]
+             + \frac{1}{n}\sum_{q=1}^n\Theta(n) \NR
+\NC         \NC= \frac{1}{n}\sum_{q=0}^{n-1}E[T(q)]
+             + \frac{1}{n}\sum_{q=0}^{n-1}E[T(n - q - 1)]
+             + \Theta(n) \NR
+\NC         \NC= \frac{1}{n}\sum_{q=0}^{n-1}E[T(q)]
+             + \frac{1}{n}\sum_{q=0}^{n-1}E[T(q)]
+             + \Theta(n) \NR
+\NC         \NC= \frac{2}{n}\sum_{q=0}^{n-1}E[T(q)] + \Theta(n) \NR
+\NC         \NC= \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)]
+             + \frac{2E[T(0)]}{n}
+             + \frac{2E[T(1)]}{n}
+             + \Theta(n) \NR
+\NC         \NC= \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n)
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startigBase[a,continue]\startitem
+證明：
+\placeformula[formula:7_7]
+\startformula
+\sum_{k=2}^{n-1}k\lg{k} \le \frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2
+\stopformula
+（\hint 以將其分成兩部分，一部分是 $k=2,3,\ldots,\lceil n/2\right\rceil-1$，
+另一部分是 $k=\lceil n/2 \right\rceil,\ldots,n-1$。）
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC \sum_{k=2}^{n-1}k\lg{k}
+   \NC=   \sum_{k=2}^{\lceil n/2 \right\rceil - 1}k\lg{k} + \sum_{k=\left\lceil n/2 \right\rceil}^{n - 1}k\lg{k} \NR
+\NC\NC\le \sum_{k=2}^{n/2}k\lg{k} + \sum_{k=n/2 + 1}^{n}k\lg{k} \NR
+\NC\NC\le \sum_{k=2}^{n/2}k\lg(n/2) + \sum_{k=n/2 + 1}^{n}k\lg{n} \NR
+\NC\NC=   \lg(n/2)\sum_{k=2}^{n/2}k\ + \lg{n}\sum_{k=n/2 + 1}^{n}k \NR
+\NC\NC=   (\lg{n} - \lg{2})\left(\frac{(n/2)(n/2 + 1)}{2}\right) +
+          \lg{n}\left(\frac{n(n+1)}{2} - \frac{(n/2)(n/2 + 1)}{2}\right) \NR
+\NC\NC=   \lg{n}\frac{n(n+1)}{2} - \frac{(n/2)(n/2 + 1)}{2} \NR
+\NC\NC=   \frac{1}{2}\lg{n}(n^2 + 2n + 1) - \frac{1}{8}(n^2 + 2n + 1/8) \NR
+\NC\NC=   \frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2 - \frac{8n\lg{n} + 4\lg{n} - 2n - 1/8}{8} \NR
+\NC\NC\le \frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startigBase[a,continue]\startitem
+利用\refformula{7_7} 給出的界證明：
+\refformula{7_6} 中的遞迴式有解 $E[T(n)]=\Theta(n\lg{n})$。
+（\hint 用代入法，證明對於某個正常數 $a$ 和足夠大的 $n$，有 $E[T(n)]\le an\lg{n}$。）
+\stopitem\stopigBase
+
+\startANSWER
+猜測 $E[T(n)] \le an\lg{n}$：
+\startsplitformula\startmathalignment
+\NC E[T(n)]
+   \NC=   \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n) \NR
+\NC\NC\le \frac{2}{n}\sum_{q=2}^{n-1}aq\lg{q} + \Theta(n) \qquad \text{（根據猜測）} \NR
+\NC\NC\le \frac{2a}{n}\left(\frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2\right)
+                 + \Theta(n) \qquad \text{（\refformula{7_7}）} \NR
+\NC\NC=   an\lg{n} - \frac{a}{4}n + \Theta(n) \qquad \text{（根據 $\Theta$ 記號的定義）} \NR
+\NC\NC\le an\lg{n} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\stopPROBLEM

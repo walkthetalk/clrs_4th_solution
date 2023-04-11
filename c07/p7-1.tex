@@ -1,0 +1,96 @@
+%p7-1
+\startPROBLEM
+（Hoare partition correctness）
+本章中的 \ALGO{PARTITION} 算法並不是其最初版本。
+下面給出的時最早由 C.R.Hoare 所設計的劃分算法：
+
+\CLRSH{HOARE-PARTITION(A, p, r)}
+\startCLRSCODE
+x = A[p]
+i = p - 1
+j = r + 1
+while TRUE
+	repeat
+		j = j - 1
+	until A[j] <= x
+	repeat
+		i = i + 1
+	until A[j] >= x
+	if i < j
+		\ALGO{SWAP(A[i],A[j])}
+	else
+		return j
+\stopCLRSCODE
+\startigBase[a]
+\item 試說明 \ALGO{HOARE-PARTITION} 在
+數列 $A = \langle 13, 19, 9, 5, 12, 8, 7, 4, 11, 2, 6, 21 \rangle$ 上的操作過程，
+並說明在每一次執行第 4～13 行 \emph{while} 循環時數列元素的值和輔助變量的值。
+\stopigBase
+
+\startANSWER
+輔助變量的值： $x = 13$， $j = 9$， $i = 10$。
+
+{\externalfigure[output/p7_1_a-1]}
+{\externalfigure[output/p7_1_a-2]}
+{\externalfigure[output/p7_1_a-3]}
+\stopANSWER
+
+後續的三個問題要求讀者仔細論證 \ALGO{HOARE-PARTITION} 的正確性。
+在這裏假設子數列 $A[p..r]$ 至少包含 2 個元素，證明下列問題：
+\startigBase[a,continue]
+\item 下標 $i$ 和 $j$ 可以使我們不會訪問在子數列 $A[p..r]$ 意外的數列 $A$ 的元素。
+\stopigBase
+
+\startANSWER
+第一次比較時， $i < j$， $i=p$ 且 $j\ge p$ （因爲 $A[p]=x$）。
+如果 $i=j$，算法終止，不會訪問任何“無效”元素。
+如果 $i<j$，下一次循環中 $i$ 和 $j$ 都仍有效（$i\le r$ 且 $j\ge p$）。
+如果某一個下標到達數列兩端，則 $i$ 不再小於等於 $j$。
+\stopANSWER
+
+\startigBase[a,continue]
+\item 當 \ALGO{HOARE-PARTITION} 結束時，他返回的值 $j$ 滿足 $p\le j < r$。
+\stopigBase
+
+\startANSWER
+第一次迭代時，如果 $A[p]$ 是最大元素，則 $i=p$ 且 $j=p<r$；
+否則會交換 $A[p]$ 和 $A[j]$，其中 $j\le r$。
+算法此時不會終止，下一次迭代時， $j$ 會減小，因此 $p\le j < r$。
+\stopANSWER
+
+\startigBase[a,continue]
+\item 當 \ALGO{HOARE-PARTITION} 結束時， $A[p..j]$ 中
+的每一個元素都小於或等於 $A[j+1..r]$ 中的元素。
+\stopigBase
+
+\startANSWER
+比較 $i$ 和 $j$ 之前， $A[p..i-1]$ 中所有元素都小於等於 $x$；
+而 $A[j+1..r]$ 中所有元素都大於等於 $x$。
+
+\emph{初始化：}兩個 \emph{repeat} 塊將建立此條件；
+
+\emph{保持：}通過交換 $A[i]$ 和 $A[j]$，使得 $A[p..i]\le x$ 且 $A[j..r]\ge x$。
+增大 $i$ 和減小 $j$ 都將維持不變式；
+
+\emph{終止：}當 $i\ge j$ 時循環終止。不變式仍然得以保持。
+\stopANSWER
+
+在\insection[desc_quicksort] 的 \ALGO{PARTITION} 過程中，
+主元（原來存儲在 $A[r]$ 中）是與他所劃分的兩個分區分離的。
+與之對應，在 \ALGO{HOARE-PARTITION} 中，
+主元（原來存儲在 $A[p]$ 中）是存在於 $A[p..j]$ 或 $A[j+1..r]$ 中的。
+因爲由 $p\le j<r$，所以這一劃分總是非平凡的。
+\startigBase[a,continue]
+\item 利用 \ALGO{HOARE-PARTITION}，重寫 \ALGO{QUICKSORT} 算法。
+\stopigBase
+
+\startANSWER
+\CLRSH{QUICKSORT''(A, p, r)}
+\startCLRSCODE
+if p < r
+	q = \ALGO{HOARE-PARTITION(A, p, r)}
+	\ALGO{QUICKSORT(A, p, q)}
+	\ALGO{QUICKSORT(A, q + 1, r)}
+\stopCLRSCODE
+\stopANSWER
+\stopPROBLEM
