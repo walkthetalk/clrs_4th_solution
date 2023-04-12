@@ -1,8 +1,8 @@
 %p7-1
 \startPROBLEM
 （Hoare partition correctness）
-本章中的 \ALGO{PARTITION} 算法並不是其最初版本。
-下面給出的時最早由 C.R.Hoare 所設計的劃分算法：
+本章中的 \ALGO{PARTITION} 並不是其最初版本。
+下面給出的是原始的劃分算法，由 C.R.Hoare 設計：
 
 \CLRSH{HOARE-PARTITION(A, p, r)}
 \startCLRSCODE
@@ -22,9 +22,10 @@ while TRUE
 		return j
 \stopCLRSCODE
 \startigBase[a]
-\item 試說明 \ALGO{HOARE-PARTITION} 在
-數列 $A = \langle 13, 19, 9, 5, 12, 8, 7, 4, 11, 2, 6, 21 \rangle$ 上的操作過程，
-並說明在每一次執行第 4～13 行 \emph{while} 循環時數列元素的值和輔助變量的值。
+\item 試說明在數列 $A = \langle 13, 19, 9, 5, 12, 8, 7, 4, 11, 2, 6, 21 \rangle$ 上
+ \ALGO{HOARE-PARTITION} 的操作過程，
+並說明在每一次執行第 4～13 行 \emph{while} 循環后
+數列元素和索引 $i$、 $j$ 的值。
 \stopigBase
 
 \startANSWER
@@ -36,9 +37,10 @@ while TRUE
 \stopANSWER
 
 後續的三個問題要求讀者仔細論證 \ALGO{HOARE-PARTITION} 的正確性。
-在這裏假設子數列 $A[p..r]$ 至少包含 2 個元素，證明下列問題：
+假設子數列 $A[p..r]$ 至少包含 2 個元素，證明下列問題：
 \startigBase[a,continue]
-\item 下標 $i$ 和 $j$ 可以使我們不會訪問在子數列 $A[p..r]$ 意外的數列 $A$ 的元素。
+\item 下標 $i$ 和 $j$ 可以保證只訪問子數列 $A[p..r]$，
+而不會訪問 $A$ 中除此之外的元素。
 \stopigBase
 
 \startANSWER

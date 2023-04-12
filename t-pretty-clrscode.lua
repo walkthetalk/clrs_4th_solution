@@ -110,6 +110,9 @@ local gkeyword   = P("for")
                   + P("NIL")
                   + P("and")
                   + P("or")
+                  + P("repeat")
+                  + P("until")
+                  + P("error")
 local notkeyword = validName - gkeyword - P("//")
 local mathContent = notkeyword * (spacer^1 * notkeyword)^0
 

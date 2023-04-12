@@ -26,14 +26,11 @@ $\Theta(n^3)$
 \startCLRSCODE
 n = A.length
 for j = 1 to n - 1
-	smallest = j
+	s = j	// $s$ 为最小元素的索引
 	for i = j + 1 to n
-		if A[i] < A[smallest]
-			smallest = i
-	// exchange $A[j]$ with $A[smallest]$
-	tmp = A[j]
-	A[j] = A[smallest]
-	A[smallest] = tmp
+		if A[i] < A[ss]
+			s = i
+	\ALGO{SWAP(A[j], A[s])}
 \stopCLRSCODE
 
 \startsplitformula

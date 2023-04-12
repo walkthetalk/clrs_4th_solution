@@ -33,11 +33,10 @@ while p < r
 當他結束時，其信息則被\emph{彈出}。
 因爲我們假設數列參數是用指針來指示的，所以每次過程調用只需要 $O(1)$ 的棧空間。
 \emph{棧深度}是在一次計算仲會用到的棧空間的最大值。
-\startigBase[a,continue]
-\startitem
+\startigBase[a,continue]\startitem
 請描述一個場景，使得 \ALGO{TAIL-RECURSIVE-QUICKSORT} 作用在規模爲 $n$ 的數列上時，
 棧深度爲 $\Theta(n)$。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 如果 \ALGO{PARTITION} 返回的一直是 $r$，
@@ -45,11 +44,11 @@ while p < r
 在數列已經排好序時就會出現這種情況。
 \stopANSWER
 
-\startitem
+\startigBase[a,continue]\startitem
 修改 \ALGO{TAIL-RECURSIVE-QUICKSORT} 的代碼，
 使其最壞請看下棧深度爲 $\Theta(\lg{n})$，
 並且能夠保持 $O(n\lg{n})$ 的期望時間複雜度。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 如果每次針對較大的子數列進行尾遞迴，則能滿足要求。
@@ -67,5 +66,5 @@ while p < r
 		r = q - 1
 \stopCLRSCODE
 \stopANSWER
-\stopigBase
+
 \stopPROBLEM
