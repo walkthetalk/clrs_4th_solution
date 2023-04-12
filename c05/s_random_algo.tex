@@ -16,7 +16,8 @@ Marceau 教授不同意引理 5.4 證明中所用的循環不變式。
 \CLRSH{RANDOMLY-PERMUTE(A,n)}
 \startCLRSCODE
 for i = 1 to n
-	// swap A[i] with A[RANDOM(i,n)]
+	j = \ALGO{RANDOM(i,n)}
+	\ALGO{SWAP(A[i],A[j])}
 \stopCLRSCODE
 \stopEXERCISE
 \startANSWER

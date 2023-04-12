@@ -49,7 +49,7 @@ return A[1]
 \CLRSH{HEAP-EXTRAC-MIN(A)}
 \startCLRSCODE
 if A.size < 1
-	// error "heap underflow"
+	error "heap underflow"
 min = A[1]
 A[1] = A[A.size]
 A.size = A.size - 1
@@ -59,7 +59,7 @@ A.size = A.size - 1
 \CLRSH{HEAP-DECREASE-KEY(A, i, key)}
 \startCLRSCODE
 if key > A[i]
-	// error "new key is bigger than current key"
+	error "new key is bigger than current key"
 A[i] = key
 j = \ALGO{PARENT(i)}
 while i > 1 and A[j] > A[i]
@@ -87,7 +87,7 @@ A[A.size] = +\infty
 \CLRSH{MAX-HEAP-DECREASE-KEY(A, x, k)}
 \startCLRSCODE
 if k > A[x]
-	// error "new key is bigger than current key"
+	error "new key is bigger than current key"
 A[x] = k
 do
 	l = \ALGO{LEFT(x)}
@@ -181,7 +181,7 @@ $A[i].key$ 可能大於 $A[\ALGO{PARENT(i)}].key$。
 \CLRSH{MAX-HEAP-INCREASE-KEY(A, i, key)}
 \startCLRSCODE
 if key < A[i]
-	// error "new key is smaller than current key"
+	error "new key is smaller than current key"
 while i > 1 and A[PARENT(i)] < key
 	A[i] = A[PARENT(i)]
 	i = PARENT(i)

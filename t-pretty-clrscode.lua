@@ -39,35 +39,30 @@ local handler = visualizers.newhandler {
     stopdisplay  = function() context.stopCSnippet() end ,
 
     fcomments   = function(s)
-                        --io.write("########comments\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context("\\color[darkred]{"..s.."}")
                     end,
     ftext       = function(s)
-                        --io.write("########text\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context(s)
                     end,
     fstrip      = function(s)
-                        --io.write("########strip\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context.verbatim.CSnippetStrip(s)
                     end,
     fnewline    = function(s)
-                        --io.write("########newline\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context.verbatim.CSnippetStrip(s)
                     end,
     ftabs       = function(s)
-                        --io.write("########tabs\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context.verbatim.CSnippetStrip(s)
                     end,
     fkeyword    = function(s)
-                        --io.write("########keyword\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context.verbatim.CSnippetKeyword(s)
                     end,
     fmath       = function(s)
-                        --io.write("########math\n"..s.."\nxxxxxxxxxxxxxx\n")
                         context("\\m{"..s.."}")
                     end,
+    fstring     = function(s)
+                        context("\\color[darkred]{"..s.."}")
+                    end,
     ftest       = function(s)
-                        --io.write("########test\n"..s.."\nxxxxxxxxxxxxxx\n")
                     end,
     --fline       = function(s)
     --                    -- check comment
@@ -95,6 +90,9 @@ local notnewline  = anything - S("\r\n")
 local notBS       = visualchar - S("/")
 local notBSTab    = anything - S("\t\r\n/")
 local notTab      = notnewline - S("\t")
+local dquote      = S("\"")
+local notdquote   = utf8char - dquote
+local dquotestring= dquote * notdquote^0 * dquote
 
 local validName   = visualchar^1
 
@@ -112,6 +110,7 @@ local gkeyword   = P("for")
                   + P("or")
                   + P("repeat")
                   + P("until")
+                  + P("break")
                   + P("error")
 local notkeyword = validName - gkeyword - P("//")
 local mathContent = notkeyword * (spacer^1 * notkeyword)^0
@@ -130,12 +129,15 @@ local grammar = visualizers.newgrammar(
       pnewline = makepattern(handler, "fnewline", newline),
 
       pkeyword = makepattern(handler, "fkeyword", gkeyword),
+      perror   = makepattern(handler, "fkeyword", P("error")),
       pmath    = makepattern(handler, "fmath", mathContent),
+      pstring  = makepattern(handler, "fstring", dquotestring),
 
       pkorm    = V("pkeyword") + V("pmath"),
 
-      ptext    = V("pkorm")
-                    * (V("pspacers") * V("pkorm"))^0,
+      ptext    = (V("perror") * V("pspacers") * V("pstring"))
+                 + (V("pkorm")
+                    * (V("pspacers") * V("pkorm"))^0),
       pcomments = makepattern(handler, "fcomments", (P("//") * notnewline^0)),
     -- the pattern is for normal line (without newline)
     pattern = V("pspacers")^0 *
