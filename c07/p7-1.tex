@@ -21,6 +21,8 @@ while TRUE
 	else
 		return j
 \stopCLRSCODE
+
+% a
 \startigBase[a]
 \item 試說明在數列 $A = \langle 13, 19, 9, 5, 12, 8, 7, 4, 11, 2, 6, 21 \rangle$ 上
  \ALGO{HOARE-PARTITION} 的操作過程，
@@ -36,11 +38,24 @@ while TRUE
 {\externalfigure[output/p7_1_a-3]}
 \stopANSWER
 
+% b
+\startigBase[a,continue]\startitem
+如果 $A[p:r]$ 中所有元素均相同，
+節 7.1 中的 \ALGO{PARTITION} 與 \ALGO{HOARE-PARTITION} 會有什麼區別？
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{PARTITION} 會執行 $r-p+1$ 次交換，返回的是 $r$。
+
+\ALGO{HOARE-PARTITION} 不會執行交換，返回的是 $p$。
+\stopANSWER
+
 後續的三個問題要求讀者仔細論證 \ALGO{HOARE-PARTITION} 的正確性。
 假設子數列 $A[p..r]$ 至少包含 2 個元素，證明下列問題：
+% c
 \startigBase[a,continue]
-\item 下標 $i$ 和 $j$ 可以保證只訪問子數列 $A[p..r]$，
-而不會訪問 $A$ 中除此之外的元素。
+\item 下標 $i$ 和 $j$ 可以保證只能訪問子數列 $A[p..r]$，
+而無法訪問 $A$ 中其他元素。
 \stopigBase
 
 \startANSWER
@@ -50,8 +65,9 @@ while TRUE
 如果某一個下標到達數列兩端，則 $i$ 不再小於等於 $j$。
 \stopANSWER
 
+% d
 \startigBase[a,continue]
-\item 當 \ALGO{HOARE-PARTITION} 結束時，他返回的值 $j$ 滿足 $p\le j < r$。
+\item 當 \ALGO{HOARE-PARTITION} 結束時，他返回的 $j$ 滿足 $p\le j < r$。
 \stopigBase
 
 \startANSWER
@@ -60,9 +76,10 @@ while TRUE
 算法此時不會終止，下一次迭代時， $j$ 會減小，因此 $p\le j < r$。
 \stopANSWER
 
+% e
 \startigBase[a,continue]
 \item 當 \ALGO{HOARE-PARTITION} 結束時， $A[p..j]$ 中
-的每一個元素都小於或等於 $A[j+1..r]$ 中的元素。
+的所有元素都小於或等於 $A[j+1..r]$ 中的元素。
 \stopigBase
 
 \startANSWER
@@ -78,10 +95,11 @@ while TRUE
 \stopANSWER
 
 在\insection[desc_quicksort] 的 \ALGO{PARTITION} 過程中，
-主元（原來存儲在 $A[r]$ 中）是與他所劃分的兩個分區分離的。
+主元（原來存儲在 $A[r]$ 中）是不在兩個分區之內的。
 與之對應，在 \ALGO{HOARE-PARTITION} 中，
-主元（原來存儲在 $A[p]$ 中）是存在於 $A[p..j]$ 或 $A[j+1..r]$ 中的。
-因爲由 $p\le j<r$，所以這一劃分總是非平凡的。
+主元（原來在 $A[p]$ 中）是在 $A[p..j]$ 或 $A[j+1..r]$ 中的。
+因爲 $p\le j<r$，所以這一劃分總是非平凡的。
+% f
 \startigBase[a,continue]
 \item 利用 \ALGO{HOARE-PARTITION}，重寫 \ALGO{QUICKSORT} 算法。
 \stopigBase

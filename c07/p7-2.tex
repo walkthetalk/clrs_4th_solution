@@ -1,9 +1,10 @@
 %p7-2
 \startPROBLEM[problem:quicksort_with_equal]
 （Quicksort with equal element values）
-在節 7.4.2 對隨機化快速排序的分析中，
+在節 7.4.2 分析隨機化快速排序時，
 我們假設輸入元素的值是互異的，
 本題中，我們來看看如果這一假設不成立會出現什麼情況。
+% a
 \startigBase[a]
 \item 如果所有輸入元素的值都相同，那麼隨機化快速排序的運行時間會是多少？
 \stopigBase
@@ -14,19 +15,19 @@
 \stopANSWER
 
 \startigBase[a,continue]
-\item \ALGO{PARTITION} 過程返回一個數列下標 $q$，
-使得 $A[p..q-1]$ 中的每個元素都小於或等於 $A[q]$，
-而 $A[q+1..r]$ 中的每個元素都大於 $A[q]$。
-修改 \ALGO{PARTITION} 代碼來構造一個新的 \ALGO{PARTITION'(A, p, r)}，
-他將 $A[p..r]$ 中的元素排序後，
-返回值是兩個數列下標 $q$ 和 $t$，
+\item \ALGO{PARTITION} 返回索引 $q$，
+使得 $A[p:q-1]$ 中的每個元素都小於或等於 $A[q]$，
+而 $A[q+1:r]$ 中的每個元素都大於 $A[q]$。
+修改 \ALGO{PARTITION} 構造一個新的 \ALGO{PARTITION'(A, p, r)}，
+他將 $A[p:r]$ 中的元素排序後，
+返回值是兩個索引 $q$ 和 $t$，
 其中 $p\le q\le t\le r$，且：
 \startigBase
-\item $A[q..t]$ 中的所有元素都相等；
-\item $A[p..q-1]$ 中的所有元素都小於 $A[q]$；
-\item $A[t+1..r]$ 中的所有元素都大於 $A[q]$。
+\item $A[q:t]$ 中的所有元素都相等；
+\item $A[p:q-1]$ 中的所有元素都小於 $A[q]$；
+\item $A[t+1:r]$ 中的所有元素都大於 $A[q]$。
 \stopigBase
-與 \ALGO{PARTITION} 類似，新構造的 \ALGO{PARTITION'} 的時間復雜度是 $\Theta(r-p)$。
+與 \ALGO{PARTITION} 類似， \ALGO{PARTITION'} 的時間復雜度是 $\Theta(r-p)$。
 \stopigBase
 
 \startANSWER
@@ -51,11 +52,11 @@ return q, t
 \stopANSWER
 
 \startigBase[a,continue]
-\item 將 \ALGO{RANDOMIZED-QUICKSORT} 過程改爲調用 \ALGO{PARTITION'}，
+\item 修改 \ALGO{RANDOMIZED-QUICKSORT}，改成調用 \ALGO{PARTITION'}，
 並重新命名爲 \ALGO{RANDOMIZED-QUICKSORT'}。
-修改 \ALGO{QUICKSORT} 的代碼構造一個新的 \ALGO{QUICKSORT'(A, p, r)}，
-他調用 \ALGO{RANDOMIZED-PARTITION'}，
-並且只有分區內的元素互不相同時才做遞迴調用。
+然後修改 \ALGO{QUICKSORT}，改成調用 \ALGO{RANDOMIZED-PARTITION'}，
+並且只有分區內的元素不同時才做遞迴調用，
+重新命名爲 \ALGO{QUICKSORT'(A, p, r)}。
 \stopigBase
 
 \startANSWER
