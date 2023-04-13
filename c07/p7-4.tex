@@ -1,70 +1,58 @@
 %p7-4
 \startPROBLEM
-（Stack depth for quicksort）
-\insection[desc_quicksort] 中的 \ALGO{QUICKSORT} 算法包含了兩個對其自身的遞迴調用。
-在調用 \ALGO{PARTITION} 後， \ALGO{QUICKSORT} 分別遞迴調用了左邊的子數列和右邊的子數列。
- \ALGO{QUICKSORT} 中的第二個遞迴調用並不是必須的。
-我們可以用一個循環控制結構來代替他。
-這一技術稱爲\emph{尾遞迴}，好的編譯器都提供這一功能。
-考慮廈門這個版本的快速排序，他模擬了尾遞迴的情況：
+（Stooge sort）
+Howard 和 Fine 教授提出了一種排序算法，
+並將其命名爲 Stooge 排序。
 
-\CLRSH{TAIL-RECURSIVE-QUICKSORT(A, p, r)}
+\CLRSH{STOOGE-SORT(A,p,r)}
 \startCLRSCODE
-while p < r
-	// Partition and sort left subarray.
-	q = \ALGO{PARTITION(A, p, r)}
-	\ALGO{TAIL-RECURSIVE-QUICKSORT(A, p, q-1)}
-	p = q + 1
+if A[p] > A[r]
+	\ALGO{SWAP(A[p],A[r])}
+if p+1 < r
+	k = \lfloor (r-p+1)/3 \rfloor	// 向下取整
+	\ALGO{STOOGE-SORT(A,p,r-k)}	// 開頭 2/3
+	\ALGO{STOOGE-SORT(A,p+k,r)}	// 最後 2/3
+	\ALGO{STOOGE-SORT(A,p,r-k)}	// 再次開頭 2/3
 \stopCLRSCODE
-
-\startigBase[a]
-\item 證明： \ALGO{TAIL-RECURSIVE-QUICKSORT(A, 1, A.length)} 能正確地對數列 $A$ 進行排序。
-\stopigBase
-
-\startANSWER
-原 \ALGO{QUICKSORT} 將數列劃分成兩部分，並對其分別遞迴調用自身。
-而這個版本所做的事情是一樣的，只是方式不同，不是調用 \ALGO{TAIL-RECURSIVE-QUICKSORT}，
-而是改變 $p$，繼續循環。
-\stopANSWER
-
-編譯器通常使用\emph{棧}來存儲遞迴過程中的相關信息，
-包括每一次遞迴調用的參數等。
-最新調用的信息存在棧的頂部；
-當他結束時，其信息則被\emph{彈出}。
-因爲我們假設數列參數是用指針來指示的，所以每次過程調用只需要 $O(1)$ 的棧空間。
-\emph{棧深度}是在一次計算仲會用到的棧空間的最大值。
-\startigBase[a,continue]\startitem
-請描述一個場景，使得 \ALGO{TAIL-RECURSIVE-QUICKSORT} 作用在規模爲 $n$ 的數列上時，
-棧深度爲 $\Theta(n)$。
+% a
+\startigBase[a]\startitem
+證明調用 \ALGO{STOOGE-SORT(A,1,n)} 可以完成對數列 $A[1:n]$ 的排序。
 \stopitem\stopigBase
 
 \startANSWER
-如果 \ALGO{PARTITION} 返回的一直是 $r$，
-則棧深度爲 $\Theta(n)$。
-在數列已經排好序時就會出現這種情況。
+對於 $n=1,2$，顯然成立。
+遞迴時，可將數列分爲三部分： $A[p,p+k-1]$， $A[p+k,r-k]$ 以及 $A[r-k+1:r]$，
+分別記爲 $a,b,c$。
+則依次排序爲 $a\le b$， $b\le c$， $a\le b$。
+最終可以保證 $a\le b\le c$。
 \stopANSWER
 
+% b
 \startigBase[a,continue]\startitem
-修改 \ALGO{TAIL-RECURSIVE-QUICKSORT} 的代碼，
-使其最壞請看下棧深度爲 $\Theta(\lg{n})$，
-並且能夠保持 $O(n\lg{n})$ 的期望時間複雜度。
+給出 \ALGO{STOOGE-SORT} 最壞運行時間的遞迴式
+及其緊確漸進界（$\Theta$）。
 \stopitem\stopigBase
 
 \startANSWER
-如果每次針對較大的子數列進行尾遞迴，則能滿足要求。
+$\Theta(n)=3\Theta(\frac{2n}{3}) + O(1)$。
 
-\CLRSH{TAIL-RECURSIVE-QUICKSORT‘(A, p, r)}
-\startCLRSCODE
-while p < r
-	// Partition and sort left subarray.
-	q = \ALGO{PARTITION(A, p, r)}
-	if q < (p + r) / 2
-		\ALGO{TAIL-RECURSIVE-QUICKSORT’(A, p, q-1)}
-		p = q + 1
-	else
-		\ALGO{TAIL-RECURSIVE-QUICKSORT’(A, q+1, r)}
-		r = q - 1
-\stopCLRSCODE
+根據主方法， $a=3,b=3/2,\epsilon=\log_{3/2}3$，
+因此解爲 $\Theta(n^{\log_{3/2}3})$。
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+比較 \ALGO{STOOGE-SORT}、插入排序、歸併配需、堆排序以及快速排序的最壞運行時間。
+這些教授是否浪得虛名？
+\stopitem\stopigBase
+
+\startANSWER
+$\log_{3/2}3\approx 2.71$。
+論最壞運行時間，這種排序算法比其他所有算法都差。
+插入排序是 $\Theta(n^2)$，
+歸併排序是 $\Theta(n\lg n)$，
+快速排序是 $\Theta(n^2)$，
+堆排序是 $\Theta(n\lg n)$。
 \stopANSWER
 
 \stopPROBLEM

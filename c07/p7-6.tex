@@ -1,68 +1,84 @@
 %p7-6
 \startPROBLEM
-（Fuzzy sorting of intervals）
-考慮這樣一種排序問題：我們無法準確知道待排序的數字是什麼，
-但是對於每一個數，我們知道他屬於實數數軸上的某個區間。
-也就是說，我們得到了 $n$ 個形如 $[a_i,b_i]$ 的閉區間，其中 $a_i\le b_i$。
-我們的目標是實現這些區間的\emph{模糊排序}，
-即對 $j=1,2,\ldots,n$ 生成一個區間的排列 $\langle i_1,i_2,\ldots,i_n\rangle$，
-且存在 $c_j \in [a_{i_j}, b_{i_j}]$，
-滿足 $c_1\le c_2\le\ldots\le c_n$。
+（Median-of-3 partition）
+一種改進 \ALGO{RANDOMIZED-QUICKSORT} 的方法就是在劃分時，
+從子數列中更細緻地選擇主元（而不是簡單的隨機選擇）。
+通常用的是三數取中法：
+從字數列仲隨機選出三個元素，取其中位數作爲主元（參見\inexercise[random_three_median]）。
+對於這個問題的分析，我們不妨假設數列 $A[1..n]$ 的元素是互異的且有 $n\ge 3$。
+我們用 $A'[1..n]$ 來表示已排好序的數列。
+用三數取中法選擇主元 $x$，並定義 $p_i=\Pr\{x=A'[i]\}$。
 \startigBase[a]\startitem
-爲 $n$ 個區間的模糊排序設計一個隨機算法。
-你的算法應該具有算法的一般結構，
-他可以對左邊端點（即 $a_i$ 的值）進行快速排序，
-同時他也能利用區間的重疊性質來改善時間性能。
-（當區間重疊越來越多的時候，區間的模糊排序問題變得越來越容易。
-你的算法應充分利用這一重疊性質。）
+對於 $i=2,3,\ldots,n-1$，請給出以 $n$ 和 $i$ 表示的 $p_i$ 的準確表達式（注意 $p_1=p_n=0$）。
 \stopitem\stopigBase
 
 \startANSWER
-與\refproblem{quicksort_with_equal} 類似。
-在（隨機）選擇主元區間後，檢查與其他區間是否重疊。
-具體而言，累計主區間和其他區間的重疊區間。
-然後用此區間進行比較，而不是用主元進行比較。
-比較時，凡是包含此區間的其他區間都可以認爲是相等的。
-在將主區間左邊的區間排列完畢後，可以將相等的區間全部放到主元的右邊。
-與\refproblem{quicksort_with_equal} 類似，返回兩個點（區間）用來進行遞迴。
-
-即使劃分時需要掃描三次子數列（最壞情況），整個算法仍然是線性的。
+共有 $n!/(n-3)!$ 種三元素排列。如果中位數是第 $i$ 小元素，
+則需要有一個小於他的元素，一個大於他的元素。
+小於他的元素有 $i-1$ 個，大於他的有 $n-i$ 個。
+這三個元素共有 $3!$ 種選取順序。因此：
+\startformula
+p_i = \frac{6(i-1)(n-i)}{n(n-1)(n-2)}
+\stopformula
 \stopANSWER
 
 \startigBase[a,continue]\startitem
-證明：在一般情況下，你的算法期望運行時間爲 $\Theta(n\lg{n})$。
-但是，當所有的區間都有重疊的時候，算法的期望運行時間爲 $\Theta(n)$。
-也就是說，存在一個值 $x$，對所有的 $i$，都有 $x\in [a_i,b_i]$。
-你的算法不必顯式地檢查這種情況，
-而是隨着重疊情況的增加，算法的性能自然地提高。
+與普通實現相比，在這種實現中，
+選擇 $x=A'\left[\lfloor (n+1)/2 \rfloor\right]$
+ （即 $A[1..n]$ 的中位數）
+的值作爲主元的概率增加了多少？
+假設 $n\to\infty$，請給出這一概率的極限值。
 \stopitem\stopigBase
 
 \startANSWER
-\CLRSH{FUZZY-PARTITION(A, p, r)}
-\startCLRSCODE
-x = A[r]
-// find the minimus interval for pivot
-for j = p to r - 1
-	if x.left <= A[j].right and A[j].right < x.right
-		x.right = A[j].right
-	if x.left < A[j].left and A[j].left <= x.right
-		x.left = A[j].left
+\startsplitformula\startmathalignment
+\NC \NC \lim_{n \to \infty}\frac{6(i-1)(n-i)}{n(n-1)(n-2)}/\frac{1}{n} \NR
+\NC = \NC \lim_{n \to \infty}\frac{6n(n/2 - 1)(n/2)}{n(n-1)(n-2)} \NR
+\NC = \NC \lim_{n \to \infty}\frac{6(n^2 - 2n)}{4(n^2 - 3n + 2)} \NR
+\NC = \NC \frac{6}{4} \NR
+\stopmathalignment\stopsplitformula
+概率變爲原來的 1.5 倍，變化不大。
+\stopANSWER
 
-q = p - 1
-t = q
-for j = p to r - 1
-	if A[j].right <= x.right
-		if A[j].right = x.right
-			q = q + 1
-			\ALGO{SWAP(A[q],A[j])}
-		t = t + 1
-		\ALGO{SWAP(A[t],A[j])}
-q = q + 1
-t = t + 1
-\ALGO{SWAP(A[t],A[r])}
+\startigBase[a,continue]\startitem
+如果我們定義一個“好”的劃分意味着選擇 $x=A'[i]$ 作爲主元，其中 $n/3\le i\le 2n/3$。
+與普通實現相比，這種實現仲得到一個好的劃分的概率增加了多少？
+（\hint 積分來近似累加和）
+\stopitem\stopigBase
 
-return q, t
-\stopCLRSCODE
+\startANSWER
+由\inexercise[const_part_probability]可知，
+普通實現中得到“好”的劃分的概率爲 $1-2(1/3)=1/3$。
+而三數取中法可將概率變爲：
+\startsplitformula\startmathalignment
+\NC   \NC \lim_{n \to \infty}\sum_{i=n/3}^{2n/3}\frac{6(i-1)(n-i)}{n(n-1)(n-2)} \NR
+\NC = \NC \lim_{n \to \infty}\frac{6}{n(n-1)(n-2)}\sum_{i=n/3}^{2n/3}(i-1)(n-i) \NR
+\NC = \NC \lim_{n \to \infty}\binom{n}{3}\int_{n/3}^{2n/3}(i-1)(n-i)\mathrm{d}i \NR
+\NC   \NC  \qquad \left( \int(i-1)(n-i)\mathrm{d}i
+                      = \frac{1}{6}(3ni^2 - 6ni - 2i^3 + 3i^2) \right) \NR
+\NC = \NC \lim_{n \to \infty}\binom{n}{3}\frac{1}{6}\left[
+          \frac{36}{27}n^3 - \frac{16}{27}n^3 + o(n^3) -
+          \frac{9}{27}n^3 + \frac{2}{27}n^3 + o(n^3)
+        \right] \NR
+\NC = \NC \lim_{n \to \infty}\frac{1}{n(n-1)(n-2)} \frac{13}{27}(n^3 + o(n^3)) \NR
+\NC = \NC \lim_{n \to \infty}\frac{13}{27}\frac{n^3 + o(n^3)}{n^3 + o(n^3)} \NR
+\NC = \NC \frac{13}{27} \NR
+\stopmathalignment\stopsplitformula
+
+$n$ 增大時，概率收斂爲 $13/27$，
+是普通實現的 $\frac{13}{27} \div \frac{1}{3} = \frac{39}{27} \approx 1.\dot{4}$ 倍。
+\stopANSWER
+
+\startigBase[a,continue]\startitem
+證明：對快速排序而言，三數取中法只影響其時間複雜度 $\Omega(n\lg{n})$ 的常數項因子。
+\stopitem\stopigBase
+
+\startANSWER
+如果新的方法總能得到“好”的劃分，則會減少運行時間。然而，他不能。
+新方法只能保證無論怎樣劃分，都不會出現空的子數列，但是仍會出現 $1:(n-2)$ 的劃分。
+他提升了“好”的劃分的概率，同時也增加了選擇主元的開銷，
+但無法保證劃分的質量。
+因此算法的時間複雜度仍然爲 $\Omega(n\lg{n})$ 和 $O(n^2)$。
 \stopANSWER
 
 \stopPROBLEM
