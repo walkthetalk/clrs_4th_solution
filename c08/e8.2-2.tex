@@ -1,0 +1,12 @@
+\startEXERCISE
+試證明 \ALGO{COUNTING-SORT} 是穩定的。
+\stopEXERCISE
+
+\startANSWER
+假定兩個下標爲 $i_1$ 和 $i_2$，且 $i_1 < i_2$ 的元素相等。
+排序後位置爲 $j_1$ 和 $j_2$。
+由於 \ALGO{COUNTING-SORT} 是從右向左處理數列元素的，
+會先處理 $A[i_2]$，將其放入 $B[j_2]$ 中，
+然後再處理 $A[i_1]$，將其放入 $B[j_1]$ 中。
+由算法可知 $j_2 > j_1$，因此算法是穩定的。
+\stopANSWER

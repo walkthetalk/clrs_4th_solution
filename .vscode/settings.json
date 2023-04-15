@@ -1,7 +1,11 @@
 {
     "editor.tabSize": 8,
+    "editor.insertSpaces": false,
+    "editor.detectIndentation": false,
     "tex": {
-        "editor.tabSize": 2
+        "editor.tabSize": 2,
+        "editor.insertSpaces": false,
+    	"editor.detectIndentation": false
     },
     "editor.unicodeHighlight.allowedLocales": {
         "zh-hans": true,

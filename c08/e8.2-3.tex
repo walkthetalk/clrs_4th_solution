@@ -1,0 +1,55 @@
+\startEXERCISE
+如果將 \ALGO{COUNTING-SORT} 的第 12 行 \emph{for} 循環改爲：
+\startCLRSCODE[start=12]
+for j = 1 to n
+\stopCLRSCODE
+試證明該算法仍可以正常工作，但不穩定。
+然後重寫計數排序的僞碼，
+使得相同元素按索引升序寫入輸出數列，
+且算法是穩定的。附：
+\CLRSH{COUNTING-SORT(A,n,k)}
+\startCLRSCODE
+\ALGO{SETUP-ARRAY(B[1:n])}
+\ALGO{SETUP-ARRAY(C[0:k])}
+for i = 0 to k
+	C[i] = 0
+for j = 1 to n
+	C[A[j]] = C[A[j]] + 1
+// 現在 $C[i]$ 即爲 $i$ 在 $A$ 中出現的次數
+for i = 1 to k
+	C[i] = C[i] + C[i-1]
+// C[i] 爲 $\le i$ 的元素的數目
+// 將 $A$ 複製到 $B$ 中，從 $A$ 的末尾開始
+for j = n downto 1
+	B[C[A[j]]] = A[j]
+	C[A[j]] = C[A[j]] - 1	// 處理重複的值
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+算法仍然正確，但不穩定了。
+相等的元素會以相反的順序出現在排好序的數列中。
+
+如果該了 \emph{for} 循環遍歷的方向，
+則需要更改數列 $C$ 的含義，
+ $C[i]$ 中存放小於 $i$ 的元素的數目，
+ 不再包含等於 $i$ 的元素的數目。
+\CLRSH{COUNTING-SORT‘(A,n,k)}
+\startCLRSCODE
+\ALGO{SETUP-ARRAY(B[1:n])}
+\ALGO{SETUP-ARRAY(C[0:k])}
+for i = 0 to k
+	C[i] = 0
+for j = 1 to n
+	if A[j] < k		// 改爲 $A[j]+1$
+		C[A[j]+1] = C[A[j]+1] + 1
+// 現在 $C[i]$ 即爲 $i-1$ 在 $A$ 中出現的次數
+for i = 1 to k
+	C[i] = C[i] + C[i-1]
+// C[i] 爲 $< i$ 的元素的數目
+// 將 $A$ 複製到 $B$ 中，從 $A$ 的末尾開始
+for j = 1 to n		// 改爲升序
+	B[C[A[j]]] = A[j]
+	C[A[j]] = C[A[j]] + 1	// 改爲 $+1$
+\stopCLRSCODE
+\stopANSWER

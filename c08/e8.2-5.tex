@@ -1,0 +1,27 @@
+\startEXERCISE
+假設索要排序的數列元素均爲 $0$ 到 $k$ 之間的整數，
+且沒有需要與 key 一起移動的衛星數據。
+修改計數排序，僅使用數列 $A$ 和 $C$，
+將結果存入數列 $A$，而無需新數列 $B$。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{COUNTING-SORT‘’(A,n,k)}
+\startCLRSCODE
+\ALGO{SETUP-ARRAY(C[0:k])}
+for i = 0 to k
+	C[i] = 0
+for j = 1 to n
+	C[A[j]] = C[A[j]] + 1
+// 現在 $C[i]$ 即爲 $i$ 在 $A$ 中出現的次數
+for i = 1 to k
+	C[i] = C[i] + C[i-1]
+// C[i] 爲 $\le i$ 的元素的數目
+// 將 $A$ 複製到 $B$ 中，從 $A$ 的末尾開始
+s = 1
+for i = 0 to k
+	for j = s to c[i]
+		A[s] = i
+	s = c[i] + 1
+\stopCLRSCODE
+\stopANSWER

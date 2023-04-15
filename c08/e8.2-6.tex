@@ -1,0 +1,10 @@
+\startEXERCISE
+設計一個算法，對介於 $0$ 到 $k$ 之間的 $n$ 個整數先進行預處理，
+然後在 $O(1)$ 時間內回答輸入的 $n$ 個整數中有多少個落在區間 $[a..b]$ 內。
+此算法的預處理時間應爲 $\Theta(n+k)$。
+\stopEXERCISE
+
+\startANSWER
+先利用 \ALGO{COUNTING-SORT} 中的部分代碼構建數列 $C$，即預處理，時間爲 $\Theta(n) + \Theta(k) = \Theta(n+k)$。
+然後直接由 $C[b] - C[a-1]$ 即可得到想要的結果，時間爲 $O(1)$。
+\stopANSWER
