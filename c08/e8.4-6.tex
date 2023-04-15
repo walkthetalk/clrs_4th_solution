@@ -1,0 +1,14 @@
+\startEXERCISE\DIFFICULT
+定義隨機變量 $X$ 的\emph{概率分布函數} $P(x)$ 爲 $P(x)=\Pr\{X\le x\}$。
+假設有 $n$ 個隨機變量 $X_1,X_2,\ldots,X_n$ 服從連續概率分布函數 $P$，
+且可以在 $O(1)$ 時間內計算出 $P$ 的值，
+即給定 $y$，可以在 $O(1)$ 時間內找到 $x$，使得 $P(x)=y$。
+設計一個算法對這些數進行排序，使其平均情況運行時間爲線性。
+\stopEXERCISE
+
+\startANSWER
+與上一練習類似，關鍵在於如何構造“桶”。
+找到 $x_0,x_1,\ldots,x_n$，使得 $P(x_i)-P(x_{i-1}) = 1/n$，
+其中 $i=1,2,\ldots,n$。
+這 $n$ 個桶的區間爲 $(x_0,x_1],(x_1,x_2],\ldots,(x_{n-1},x_n]$。
+\stopANSWER

@@ -1,0 +1,20 @@
+
+\startEXERCISE\DIFFICULT
+有數列 $A$，大小爲 $n>10$，按如下方式填充。
+對於每個元素 $A[i]$，
+均勻選擇兩個隨機變量 $x_i$ 和 $y_i$，
+且相互獨立，範圍均爲 $[0,1)$。然後設置：
+\startformula
+A[i]=\frac{\lfloor 10 x_i\rfloor}{10} + \frac{y_i}{n}
+\stopformula
+修改桶排序，在期望時間 $O(n)$ 內對 $A$ 進行排序。
+\stopEXERCISE
+
+\startANSWER
+$A[i]$ 中第一部分 $\frac{\lfloor 10 x_i\rfloor}{10}$ 可能的值爲
+ $0.0,0.1,0.2,\ldots,0.9$，而第二部分 $\frac{y_i}{n}$ 的值 $<0.1$。
+
+按小數點後第一位，即十分位的值分成 $10$ 個桶。
+任一元素放入任一桶的機會均等，且在插入排序時，
+各元素第二部分在 $[0, 1/n)$ 間均勻分佈。
+\stopANSWER

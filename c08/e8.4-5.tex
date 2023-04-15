@@ -1,0 +1,44 @@
+\startEXERCISE\DIFFICULT
+在單位圓內給定 $n$ 個點， $p_i=(x_i,y_i)$，
+對所有 $i=1,2,\ldots,n$，有 $0<x_i^2+y_i^2\le 1$。
+假設所有點服從均勻分布，即在單位圓內任一區域找到給定點的概率與該區域面積成正比。
+請設計一個在平均情況下運行時間爲 $\Theta(n)$ 的算法，
+按照點到原點之間的距離 $d_i=\sqrt{x_i^2+y_i^2}$ 對這 $n$ 個點進行排序。
+\stopEXERCISE
+
+\startANSWER
+單位圓面積爲 $\pi 1^2=\pi$，將其 $n$ 等分，每塊面積爲 $\pi/n$。
+如果圓環的內徑爲 $a$，外徑爲 $b$，則其面積爲 $\pi(b^2-a^2)$。
+
+選取半徑序列 $a_0,a_1,a_2,\ldots,a_n$ 將單位圓劃分成面積相等的 $n$ 等份。
+第 $i$ 個圓環內外徑分別爲 $a_{i-1}$ 和 $a_i$。
+已知 $a_0=0$ 且 $a_n=1$。則：
+\startsplitformula\startmathalignment[n=1]
+\NC \pi(a_i^2 - a_{i-1}^2) = \frac{\pi}{n} \NR
+\NC \Downarrow \NR
+\NC a_i^2 - a_{i-1}^2 = \frac{1}{n} \NR
+\NC \Downarrow \NR
+\NC a_i^2 = \frac{1}{n} + a_{i-1}^2 \NR
+\stopmathalignment\stopsplitformula
+得到如下遞迴式：
+\startsplitformula\startmathalignment
+\NC a_i \NC= \sqrt{1/n + a_{i-1}^2} \NR
+\stopmathalignment\stopsplitformula
+又 $a_0 = 0$，解得：
+\startformula
+a_i=\frac{\sqrt{i}}{\sqrt{n}}
+\stopformula
+
+因此，桶的半徑區間爲：
+\startformula
+\left(0, \frac{1}{\sqrt n} \right],
+   \left(\frac{1}{\sqrt n}, \frac{\sqrt 2}{\sqrt n}\right], \cdots,
+   \left(\frac{\sqrt{n-1}}{\sqrt n}, 1 \right]
+\stopformula
+
+半徑爲 $d$ 的元素應該放入第 $k$ 個桶中
+（從 $1$ 開始計數）， $k$ 爲：
+\startformula
+k = \lceil d^2 n \rceil
+\stopformula
+\stopANSWER
