@@ -1,0 +1,18 @@
+\startEXERCISE
+證明：對於 $n!$ 種長度爲 $n$ 的輸入，
+至少有一半不能在線性運行時間內完成比較排序。
+如果只要求對 $1/n$ 的輸入達到線性時間呢？
+ $1/2^n$ 呢？
+\stopEXERCISE
+
+\startANSWER
+如果能在線性時間內排序，則路徑在決策樹上的高度要小於等於 $n$，
+而高度爲 $n$ 的二叉樹最多有 $2^n$ 個葉子節點，因此：
+\startformula
+\frac{n!}{2} \le 2^n
+\stopformula
+只有 $n$ 很小時上式才能成立。
+
+對於 $\frac{n!}{n} \le 2^n$ 和 $\frac{n!}{2^n}\le 2^n \Leftrightarrow n! \le 4^n$，
+都只有當 $n$ 很小時才成立。
+\stopANSWER

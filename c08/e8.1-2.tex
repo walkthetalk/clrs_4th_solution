@@ -1,0 +1,23 @@
+\startEXERCISE[exercise:bound_of_lgnfrac]
+不用 Stirling 近似公式，給出 $\lg(n!)$ 的漸進緊確界。
+利用 A.2 中介紹的技術來求累加和 $\sum_{k=1}^n\lg{k}$。
+\stopEXERCISE
+
+\startANSWER
+先來證明解爲 $O(n\lg{n})$：
+\startformula
+\sum_{k=1}^n\lg{k} \le \sum_{k=1}^n\lg{n} = n\lg{n} = O(n\lg{n})
+\stopformula
+
+再來證明解爲 \m{\Omega(n\lg{n})}：
+\startsplitformula\startmathalignment
+\NC \sum_{k=1}^n\lg{k}
+   \NC= \sum_{k=1}^{\lfloor n/2 \rfloor}\lg{k} +
+	\sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{k} \NR
+\NC\NC\ge \sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{k} \NR
+\NC\NC\ge \sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{\frac{n}{2}} \NR
+\NC\NC\ge (\frac{n}{2}-1)\lg{\frac{n}{2}} \NR
+\NC\NC\ge (\frac{n}{2}-1)(\lg{n}-1) \NR
+\NC\NC= \Omega(n\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
