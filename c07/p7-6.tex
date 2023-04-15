@@ -4,12 +4,16 @@
 一種改進 \ALGO{RANDOMIZED-QUICKSORT} 的方法就是在劃分時，
 從子數列中更細緻地選擇主元（而不是簡單的隨機選擇）。
 通常用的是三數取中法：
-從字數列仲隨機選出三個元素，取其中位數作爲主元（參見\inexercise[random_three_median]）。
-對於這個問題的分析，我們不妨假設數列 $A[1..n]$ 的元素是互異的且有 $n\ge 3$。
-我們用 $A'[1..n]$ 來表示已排好序的數列。
-用三數取中法選擇主元 $x$，並定義 $p_i=\Pr\{x=A'[i]\}$。
+從子數列中隨機選出三個元素，
+取其中位數作爲主元（參見\inexercise[random_three_median]）。
+對於這個問題的分析，我們不妨假設數列 $A[1..n]$ 的元素是互異的且 $n\ge 3$。
+我們用 $z_1,z_2,\ldots,z_n$ 表示已排序的 $A[p..r]$。
+用三數取中法選擇主元 $x$，並定義 $p_i=\Pr\{x=z_i\}$。
+% a
 \startigBase[a]\startitem
-對於 $i=2,3,\ldots,n-1$，請給出以 $n$ 和 $i$ 表示的 $p_i$ 的準確表達式（注意 $p_1=p_n=0$）。
+對於 $i=2,3,\ldots,n-1$，
+請給出 $p_i$ 的準確表達式，用 $n$ 和 $i$ 表示
+（注意 $p_1=p_n=0$）。
 \stopitem\stopigBase
 
 \startANSWER
@@ -22,12 +26,13 @@ p_i = \frac{6(i-1)(n-i)}{n(n-1)(n-2)}
 \stopformula
 \stopANSWER
 
+% b
 \startigBase[a,continue]\startitem
 與普通實現相比，在這種實現中，
-選擇 $x=A'\left[\lfloor (n+1)/2 \rfloor\right]$
- （即 $A[1..n]$ 的中位數）
-的值作爲主元的概率增加了多少？
-假設 $n\to\infty$，請給出這一概率的極限值。
+所選主元滿足 $x=z_{\lfloor (n+1)/2 \rfloor}$
+ （即 $A[p..r]$ 的中位數）
+的概率增加了多少？
+假設 $n\to\infty$，請給出這一概率比值的極限值。
 \stopitem\stopigBase
 
 \startANSWER
@@ -40,10 +45,12 @@ p_i = \frac{6(i-1)(n-i)}{n(n-1)(n-2)}
 概率變爲原來的 1.5 倍，變化不大。
 \stopANSWER
 
+% c
 \startigBase[a,continue]\startitem
-如果我們定義一個“好”的劃分意味着選擇 $x=A'[i]$ 作爲主元，其中 $n/3\le i\le 2n/3$。
+如果我們定義一個“好”的劃分意味着選擇 $x=z_i$ 作爲主元，
+其中 $n/3\le i\le 2n/3$。
 與普通實現相比，這種實現仲得到一個好的劃分的概率增加了多少？
-（\hint 積分來近似累加和）
+（\hint 用積分來近似累加和）
 \stopitem\stopigBase
 
 \startANSWER
@@ -65,10 +72,11 @@ p_i = \frac{6(i-1)(n-i)}{n(n-1)(n-2)}
 \NC = \NC \frac{13}{27} \NR
 \stopmathalignment\stopsplitformula
 
-$n$ 增大時，概率收斂爲 $13/27$，
+$n$ 趨近 $\infty$ 時，概率收斂爲 $13/27$，
 是普通實現的 $\frac{13}{27} \div \frac{1}{3} = \frac{39}{27} \approx 1.\dot{4}$ 倍。
 \stopANSWER
 
+% d
 \startigBase[a,continue]\startitem
 證明：對快速排序而言，三數取中法只影響其時間複雜度 $\Omega(n\lg{n})$ 的常數項因子。
 \stopitem\stopigBase
