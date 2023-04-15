@@ -1,0 +1,15 @@
+\startEXERCISE
+假設在 \ALGO{RADIX-SORT} 中使用 \ALGO{COUNTING-SORT} 作爲穩定排序。
+如果 \ALGO{RADIX-SORT} 調用了 $d$ 次 \ALGO{COUNTING-SORT}，
+由於每次調用 \ALGO{COUNTING-SORT} 都遍歷了兩次數據
+（第 4-5 及 11-13 行），
+一共會遍歷 $2d$ 次。
+如何將總遍歷次數降爲 $d+1$？
+\stopEXERCISE
+
+\startANSWER
+在 \ALGO{COUNTING-SORT} 中只遍歷依次生成數列 $C$，
+在調用 $d$ 次 \ALGO{COUNTING-SORT} 後，
+再遍歷最後一次，對於任一元素，遍歷所有 $C$，
+總共 $d+1$ 次。
+\stopANSWER
