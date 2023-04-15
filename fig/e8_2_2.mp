@@ -83,18 +83,20 @@ image(
 	numeric localcnt;
 	localcnt := 1;
 
+	gsize := .3cm;
+
 	% init
 	if localcnt = recurselevel:
-		draw img_radix_sort(A)(ALength, .5cm, -1);
+		draw img_radix_sort(A)(ALength, gsize, -1);
 	fi;
 	localcnt := localcnt + 1;
 
 	for i = 2 downto 0:
-		radix_sort(A, B, C)(ALength, BLength, CLength, .5cm, i);
+		radix_sort(A, B, C)(ALength, BLength, CLength, gsize, i);
 
 		if localcnt = recurselevel:
-			drawarrow (-2cm, -ALength/2 * .5cm)--(-.3cm, -ALength/2 * .5cm);
-			draw img_radix_sort(A)(ALength, .5cm, i);
+			drawarrow (-2cm, -ALength/2 * gsize)--(-.3cm, -ALength/2 * gsize);
+			draw img_radix_sort(A)(ALength, gsize, i);
 		fi;
 		localcnt := localcnt + 1;
 	endfor;
