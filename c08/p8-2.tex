@@ -1,0 +1,110 @@
+\startPROBLEM
+（Sorting in place in linear time）
+假設有 $n$ 個待排序的數據記錄，
+且每條記錄的關鍵字值爲 $0$ 或 $1$。
+對這樣一組記錄進行排序的算法可能具備如下三種特性中的一部分：
+\startigBase[n]
+\item 算法的運行時間爲 $O(n)$；
+\item 算法是穩定的；
+\item 算法是原址排序，除了輸入數列之外，算法只需要固定的額外存儲空間。
+\stopigBase
+
+% a
+\startigBase[a]\startitem
+給出一個滿足上述條件 1 和條件 2 的算法。
+\stopitem\stopigBase
+
+\startANSWER
+\startCLRSCODE
+\ALGO{SETUP(C[1..n])}
+index = 1
+for i = 1 to n
+	if A[i] == 0
+		C[index] = A[i]
+		index = index + 1
+for i = 1 to n
+	if A[i] == 1
+		C[index] = A[i]
+		index = index + 1
+\stopCLRSCODE
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+給出一個滿足上述條件 1 和條件 3 的算法。
+\stopitem\stopigBase
+
+\startANSWER
+改造計數排序，不求穩定，即可做到原址排序。
+\startCLRSCODE
+index = 1
+for i = 1 to n
+	if A[i] == 0
+		\ALGO{SWAP(A[i],A[index])}
+		index = index + 1
+\stopCLRSCODE
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+給出一個滿足上述條件 2 和條件 3 的算法。
+\stopitem\stopigBase
+
+\startANSWER
+冒泡排序。
+\stopANSWER
+
+% d
+\startigBase[a,continue]\startitem
+是否可以在上面三個算法中選一個
+用於 \ALGO{RADIX-SORT} 的第 2 行作爲基礎排序方法，
+從而在排序有 $b$ 位關鍵字的 $n$ 條記錄時，
+ \ALGO{RADIX-SORT} 的時間代價爲 $O(bn)$？
+如果可以，請解釋如何處理；如果不行，請說明原因。
+\stopitem\stopigBase
+
+\startANSWER
+只有第一項的計數排序可以。基數排序要求穩定，
+另外基礎排序要求時間代價爲 $\Theta(n)$。
+\stopANSWER
+
+% e
+\startigBase[a,continue]\startitem
+假設有 $n$ 條記錄，關鍵字的值都在 $1$ 到 $k$ 之間。
+你應該如何修改計數排序，
+使得他可以在 $O(n+k)$ 的時間內完成對 $n$ 條記錄的原址排序。
+除輸入數列外，
+你可以使用 $O(k)$ 大小的額外存儲空間。
+你給出的算法是穩定的嗎？
+\stopitem\stopigBase
+
+\startANSWER
+\startCLRSCODE
+\ALGO{SETUP-ARRAY(C[0:k])}
+for i = 0 to k
+	C[i] = 0
+for j = 1 to n
+	C[A[j]] = C[A[j]] + 1
+// 現在 $C[i]$ 即爲 $i$ 在 $A$ 中出現的次數
+for i = 1 to k
+	C[i] = C[i] + C[i-1]
+// $C[i]$ 爲 $\le i$ 的元素的數目
+// 將 $C$ 的內容複製到 $B$ 中
+\ALGO{SETUP-ARRAY(B[0:k])}
+for i = 0 to k
+	B[i] = C[i]
+// 將 $A$ 複製到 $B$ 中，從 $A$ 的末尾開始
+i = 1
+while i ≤ n
+	key = A[i]
+	// 如果位置正確，檢查下一個
+	if B[key - 1] < i and B[key] <= i
+		++i
+	// 如果位置不正確，與正確位置的元素互換
+	else
+		\ALGO{SWAP(A[i],A[C[key]])}
+		--C[key]
+\stopCLRSCODE
+\stopANSWER
+
+\stopPROBLEM

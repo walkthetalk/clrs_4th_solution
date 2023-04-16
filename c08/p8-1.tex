@@ -1,0 +1,131 @@
+\startPROBLEM
+（Probabilistic lower bounds on comparison sorting）
+在這一問題中，我們將證明：
+對於給定的 $n$ 個互異的輸入元素，
+任何確定或隨機的比較排序算法，
+其運行時間都有基於概率的下界 $\Omega(n\lg{n})$。
+首先分析一個確定的比較排序算法對 $A$ 進行排序，
+其決策樹爲 $T_A$。
+假設 $A$ 的所有排列機會均等。
+% a
+\startigBase[a]\startitem
+假設 $T_A$ 的每個葉子節點都標有在隨機輸入情況下到達該節點的概率。
+證明：恰有 $n!$ 個葉子節點標有 $1/n!$，其他的葉子節點標記爲 $0$。
+\stopitem\stopigBase
+
+\startANSWER
+有 $n!$ 種排序結果，每一種都對應 $n!$ 種輸入中的一種。
+每種排序結果都對應一個葉子節點，由於各種輸入的可能性相同，
+到達具體排序結果的概率均爲 $1/n!$。
+除了這 $n!$ 種結果所對應的葉子節點，
+即使決策樹有其他有更多葉子節點，也無法到達。
+
+當然以上僅憑直覺，正式的證明卻有點麻煩。
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+令 $D(T)$ 表示決策樹 $T$ 的外部路徑長度，
+即 $T$ 的所有葉子節點深度的和。
+令 $T$ 的葉子節點數目 $k>1$，
+ $LT$ 和 $RT$ 分別是 $T$ 的左子樹和右子樹。
+證明：
+\startformula
+D(T) = D(LT) + D(RT) + k
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+子樹上的葉子節點在原樹上也是葉子節點。
+原樹上的葉子節點也是子樹上的葉子節點
+（不是左子樹的葉子，就是右子樹的葉子）。
+因此 $LEAVES(LT) + LEAVES(RT) = k$。
+對於子樹上的每個葉子節點而言，在子樹上的深度比在原樹上的深度小 1。
+因此：
+\startsplitformula\startmathalignment
+\NC D(T) \NC = D(LT) + LEAVES(LT) + D(RT) + LEAVES(RT) \NR
+\NC      \NC = D(LT) + D(RT) + k \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+對於葉子節點數目爲 $k>1$ 的所有決策樹 $T$，
+令 $D(T)$ 的最小值爲 $d(k)$。
+證明：
+\startformula
+d(k) = \min_{1\le i\le {k-1}}\left\{d(i)+d(k-i)+k\right\}
+\stopformula
+（\hint 找一棵能使 $d(k)$ 取得最小值的、有 $k$ 個葉子節點的決策樹 $T$。
+設 $i_0$ 是 $LT$ 中的葉子節點數， $k-i_0$ 是 $RT$ 中的葉子節點數。）
+\stopitem\stopigBase
+
+\startANSWER
+對於一棵具有 $k$ 個葉子節點的決策樹，
+由上一項可知：
+\startformula
+D(T) = D(LT) + D(RT) + k
+\stopformula
+而左子樹上葉子節點數目有從 $1$ 到 $k-1$ 共 $k-1$ 種可能。
+由 $d(k)$ 的定義即得所要證明的結論。
+\stopANSWER
+
+% d
+\startigBase[a,continue]\startitem
+證明：對於給定的 $k$ 和 $i$ （$k>1$ 且 $1\le i\le {k-1}$），
+函數 $i\lg{i}+(k-i)\lg{k-i}$ 在 $i=k/2$ 處取得最小值，
+並有結論 $d(k)=\Omega(k\lg{k})$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC f(i) \NC= i\lg{i} + (k-i)\lg(k-i) \NR
+\NC f'(i) \NC= \lg{i} + 1 - \lg(k-i) - 1 = \lg\frac{i}{k-i} \NR
+\NC f'(i) = 0 \NC \Leftrightarrow \lg\frac{i}{k-i} = 0 \Rightarrow i/(k-i) = 1 \Rightarrow i = \frac k 2 \NR
+\stopmathalignment\stopsplitformula
+
+由於 $f'(i)$ 單調遞增，因此 $f(i)$ 在 $i=k/2$ 處取得局部最小值。
+
+就直覺而言，應該是左右兩棵子樹大小相同時取得最小值。
+\stopANSWER
+
+% e
+\startigBase[a,continue]\startitem
+證明： $D(T_A)=\Omega(n!\lg(n!))$，
+且對 $n$ 個元素進行排序平均所需時間爲 $\Omega(n\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+在 $T_A$ 上有 $n!$ 個葉子節點，
+由上一項可知 $D(n)>d(k)=\Omega(n!\lg(n!))$。
+每種排列的概率都是 $1/n!$，
+因此排序的期望時間爲：
+\startformula
+\frac{\Omega(n!\lg(n!))}{n!} = \Omega(\lg(n!)) = \Omega(n\lg{n})
+\stopformula
+\stopANSWER
+
+現在考慮一個隨機化的比較排序 $B$。
+通過引入兩種節點，
+我們可以擴展決策樹模型來處理隨機化的情況。
+這兩種節點是：
+普通的比較節點和“隨機化”節點。
+隨機化節點使用 $B$ 中的 \ALGO{RANDOM(1, r)} 進行隨機挑選。
+該類節點有 $r$ 個子節點，
+在算法執行過程中，選擇任一子節點的概率相等。
+% f
+\startigBase[a,continue]\startitem
+證明：對任何隨機化比較排序算法 $B$，
+總存在一個確定的比較排序算法 $A$，
+其比較次數的期望值不多於 $B$ 的比較次數。
+\stopitem\stopigBase
+
+\startANSWER
+隨機算法 $B$ 所對應的確定算法 $A$ 可以認爲只是進行了預先的“隨機”選擇。
+我們可以通過將隨機節點替換爲我們所選的一個子節點，來構造確定算法的決策樹。
+隨機節點的所有子樹的期望值要大於等於其中最小的那棵子樹。
+由於確定算法時間代價爲 $\Omega(n\lg{n})$，
+因此隨機算法的時間代價亦爲 $\Omega(n\lg{n})$。
+\stopANSWER
+
+\stopPROBLEM

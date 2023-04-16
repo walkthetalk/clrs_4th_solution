@@ -321,11 +321,13 @@ function commands.clrsalgo(algoname)
 	end
 end
 \stopluacode
+% @note 使用 [==[xxx]==]，不要使用 [[xxx]]，
+%       防止多重索引訪問數列造成的衝突，如 A[C[idx]]
 \define[1]\ALGO{%
 \ifmmode%
-\ctxlua{commands.clrsalgo([[#1]])}%
+\ctxlua{commands.clrsalgo([==[#1]==])}%
 \else%
-\m{\ctxlua{commands.clrsalgo([[#1]])}}%
+\m{\ctxlua{commands.clrsalgo([==[#1]==])}}%
 \fi%
 }%
 
