@@ -1,0 +1,79 @@
+\startPROBLEM
+（Water jugs）
+假設有 $n$ 個紅色水壺和 $n$ 個藍色水壺。
+他們的形狀和大小各不相同。
+所有的紅色水壺的容積都不一樣，
+藍色水壺亦是如此。
+壺的容積與壺的大小沒有關係。
+而且，對於任一個水壺來說，
+肯定有一個跟他顏色不同的水壺，容積一樣。
+
+你的任務是將紅水壺和藍水壺配對，要求所盛水一樣多。
+爲此，可以這樣做：
+挑出一對水壺，其中一個是紅色的，一個是藍色的，
+將紅色水壺中倒滿水，再將水倒入藍色的水壺中。
+通過這一操作，可以判斷出這兩個水壺容積是否相同。
+假設這樣的比較需要花費一個單位時間。
+你的目標是找出一個算法，用最少的比較次數進行配對。
+注意，你不能直接比較兩個紅色或兩個藍色的水壺。
+% a
+\startigBase[a]\startitem
+設計一個確定性算法，能用 $\Theta(n^2)$ 次比較來完成所有水壺的配對。
+\stopitem\stopigBase
+
+\startANSWER
+任取一紅色水壺，將其與所有藍色水壺比較，直至找到與之配對的藍色水壺。
+一旦爲所有紅色水壺都找到了與之配對的藍色水壺，算法終止。
+比較次數最多爲：
+\startformula
+\sum_{i=1}^{n-1}i = \frac{n(n-1)}{2} = O(n^2)
+\stopformula
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+證明：解決該問題所需比較次數的下界爲 $\Omega(n\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+参考\insection[lower_bound_sorting]。
+先將紅藍水壺各自排序。
+则一种配对方案相當於一个 $n$ 项排列，
+第 $i$ 個藍水壺與第 $i$ 個紅水壺進行配對。
+利用決策樹對紅藍水壺進行比較。
+每個內部節點都代表對某個紅水壺和某個藍水壺進行比較，
+葉子節點表示根據比較結果對藍水壺的一種排列。
+比較結果可能是小於、等於、大於三種情況，
+即决策树上的每个內部节点會有三个子节点，即\emph{三叉树}。
+
+由于有 $n!$ 种结果，每种结果都是决策树中的一个叶子节点。
+假如树中共有 $l$ 个节点，樹高 $h$：
+\startformula
+n! \le l \le 3^h
+\stopformula
+则：
+\startformula
+h \ge \lg_{3}(n!) = \Omega(n\lg{n})
+\stopformula
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+設計一個隨機算法，比較次數的期望值為 $O(n\lg{n})$，
+並證明這個界的正確性。
+此算法在最壞情況下的比較次數是多少？
+\stopitem\stopigBase
+
+\startANSWER
+可以將快速排序隨機化。以如下步驟進行劃分：
+\startigBase[n]
+\item 隨機選擇一個紅色水壺作為紅色主元； $O(1)$
+\item 以紅色主元劃分藍色水壺； $O(n)$
+\item 在上一步找到與紅色主元配對的藍色主元並將其歸位-； $O(1)$
+\item 以藍色主元劃分紅色水壺，並將紅色主元歸位。 $O(n)$
+\stopigBase
+
+最壞情況下比較次數爲 $\sum_{i=2}^{n}(i+i-1) = n^2$。
+\stopANSWER
+
+\stopPROBLEM
