@@ -1,0 +1,94 @@
+\startPROBLEM
+（Average sorting）
+有時我們並不需要一個數列完全有序，
+而是要求數列部分元素的平均數是增大的。
+更準確地說，如果對所有的 $i=1,2,\ldots,n-k$ 有下式成立，
+我們就稱包含 $n$ 個元素的數列 $A$ 是 \emph{$k$-有序}（$k$-sorted）的：
+\startformula
+\frac{\sum_{j=i}^{i+k-1}A[j]}{k}
+ \le \frac{\sum_{j=i + 1}^{i+k}A[j]}{k}
+\stopformula
+
+% a
+\startigBase[a]\startitem
+一個數列是 $1$-有序的，表示什麼含義？
+\stopitem\stopigBase
+
+\startANSWER
+將 $k=1$ 代入可得： $A[j] \le A[j+1]$，
+其中 $1 \le j \le n-1$。即整個數列是完全升序的。
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+給出對 $1,2,\ldots,10$ 的一個排列，
+ $2$-有序但不是完全有序。
+\stopitem\stopigBase
+
+\startANSWER
+2, 1, 4, 3, 6, 5, 8, 7, 10, 9。
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+證明：一個包含 $n$ 個元素的數列是 $k$-有序的，
+當且僅當所有 $i=1,2,\ldots,n-k$ 均滿足 $A[i]\le A[i+k]$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment[n=1]
+\NC \frac{\sum_{j=i}^{i+k-1}A[j]}{k} \le \frac{\sum_{j=i + 1}^{i+k}A[j]}{k} \NR
+\NC \Updownarrow \NR
+\NC \frac{A[i] + \sum_{j=i+1}^{i+k-1}A[j]}{k} \le
+     \frac{\sum_{j=i+1}^{i+k-1}A[j] + A[i+k]}{k} \NR
+\NC \Updownarrow \NR
+\NC \frac{A[i]}{k} \le \frac{A[i+k]}{k} \NR
+\NC \Updownarrow \NR
+\NC A[i] \le A[i+k] \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% d
+\startigBase[a,continue]\startitem
+設計一個算法，對一個包含 $n$ 個元素的數列進行 $k$ 排序，
+要求運行時間爲 $O(n\lg(n/k))$。
+\stopitem\stopigBase
+
+\startANSWER
+將數列劃分成 $k$ 個子數列，記爲 $A_s$，其中 $s=1,2,\ldots,k$。
+
+而 $A_s[i] = A[s + i \times k]$，其中 $i=0,1,2,\ldots,n/k-1$。
+
+只需將這 $k$ 個子數列排序即可。每個子數列元素個數爲 $n/k$，
+總時間爲
+\startformula
+O((n/k)\lg(n/k)) \times k = O(n\lg(n/k))
+\stopformula
+\stopANSWER
+
+當 $k$ 是一個常數時，也可以給出 $k$ 排序算法的下界。
+% e
+\startigBase[a,continue]\startitem
+證明：我們可以在 $O(n\lg{k})$ 時間內對一個長度爲 $n$ 的 $k$-有序數列進行全排序。
+（\hint 利用\inexercise[k_merge] 的結果。）
+\stopitem\stopigBase
+
+\startANSWER
+即總元素個數爲 $n$ 的 $k$ 個有序數列，進行歸並排序，
+參見\inexercise[k_merge]。
+\stopANSWER
+
+% f
+\startigBase[a,continue]\startitem
+證明：當 $k$ 是一個常數時，對包含 $n$ 個元素的數列進行 $k$ 排序需要 $\Omega(n\lg{n})$ 的時間。
+（\hint 根據比較配需的下界並利用上一項的結論。）
+\stopitem\stopigBase
+
+\startANSWER
+還是解決 $k$ 個規模爲 $n/k$ 的子問題，
+每個子問題最少比較次數爲 $\Omega((n/k)\lg(n/k))$，
+總共 $\Omega(n\lg(n/k))$。
+如果 $k$ 是常數，則結果爲 $\Omega(n\lg n)$。
+\stopANSWER
+
+\stopPROBLEM
