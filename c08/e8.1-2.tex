@@ -4,20 +4,11 @@
 \stopEXERCISE
 
 \startANSWER
-先來證明解爲 $O(n\lg{n})$：
-\startformula
-\sum_{k=1}^n\lg{k} \le \sum_{k=1}^n\lg{n} = n\lg{n} = O(n\lg{n})
-\stopformula
-
-再來證明解爲 \m{\Omega(n\lg{n})}：
-\startsplitformula\startmathalignment
-\NC \sum_{k=1}^n\lg{k}
-   \NC= \sum_{k=1}^{\lfloor n/2 \rfloor}\lg{k} +
-	\sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{k} \NR
-\NC\NC\ge \sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{k} \NR
-\NC\NC\ge \sum_{k=\lfloor n/2 \rfloor + 1}^n\lg{\frac{n}{2}} \NR
-\NC\NC\ge (\frac{n}{2}-1)\lg{\frac{n}{2}} \NR
-\NC\NC\ge (\frac{n}{2}-1)(\lg{n}-1) \NR
-\NC\NC= \Omega(n\lg{n}) \NR
+根據公式 A.18：
+\startsplitformula\startmathalignment[n=3,align={right,middle,left}]
+\NC \int_0^n \lg(x)dx \NC \le \sum_{k=1}^{n}\lg(k) \le \NC \int_1^{n+1}\lg(x)dx \NR
+\NC x\lg(x) - x|_0^n  \NC \le \sum_{k=1}^{n}\lg(k) \le \NC x\lg(x) - x|_1^{n+1} \NR
+\NC n\lg n - n        \NC \le \sum_{k=1}^{n}\lg(k) \le \NC (n+1)\lg(n+1) - n    \NR
 \stopmathalignment\stopsplitformula
+所以結果爲 $\Theta(n\lg n)$。
 \stopANSWER
