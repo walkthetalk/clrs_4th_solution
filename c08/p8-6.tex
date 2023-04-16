@@ -1,0 +1,67 @@
+\startPROBLEM
+（Lower bound on merging sorted lists）
+我們經常遇到合並兩個有序列表的問題，
+比如節 2.3.1 中的子過程 \ALGO{MERGE}。
+對這一問題，我們將證明在最壞情況下，
+合並兩個都包含 $n$ 個元素的有序列表所需比較次數的下界爲 $2n-1$。
+
+首先，利用決策樹來說明比較次數有一個下界 $2n-o(n)$。
+% a
+\startigBase[a]\startitem
+給定 $2n$ 個數，請算出共有多少種可能的方式將他們劃分成兩個有序列表，
+其中每個列表都包含 \m{n} 個數。
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+\binom{2n}{n}
+\stopformula
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+利用決策樹和上一項的結果，證明：
+要想能正確合併兩個有序列表，任何算法都至少要進行 $2n-o(n)$ 次比較。
+\stopitem\stopigBase
+
+\startANSWER
+要合併兩個列表，決策樹的葉子節點至少有 $\binom{2n}{n}$ 個。
+所以高度至少爲 $\lg\left(\frac{(2n)!}{n! n!}\right)$。
+根據\inexercise[bound_of_lgnfrac]：
+\startsplitformula\startmathalignment
+\NC \lg\left(\frac{(2n)!}{n! n!}\right)
+    \NC = \lg((2n)!) - 2\lg(n!) \NR
+\NC \NC = \sum_{k=1}^{2n}\lg(k) - 2\sum_{k=1}^{n}\lg(k) \NR
+\NC \NC \ge \left((2n)\lg(2n) - 2n\right) - 2\left((n+1)\lg(n+1)-n\right) \NR
+\NC \NC = 2n + 2n\lg n - 2n\lg(n+1) - 2\lg(n+1) \NR
+\NC \NC = 2n + 2n \lg(\frac{n}{n+1}) - 2\lg(n+1) \NR
+\NC \NC = 2n - o(n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+現在我們給出一個更緊確的界 $2n-1$。
+% c
+\startigBase[a,continue]\startitem
+請說明：如果來自不同列表的兩個元素在排序後相鄰，則必須對其進行比較。
+\stopitem\stopigBase
+
+\startANSWER
+如果不進行比較，我們不知道這兩個元素誰先誰後。
+當然如果這兩個元素來自同一個列表，則無需比較。
+\stopANSWER
+
+% d
+\startigBase[a,continue]\startitem
+利用上一項的結論，說明合併兩個有序列表時的比較次數下界爲 $2n-1$。
+\stopitem\stopigBase
+
+\startANSWER
+如果兩個有序列表
+ $\langle a_1,a_2,\ldots,a_n\rangle$ 和
+ $\langle b_1,b_2,\ldots,b_n\rangle$ 合併後
+爲 $\langle a_1,b_1,a_2,b_2,\ldots,a_n,b_n\rangle$，
+則任意相鄰兩個元素均須比較，共需比較次數爲 $2n-1$。
+這是最壞情況。
+\stopANSWER
+
+\stopPROBLEM
