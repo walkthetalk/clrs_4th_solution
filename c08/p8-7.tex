@@ -1,0 +1,347 @@
+\startPROBLEM
+（The 0-1 sorting lemma and columnsort）
+對兩個數列元素 $A[i]$ 和 $A[j]$ （其中 $i < j$）進行\emph{比較交換}
+（\emph{compare-exchange}），如下所示：
+
+\CLRSH{COMPARE-EXCHANGE(A, i, j)}
+\startCLRSCODE
+if A[i] > A[j]
+	\ALGO{SWAP(A[i],A[j])}
+\stopCLRSCODE
+比較交換後，滿足 $A[i] \le A[j]$。
+
+\emph{遺忘比較交換算法（oblivious compare-exchange algorithm）}
+指算法只按照事先定義好的比較交換操作執行。
+所比較元素的下標必須事先確定好，
+這些下標可以依賴待排序元素個數，
+卻不能依賴待排序元素的值，
+也不能依賴之前比較交換操作的結果。
+下面就是一個經過遺忘比較交換改造的插入排序
+（此算法在所有情況下運行時間都是 $\Theta(n^2)$，與插入排序不同）：
+
+\CLRSH{COMPARE-EXCHANGE-INSERTION-SORT(A,n)}
+\startCLRSCODE
+for i = 2 to n
+	for j = i - 1 downto 1
+		\ALGO{COMPARE-EXCHANGE(A, j, j + 1)}
+\stopCLRSCODE
+
+\emph{0-1 排序引理（0-1 sorting lemma）}可以有力的證明
+遺忘比較交換算法的排序結果是正確的。
+該引理表明，如果遺忘比較交換算法能夠對所有
+只包含 $0$ 和 $1$ 的序列正確排序，
+那麼他就可以對包含任意值的序列正確排序。
+
+你可以用反例來證明 0-1 排序引理：
+如果遺忘比較交換算法不能對包含任意值的序列進行排序，
+那麼他也不能對某個 0-1 序列進行排序。
+不妨假設遺忘比較交換算法 $X$ 未能對數列 $A[1..n]$ 排序。
+設 $A[p]$ 是算法 $X$ 將其放到錯誤位置上的最小元素，
+而 $X$ 將 $A[q]$ 放在了 $A[p]$ 應該所在的位置上。
+定義一個只包含 $0$ 和 $1$ 的數列 $B[1..n]$ 如下：
+\startformula
+B[i] = \startmathcases
+\NC 0 \NC \text{若 $A[i]\le A[p]$，} \NR
+\NC 1 \NC \text{若 $A[i] > A[p]$。} \NR
+\stopmathcases
+\stopformula
+
+% a
+\startigBase[a]\startitem
+討論：$A[q]>A[p]$，且 $B[p]=0$， $B[q]=1$。
+\stopitem\stopigBase
+
+\startANSWER
+$A[p]$ 和 $A[q]$ 所放位置均不正確，
+且 $A[p]$ 是位置不正確的最小元素，
+因此 $A[q] \ge A[p]$。
+而如果 $A[q]=A[p]$，就不能說 $A[p]$ 放錯位置了。
+所以 $A[q] > A[p]$。
+
+將 $i=p,q$ 代入即得 $B[p]=0$ 和 $B[q]=1$。
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+爲完成 0-1 排序引理的證明，
+請先證明算法 $X$ 不能對數列 $B$ 正確排序。
+\stopitem\stopigBase
+
+\startANSWER
+經過 $i$ 步操作， $A$ 變爲 $A_i$， $B$ 變爲 $B_i$。
+因此 $A=A_0$，且 $B=B_0$。
+對於所有 $i$ 和 $j$，我們都可以維持如下不變式：
+\startformula
+A_i[j] >A[p] \Leftrightarrow B_i[j] > 0 = B[p]
+\stopformula
+
+初始化：（$i=0$）根據定義，
+對於所有比 $A[p]$ 大的元素， $B$ 中對應位置上都是 $1$，
+相應的，所有不比 $A[p]$ 大的元素， $B$ 中對應位置上都是 $0$。
+假設在步驟 $i+1$ 中，我們對位置 $j_1$ 和 $j_2$ （$j_1<j_2$）上的元素執行了比較交換。
+也就是說 $B_i[j_1]>B_i[j_2]$，
+根據假設，不可能有 $A_i[j_1]\le A_i[j_2]$，
+因爲 $B$ 中的元素關係就意味着 $A_i[j_1]>A[p]\ge A_i[j_2]$。
+分情況討論：
+
+1. $A_i[j_1]\le A_i[j_2]$，且 $B_i[j_1]\le B_i[j_2]$。
+兩個數列均不會發生交換，即 $A_{i+1}=A_i$ 且 $B_{i+1}=B_i$。
+顯然，所期望的屬性仍然成立。
+
+2. $A_i[j_1]> A_i[j_2]$，且 $B_i[j_1]\le B_i[j_2]$。
+ $A$ 會發生交換但 $B$ 不會。
+ $A_i[j_1]$ 和 $A_i[j_2]$ 肯定都大於 $A[p]$ 或者都小於等於 $A[p]$。
+否則 $B_i[j_1]\ne B_i[j_2]$，
+即 $0=B_i[j_1]<B_i[j_2]=1$，
+即 $A_i[j_1]\le A[p]<A_i[j_2]$，與假設矛盾。
+如果 $A_i[j_1]$ 和 $A_i[j_2]$ 都大於 $A[p]$，
+則 $B_i[j_1]=B_i[j_2]=1$；
+而如果 $A_i[j_1]$ 和 $A_i[j_2]$ 都小於等於 $A[p]$，
+則 $B_i[j_1]=B_i[j_2]=0$。
+即 $A_{i+1}[j_2]=A_i[j_1] > A[p]$，
+且 $A_{i+1}[j_1]=A_i[j_2] > A[p]$。
+
+3. $A_i[j_1]> A_i[j_2]$，且 $B_i[j_1]> B_i[j_2]$。
+ $A$ 和 $B$ 都會發生交換。
+如果 $j$ 既不是 $j_1$ 也不是 $j_2$，則無需移動，不用考慮。
+對於 $j_2$，有：
+\startsplitformula\startmathalignment[n=3,align={right,middle,left}]
+\NC A_i[j_1] > A[p] \NC \Leftrightarrow \NC B_i[j_1] > 0 \NR
+\NC A_{i+1}[j_2] > A[p] \NC \Leftrightarrow \NC B_{i+1}[j_2] > 0 \NR
+\stopmathalignment\stopsplitformula
+對於 $j_1$ 也是一樣。不變式證明完畢。
+
+綜上所述，令 $i$ 是操作的總數目，
+令 $j$ 爲 $A[p]$ 的最終位置，
+令 $k$ 爲 $A[p]$ 的正確位置。
+因爲 $A[p]$ 是放置錯誤的最小元素，所以 $k<j$，
+否則他所佔位置屬於一個更小的元素。
+如果他所佔位置屬於一個與他相等的元素，
+那麼不能說他的位置不對。
+根據定義， $A[q]=A_i[i]$， $A[p]=A_i[j]$。
+根據上一項，可知 $A_i[j]=A[p]$。
+根據不變式，我們證明了 $B_i[j]>0$ 且 $B[k]=0$。
+因此 $B$ 沒有正確排序。
+\stopANSWER
+
+現在，需要用 0-1 排序引理來證明一個特殊的排序算法的正確性。
+\emph{列排序}算法用於對矩形數列進行排序。
+這一矩形數列有 $r$ 行 $s$ 列（因此 $n=rs$），
+滿足下列三個限制條件：
+\startigNum[2]
+\item $r$ 必須是偶數；
+\item $s$ 必須是 $r$ 的因子；
+\item $r\ge 2s^2$；
+\stopigNum
+當排序完成時，矩形數列是\emph{列優先有序}的：
+按照列從上到下，從左到右，都是單調遞增的。
+
+無論 $n$ 的值如何，列排序需要 8 步。
+所有奇數步都一樣：對每一列單獨進行排序。
+每一個偶數步是一個特定的排列。具體如下：
+\startigNum[n]
+\item 對每一列進行排序；
+\item 將矩形數列轉置，並重整爲 $r$ 行 $s$ 列的形式。
+也就是說，首先將最左邊的一列按順序放入前 $r/s$ 行，
+然後將下一列放在第二個 $r/s$ 行，以此類推；
+\item 對每一列進行排序；
+\item 執行第 2 步排列操作的逆操作；
+\item 對每一列進行排序；
+\item 將每一列的上半部分移到同一列的下半部分位置，
+將每一列的下半部分移到下一列的上半部分，
+並將最左邊一列的上半部分置空。
+此時，最後一列的下半部分成爲新的最右列的上半部分，新的最右列的下半部分爲空；
+\item 對每一列進行排序；
+\item 執行第 6 步排列操作的逆操作。
+\stopigNum
+
+可以將第 6～8 步視爲一步，
+對每列的下半部及下一列的上半部進行排序。
+下圖是對 $r=6,s=3$ 矩形數列的排序過程
+（即使違背了 $r\ge 2s^2$ 的條件，算法仍然有效）。
+
+\startplacefloat[][location={none}]
+\startcombination[nx=5,ny=2, distance=3em, align=middle]
+{
+\startmatrix
+\NC 10 \NC 14 \NC  5 \NR
+\NC  8 \NC  7 \NC 17 \NR
+\NC 12 \NC  1 \NC  6 \NR
+\NC 16 \NC  9 \NC 11 \NR
+\NC  4 \NC 15 \NC  2 \NR
+\NC 18 \NC  3 \NC 13 \NR
+\stopmatrix
+}{(a)}{
+\startmatrix
+\NC  4 \NC  1 \NC  2 \NR
+\NC  8 \NC  3 \NC  5 \NR
+\NC 10 \NC  7 \NC  6 \NR
+\NC 12 \NC  9 \NC 11 \NR
+\NC 16 \NC 14 \NC 13 \NR
+\NC 18 \NC 15 \NC 17 \NR
+\stopmatrix
+}{(b)}{
+\startmatrix
+\NC  4 \NC  8 \NC 10 \NR
+\NC 12 \NC 16 \NC 18 \NR
+\NC  1 \NC  3 \NC  7 \NR
+\NC  9 \NC 14 \NC 15 \NR
+\NC  2 \NC  5 \NC  6 \NR
+\NC 11 \NC 13 \NC 17 \NR
+\stopmatrix
+}{(c)}{
+\startmatrix
+\NC  1 \NC  3 \NC  6 \NR
+\NC  2 \NC  5 \NC  7 \NR
+\NC  4 \NC  8 \NC 10 \NR
+\NC  9 \NC 13 \NC 15 \NR
+\NC 11 \NC 14 \NC 17 \NR
+\NC 12 \NC 16 \NC 18 \NR
+\stopmatrix
+}{(d)}{
+\startmatrix
+\NC  1 \NC  4 \NC 11 \NR
+\NC  3 \NC  8 \NC 14 \NR
+\NC  6 \NC 10 \NC 17 \NR
+\NC  2 \NC  9 \NC 12 \NR
+\NC  5 \NC 13 \NC 16 \NR
+\NC  7 \NC 15 \NC 18 \NR
+\stopmatrix
+}{(e)}{
+\startmatrix
+\NC  1 \NC  4 \NC 11 \NR
+\NC  2 \NC  8 \NC 12 \NR
+\NC  3 \NC  9 \NC 14 \NR
+\NC  5 \NC 10 \NC 16 \NR
+\NC  6 \NC 13 \NC 17 \NR
+\NC  7 \NC 15 \NC 18 \NR
+\stopmatrix
+}{(f)}{
+\startmatrix
+\NC    \NC  5 \NC 10 \NC 16 \NR
+\NC    \NC  6 \NC 13 \NC 17 \NR
+\NC    \NC  7 \NC 15 \NC 18 \NR
+\NC  1 \NC  4 \NC 11 \NC    \NR
+\NC  2 \NC  8 \NC 12 \NC    \NR
+\NC  3 \NC  9 \NC 14 \NC    \NR
+\stopmatrix
+}{(g)}{
+\startmatrix
+\NC    \NC  4 \NC 10 \NC 16 \NR
+\NC    \NC  5 \NC 11 \NC 17 \NR
+\NC    \NC  6 \NC 12 \NC 18 \NR
+\NC  1 \NC  7 \NC 13 \NC    \NR
+\NC  2 \NC  8 \NC 14 \NC    \NR
+\NC  3 \NC  9 \NC 15 \NC    \NR
+\stopmatrix
+}{(h)}{
+\startmatrix
+\NC  1 \NC  7 \NC 13 \NR
+\NC  2 \NC  8 \NC 14 \NR
+\NC  3 \NC  9 \NC 15 \NR
+\NC  4 \NC 10 \NC 16 \NR
+\NC  5 \NC 11 \NC 17 \NR
+\NC  6 \NC 12 \NC 18 \NR
+\stopmatrix
+}{(i)}
+\stopcombination
+\stopplacefloat
+
+% c
+\startigBase[a,continue]\startitem
+討論：即使不知道奇數步採用了什麼排序算法，
+我們也可以把列排序看作一種遺忘比較交換算法。
+\stopitem\stopigBase
+
+\startANSWER
+偶數步根本就不關心元素的值。
+\stopANSWER
+
+似乎很難讓人相信列排序也能實現排序，
+不過你可以利用 0-1 排序引理來證明這一點。
+之所以可以使用 0-1 排序引理，
+是因爲列排序可以看作是一種遺忘比較交換算法。
+下面一些定義有助於你試用這一引理。
+如果數列仲的某個區域只包含全 0 或者全 1,
+或者這個區域中沒有任何元素，
+我們定義這個區域是\emph{乾淨}的；
+否則稱這個區域是\emph{髒}的。
+這裏，假設輸入數據只包含 0 和 1，
+且能轉換成 $r$ 行 $s$ 列。
+% d
+\startigBase[continue]\startitem
+證明：經過第 1～3 步，數列由三部分組成：
+頂部一些由全 $0$ 組成的乾淨行，
+底部一些由全 1 組成的乾淨行，
+以及中間最多 $s$ 行髒的行。
+\stopitem\stopigBase
+
+\startANSWER
+第一步後，每一列均爲連續 0 後緊跟連續 1，
+只有一處 0 到 1 的跳變。
+由於 $s$ 整除 $r$，
+第二步會將第一步的每一列轉換爲 $r/s$ 行。
+在這 $r/s$ 行中最多只有一行有 0 到 1 的跳變，
+其他行都是 0 或者都是 1。
+即每一列所轉換的行中最多有一行是髒的。
+
+第三步會將所有 0 行上移，所有 1 行下移，即最多只會剩下 $s$ 行髒的行。
+\stopANSWER
+
+% e
+\startigBase[continue]\startitem
+證明：經過第 4 步後，如果按列優先讀取數列，
+先讀到的是全 0 的乾淨區域，最後是全 1 的乾淨區域，
+中間是由最多 $s^2$ 個元素組成的髒區域。
+\stopitem\stopigBase
+
+\startANSWER
+第 4 步後按列優先讀數據，
+相當於在第 3 步後按行優先讀數據，
+參考上一項的證明，結論是顯然的。
+\stopANSWER
+
+% f
+\startigBase[continue]\startitem
+證明：第 5～8 步產生一個全排序的 0-1 輸出，
+並得到結論：列排序可以正確地對任意輸入值排序。
+\stopitem\stopigBase
+
+\startANSWER
+第四步後，髒序列中最多有 $s^2$ 個元素，爲一列元素的一半，
+可能在一列中，也可能分散於相鄰兩列中。
+左邊的所有列爲 0，右邊的所有列爲 1。
+如果髒序列在同一列中，則第 5 步即可保證每列有序，後續步驟不受影響。
+如果髒序列分散於相鄰兩列中，則第 6 步會將髒序列轉移到同一列中。
+\stopANSWER
+
+% g
+\startigBase[continue]\startitem
+現在假設 $s$ 不能被 $r$ 整除。
+證明：經過第 1～3 步，數列的頂部有一些全 0 的乾淨行，
+底部有一些全 1 的乾淨行，中間最多 $2s-1$ 行髒行。
+那麼與 $s$ 相比，在 $s$ 不能被 $r$ 整除時，
+ $r$ 至少要多大才能保證配序的正確性？
+\stopitem\stopigBase
+
+\startANSWER
+如果 $s$ 不能整除 $r$，
+一行可能不僅包含 0 到 1 的跳變，也包含 1 到 0 的跳變。
+最多有 $s - 1$  行，即最多有 $2s-1$ 個髒區域。
+ $r$ 至少要是 $2(2s-1)s$。
+\stopANSWER
+
+% h
+\startigBase[continue]\startitem
+對第 1 步做一個簡單修改，
+使得我們可以在 $s$ 不能被 $r$ 整除時，也保證 $r\ge 2s^2$，
+並證明修改後，列排序仍然正確。
+\stopitem\stopigBase
+
+\startANSWER
+第一步中，可以用 $+\infty$ 補齊數列使得 $s$ 可以整除 $r$，
+或者可以將數列截斷一小部分，對其獨立排序。後者會更有效，因爲無需移動數列。
+其實這些均無必要，列排序對是否整除沒有嚴格要求。
+\stopANSWER
+
+\stopPROBLEM
