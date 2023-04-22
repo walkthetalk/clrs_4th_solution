@@ -1,0 +1,23 @@
+\startEXERCISE[exercise:9.3-8]
+設 $X[1..n]$ 和 $Y[1..n]$ 爲兩個有序數列，
+所含元素個數均爲 $n$。
+請設計一個 $O(\lg{n})$ 時間的算法，
+以找出 $X$ 和 $Y$ 中所有 $2n$ 個元素的中位數。
+假設所有元素互不相同。
+\stopEXERCISE
+
+\startANSWER
+\startigNum
+\item 如果 $n=1$，我們選擇小的那個；
+\item 否則，分別找出兩個數列的中位數；
+\item 中位數較小的那個數列留下大於中位數的元素，
+另一個數列留下小於其中位數的元素，
+這樣問題規模就變爲 $\lfloor n/2 \rfloor$；
+\item 求兩個新數列的中位數。
+\stopigNum
+
+遞迴式爲：
+\startformula
+T(n)=T(n/2) + O(n)
+\stopformula
+\stopANSWER

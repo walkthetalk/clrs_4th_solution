@@ -185,7 +185,7 @@
 \defineitemgroup[igNum][levels=2]
 \setupitemgroup[igNum]
 [1]
-[a, packed,joinedup,intext]
+[n, packed,joinedup,intext]
 [
   leftmargin=2em,	%no standard dimension
   %width=2em,	%dimension
@@ -197,7 +197,7 @@
 ]
 \setupitemgroup[igNum]
 [2]
-[a, packed,joinedup,intext]
+[n, packed,joinedup,intext]
 [
   leftmargin=4em,	%no standard dimension
   %width=2em,	%dimension

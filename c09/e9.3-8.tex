@@ -1,0 +1,28 @@
+\startEXERCISE
+對一個包含 $n$ 個元素的集合來說，
+ $k$-\emph{分位數}（quantile）是指
+能把排序後的集合分成 $k$ 個大小相同的集合的 $k-1$ 個順序統計量。
+給出一個算法，
+以找出某一集合的 $k$-分位數，
+要求運行時間爲 $O(n\lg{k})$。
+\stopEXERCISE
+
+\startANSWER
+\startigNum
+\item 如果 $k=1$，則返回空；
+\item 如果 $k$ 是偶數，我們先找到中位數，用中位數將集合劃分成兩部分，
+然後對兩個規模爲 $\lfloor n/2 \rfloor$ 的子問題求解，最後加上中位數即可；
+\item 如果 $k$ 是奇數，則先找到 $\lfloor k/2\rfloor$ 和 $\lceil k/2\rceil$ 兩個分位點，
+然後對兩個規模均小於 n/2 的子問題求解。
+\stopigNum
+
+最壞情況的遞迴式爲：
+\startformula
+T(n,k)=2T(\lfloor n/2\rfloor,k/2)+O(n)
+\stopformula
+其解爲 $O(n\lg{k})$。
+
+如果 $n=ak+k-1$，其中 $a$ 爲正整數，
+毫無疑問，所有子集合元素個數均爲 $a$，
+否則需要注意舍入問題，所有子集合元素個數差異不能超過 1。
+\stopANSWER

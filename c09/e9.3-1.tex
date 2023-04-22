@@ -1,0 +1,96 @@
+
+\startEXERCISE
+在算法 \ALGO{SELECT} 中，輸入元素分組後每組有 5 個元素。
+如果每組 7 個元素，該算法仍是線性時間嗎？
+證明：如果分成每組 3 個元素， \ALGO{SELECT} 的運行時間不是線性的。
+
+\CLRSH{SELECT(A,p,r,i)}
+\startCLRSCODE
+while (r-p+1) \bmod 5 \ne 0
+	for j = p+1 to r	// 將最小元素放入 $A[p]$
+		if A[p] > A[j]
+			\ALGO{SWAP(A[p],A[j])}
+	// 如果我們想要的是 $A[p:r]$ 中的最小值，那麼已經找到了
+	if i == 1
+		return A[p]
+	// 否則，我們要的是 $A[p+1:r]$ 中的第 $(i-1)$ 小的元素
+	p = p+1
+	i = i-1
+g=(r-p+1)/5	// 一共有 $g$ 組數據，每組 $5$ 個元素
+for j=p to p+g-1	// 對每組數據進行排序
+	\ALGO{SORT-IN-PLACE(A[j],A[j+g],A[j+2g],A[j+3g],A[j+4g])}
+// 其中一組的中位數也是所有元素的中位數
+// 遞迴查找所有分組中位數的中位數
+x = \ALGO{SELECT(A,p+2g,p+3g-1,\lceil g/2\rceil)}
+q = \ALGO{PARTITION-AROUND(A,p,r,x)}	// 以 $x$ 爲主元進行劃分
+// 接下來就跟 \ALGO{RANDOMIZED-SELECT} 的第 3~9 行一樣了
+k = q-p+1
+if i==k
+	return A[q]	// 主元即爲所求
+elseif i < k
+	return \ALGO{SELECT(A,p,q-1,i)}
+else
+	return \ALGO{SELECT(A,q+1,r,i-k)}
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+每組 7 個元素仍然是線性的。每次劃分時，小於或大於 $x$ 的元素數列至少爲：
+\startformula
+4 \left(\left\lceil \frac{1}{2} \left\lceil \frac{n}{7} \right\rceil \right\rceil
+           - 2 \right) \ge \frac{2n}{7} - 8
+\stopformula
+
+劃分將問題規模減小爲最大 \m{5n/7+8}。則有如下遞迴式：
+\startformula
+T(n) = \startmathcases
+ \NC O(1) \NC \text{若 $n < n_0$，} \NR
+ \NC T(\lceil n/7 \rceil) + T(5n/7 + 8) + O(n) \NC \text{若 $n \ge n_0$。} \NR
+\stopmathcases
+\stopformula
+
+猜測 \m{T(n)\le cn}，令非遞迴項爲 \m{an}：
+\startsplitformula\startmathalignment
+\NC T(n) \NC \le c\lceil n/7 \rceil + c(5n/7 + 8) + an \NR
+\NC \NC \le cn/7 + c + 5cn/7 + 8c + an \NR
+\NC \NC = 6cn/7 + 9c + an \NR
+\NC \NC = cn + (-cn/7 + 9c + an) \NR
+\NC \NC \le cn \NR
+\NC \NC = O(n) \NR
+\stopmathalignment\stopsplitformula
+
+當 \m{(-cn/7 + 9c + an) \le 0} 時，最後一步成立。因此：
+\startsplitformula\startmathalignment[n=1]
+\NC -cn/7 + 9c + an \le 0 \NR
+\NC \Downarrow \NR
+\NC c(n/7 - 9) \ge an \NR
+\NC \Downarrow \NR
+\NC \frac{c(n - 63)}{7} \ge an \NR
+\NC \Downarrow \NR
+\NC c \ge \frac{7an}{n - 63} \NR
+\stopmathalignment\stopsplitformula
+
+如果令 \m{n_0=126}， \m{n\le n_0}，則 \m{n/(n-63)\le 2}。因此只需 \m{c\ge 14a} 即可。
+
+而對於 3 個一組，則大於或小於中位數的中位數的元素數目至少爲：
+\startformula
+2 \left(\lceil \frac{1}{2} \left\lceil \frac{n}{3} \rceil \right\rceil
+           - 2 \right) \ge \frac{n}{3} - 4
+\stopformula
+
+遞迴式如下：
+\startformula
+T(n) = T(\lceil n/3 \rceil) + T(2n/3 + 4) + O(n)
+\stopformula
+
+用代入法證明 \m{T(n)=\omega(n)}。猜測 \m{T(n) > cn}，令非遞迴項爲 \m{an}：
+\startsplitformula\startmathalignment
+\NC T(n) \NC > c\lceil n/3 \rceil + c(2n/3 + 2) + an \NR
+\NC \NC > cn/3 + c + 2cn/3 + 2c + an \NR
+\NC \NC = cn + 3c + an \qquad c>0,a>0,n>0\NR
+\NC \NC > cn \NR
+\NC \NC = \omega(n) \NR
+\stopmathalignment\stopsplitformula
+
+上式對所有 \m{c>0} 都成立。
+\stopANSWER

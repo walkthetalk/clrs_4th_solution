@@ -1,0 +1,18 @@
+\startEXERCISE
+假設你已經有了一個求解中位數的“黑箱”子過程，
+最壞情況下所花時間是線性的。
+設計一個算法，對於任意順序統計量，
+都能在線性時間內解決選擇的問題。
+\stopEXERCISE
+
+\startANSWER
+如果 $i=\lceil n/2\rceil$，
+則只需調用一次子過程，顯然是線性時間。
+否則，只需針對所劃分成的兩部分中的一個調用子過程（視 $i$ 的大小而定），
+因此有如下遞迴式：
+\startsplitformula
+T(n)=T(n/2)+O(n)
+\stopsplitformula
+
+由主定理可知上限爲 $O(n)$。
+\stopANSWER

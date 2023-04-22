@@ -1,0 +1,15 @@
+\startEXERCISE
+假設有集合 $S$，其中的 $n$ 個數互不相同，
+設計一個 $O(n)$ 時間的算法，
+對於給定的正整數 $k\le n$，
+該算法能找出 $S$ 中最接近其中位數的 $k$ 個元素。
+\stopEXERCISE
+
+\startANSWER
+\startigNum
+\item 先在線性時間內找出中位數；
+\item 計算出其他所有元素與中位數的差異；
+\item 在上一步結果中，以線性時間找出第 $k$ 個順序統計量，
+\item 距離小於等於第 $k$ 個順序統計量的元素即爲所求。
+\stopigNum
+\stopANSWER
