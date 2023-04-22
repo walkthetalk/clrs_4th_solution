@@ -1,0 +1,40 @@
+\startPROBLEM
+（找出最大的 $i$ 個元素並排序）
+給定一個集合，包含 $n$ 個元素，
+我們希望利用基於比較的算法，
+找出最大的 $i$ 個元素並排序。
+在下列各種方法中，請找出最壞情況下具有最佳漸進運行時間的算法，
+以 $n$ 和 $i$ 來表示算法的運行時間：
+\startigBase[a]\startitem
+對輸入數據排序，並找出最大的 $i$ 個數；
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+O(n\lg{n} + i)
+\stopformula
+\stopANSWER
+
+\startigBase[continue]\startitem
+對輸入數據建立一個最大優先對列，並調用 \ALGO{EXTRACT-MAX} 過程 $i$ 次；
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+O((n + i)\lg{n})
+\stopformula
+\stopANSWER
+
+\startigBase[continue]\startitem
+利用順序統計量算法找到第 $i$ 大的元素，
+然後用他作爲主元劃分輸入數列，
+再對最大的 $i$ 個數排序。
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+O(n + i\lg{i})
+\stopformula
+\stopANSWER
+
+\stopPROBLEM

@@ -1,0 +1,89 @@
+\startPROBLEM
+（Small order statistics）
+要找出 $n$ 個元素中的第 $i$ 個順序統計量，
+令 \ALGO{SELECT} 在最壞情況所用比較次數爲 $S(n)$。
+儘管 $S(n)=\Theta(n)$，
+但 $\Theta$ 所隱含的常數因子非常大。
+當 $i$ 相對 $n$ 比較小時，
+可以 \ALGO{SELECT} 作爲子過程，
+重新設計一個算法，以減少最壞情況下的比較次數。
+\startigBase[a]\startitem
+設計一個算法，找出 $n$ 個元素中第 $i$ 小的元素，
+所用比較次數記爲 $U_i(n)$，滿足：
+\startformula
+U_i(n)=\startmathcases
+\NC T(n) \NC \text{若 $i\ge n/2$，} \NR
+\NC \lfloor n/2 \rfloor + U_i(\lceil n/2 \rceil) + T(2i) \NC \text{否則。} \NR
+\stopmathcases
+\stopformula
+（\hint 開始先比較 $\lfloor n/2\rfloor$ 對互不相關的元素，
+然後在每對元素中較小的數所組成的集合上進行遞迴）
+\stopitem\stopigBase
+
+\startANSWER
+修改過的 \ALGO{SELECT}，不但能找到第 $i$ 個順序統計量，
+同時會劃分數列，找到 $i-1$ 個更小的元素。
+\startigNum
+\item 如果 $i\ge n/2$，直接調用 \ALGO{SELECT}；
+\item 否則，將數列劃分成一對對元素，每一對元素間進行比較；
+\item 選取每一對元素中較小的那個，但是跟蹤另外一個（即保持成對的關聯）；
+\item 遞迴查找較小元素集合中的最小的 $i$ 個元素，
+這樣連同每個元素所對應的元素，一共有 $2i$ 個元素；
+\item 前 $i$ 個順序統計量肯定在這 $2i$ 個元素中，
+在這 $2i$ 個元素上調用 \ALGO{SELECT}。結果即爲所求。
+\stopigNum
+其中第三步會將較小元素集合劃分成兩部分 $S_1$ 和 $S_2$，
+在較大元素集合中分別對應 $B_1$ 和 $B_2$，
+則 $S_1$ 和 $B_1$ 中的元素個數均爲 $i$，四個集合元素總數爲 $n$。
+由於 $S_2$ 和 $B_2$ 中的元素均大於 $S_1$ 中的所有元素，
+即 $S_2$ 和 $B_2$ 中的元素在所有 $n$ 個元素中排序的序號均大於 $i$。
+所以前 $i$ 個順序統計量肯定在 $S_1$ 和 $B_1$ 中。
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+證明：如果 $i<n/2$，則 $U_i(n)=n+O(T(2i)\lg(n/i))$。
+\stopitem\stopigBase
+
+\startANSWER
+代入法：
+\startsplitformula\startmathalignment
+\NC U_i(n)
+    \NC = \lfloor n/2 \rfloor + U_i(\lceil n/2 \rceil) + T(2i) \NR
+\NC \NC = \lfloor n/2 \rfloor + \lceil n/2 \rceil +
+             O(T(2i)\lg(\lfloor n/2 \rfloor / i)) + T(2i) \NR
+\NC \NC = n + O(T(2i)\lg(n/i)) + T(2i) \NR
+\NC \NC = n + O(T(2i)\lg(n/i)) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startigBase[continue]\startitem
+證明：如果 $i$ 是小於 $n/2$ 的常數，則 $U_i(n)=n+O(\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC U_i(n)
+    \NC = n + O(T(2i)\lg(n/i)) \NR
+\NC \NC = n + O(O(1)\lg(n/i)) \NR
+\NC \NC = n + O(\lg{n} - \lg{i}) \NR
+\NC \NC = n + O(\lg{n} - O(1)) \NR
+\NC \NC = n + O(\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+證明：如果 $i=n/k$，且 $k\ge 2$，則 $U_i(n)=n+O(T(2n/k)\lg{k})$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC U_i(n)
+    \NC = n + O(T(2i)\lg(n/i)) \NR
+\NC \NC = n + O(T(2n/k)\lg(n/(n/k))) \NR
+\NC \NC = n + O(T(2n/k)\lg{k}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\stopPROBLEM

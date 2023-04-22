@@ -1,0 +1,108 @@
+\startPROBLEM
+（Weighted median）
+有 $n$ 個元素 $x_1,x_2,\ldots,x_n$，
+其權重分別爲 $w_1,w_2,\ldots,w_n$ （均爲正數），
+且 $\sum_{i=1}^{n}w_i=1$，
+\emph{加權中位數}（較小的那個）（weighted lower median） $x_k$ 滿足下列條件：
+\startformula
+\sum_{x_i<x_k}w_i < \frac{1}{2}
+\stopformula
+和
+\startformula
+\sum_{x_i>x_k}w_i \le \frac{1}{2}
+\stopformula
+
+現有如下元素 $x_i$ 及其權重 $w_i$：
+
+\bTABLE
+\bTR
+\bTD $i$ \eTD\bTD $1$ \eTD\bTD $2$ \eTD\bTD $3$ \eTD\bTD $4$ \eTD\bTD $5$ \eTD\bTD $6$ \eTD\bTD $7$ \eTD
+\eTR\bTR
+\bTD $x_i$ \eTD\bTD $3$ \eTD\bTD $8$ \eTD\bTD $2$ \eTD\bTD $5$ \eTD\bTD $4$ \eTD\bTD $1$ \eTD\bTD $6$ \eTD
+\eTR\bTR
+\bTD $w_i$ \eTD\bTD $0.12$ \eTD\bTD $0.35$ \eTD\bTD $0.025$ \eTD\bTD $0.08$ \eTD\bTD $0.15$ \eTD\bTD $0.075$ \eTD\bTD $0.2$ \eTD
+\eTR
+\eTABLE
+
+這些元素的中位數是 $x_5=4$，而加權中位數則是 $x_7=6$。
+要知道爲什麼加權中位數是 $x_7$，
+可以觀察到小於 $x_7$ 的有 $x_1,x_3,x_4,x_5,x_6$，
+而 $w_1+w_3+w_4+w_5+w_6=0.45$，小於 $1/2$。
+再者，只有 $x_2$ 大於 $x_7$，且 $w_2=0.35$，也不大於 $1/2$。
+\startigBase[a]\startitem
+證明：如果 $x_i$ 的權重 $w_i=1/n$，
+其中 $i=1,2,\ldots,n$，
+那麼 $x_1,x_2,\ldots,x_n$ 的中位數也是其加權中位數。
+\stopitem\stopigBase
+
+\startANSWER
+如果所有權重均爲 $1/n$，
+則小於中位數的元素權重和爲 $\lfloor \frac{n-1}{2}\rfloor \frac{1}{n}$，
+大於中位數的元素權重和爲 $\lceil \frac{n-1}{2}\rceil \frac{1}{n}$。
+滿足帶權中位數的要求。
+\stopANSWER
+
+\startigBase[continue]\startitem
+要想通過排序在計算 $n$ 個元素的加權中位數，
+如何保證最壞情況下在時間 $O(n\lg n)$ 內完成。
+\stopitem\stopigBase
+
+\startANSWER
+先對輸入進行排序，從左至右進行掃描，並累加各元素的權重，
+一旦權重累計值等於或超過 $1/2$，則對應元素即爲所求。
+\stopANSWER
+
+\startigBase[continue]\startitem
+要想使用線性時間的中位數算法（如\insection[worstcase_linear_selection] 中
+的 \ALGO{SELECT}）找出加權中位數，
+如何在最壞情況下保證在時間 $\Theta(n)$ 內完成。
+\stopitem\stopigBase
+
+\startANSWER
+與 \ALGO{SELECT} 類似，只是目標不再是主元的位置，
+而是主元兩側元素權重的和。
+
+修改 \ALGO{SELECT}。
+令 $x$ 是中位數的中位數。
+計算 $\sum_{x_i < x}w_i$ 和 $\sum_{x_i>x}w_i$，
+若其中任意一個大於 $1/2$，算法終止。
+否則，針對包含最終結果的那部分元素進行遞迴處理。
+這樣並不會改變運行時間，仍然是 $\Theta(n)$。
+\stopANSWER
+
+\emph{郵局位置問題}（\emph{post-office location problem}）定義如下：
+有 $n$ 個點 $p_1,p_2,\ldots,p_n$，
+其權重分別爲 $w_1,w_2,\ldots,w_n$。
+我們要找到一個點 $p$ （不必非得是輸入中的元素），
+以使 $\sum_{i=1}^{n}w_i d(p,p_i)$ 最小，
+其中 $d(a,b)$ 是點 $a$ 和點 $b$ 間的距離。
+\startigBase[continue]\startitem
+討論：加權中位數是解決一維郵局位置問題最好的方法，
+其中所有點都是實數， $d(a,b)=|a-b|$。
+\stopitem\stopigBase
+
+\startANSWER
+參考\inexercise[oil_well]，
+假定我們得到了最終答案，就是加權中位數。
+這時無論是將結果左移還是右移，
+都將離加權和小於 $1/2$ 的元素越來越近，
+而離加權和大於 $1/2$ 的元素越來越遠，
+從而導致 $\sum_{i=1}^{n}w_i d(p,p_i)$ 變大。
+\stopANSWER
+
+\startigBase[continue]\startitem
+如何解決二維郵局位置問題？
+其中每個點都是一對座標 $(x,y)$，
+兩個點 $a=(x_1,y_1)$ 和 $b=(x_2,y_2)$ 的距離爲\emph{曼哈頓距離（Manhattan distance）}，
+即 $d(a,b)=|x_1-x_2| + |y_1 - y_2|$。
+\stopitem\stopigBase
+
+\startANSWER
+根據曼哈頓距離的定義，
+可以將其分成相互獨立的兩部分 $d_x(a,b)=|x_1-x_2|$ 和 $d_y(a,b)=|y_1-y_2|$，
+要想 $\sum_{i=1}^{n}w_i d(p,p_i)$ 最小，
+即 $\sum_{i=1}^{n}w_i d_x(p,p_i)$ 和 $\sum_{i=1}^{n}w_i d_y(p,p_i)$ 都最小（$d_x$ 和 $d_y$ 均大於零）。
+因此我們只需針對 x 坐標和 y 坐標分別找出其加權中位數即爲所求。
+\stopANSWER
+
+\stopPROBLEM
