@@ -1,0 +1,142 @@
+\startPROBLEM
+（Alternative analysis of randomized selection）
+在這個問題中，我們用指示器隨機變量來分析 \ALGO{RANDOMIZED-SELECT}，
+與節7.4.2 中 \ALGO{RANDOMIZED-QUICKSORT} 的分析方法類似。
+
+在快速排序的分析中，我們假設所有元素互不相同，
+並且將輸入數列 $A$ 中的元素重命名爲 $z_1,z_2,\ldots,z_n$，
+其中 $z_i$ 是第 $i$ 小元素。
+因此，調用 \ALGO{RANDOMIZED-SELECT(A, 1, n, i)} 返回 $z_i$。
+
+對於 $1\le j < k \le n$，令
+\startformula
+X_{ijk}=I\{\text{在查找 $z_i$ 的過程中會比較 $z_j$ 和 $z_k$}\}
+\stopformula
+
+\startigBase[a]\startitem
+給出 $E[X_{ijk}]$ 的算式。
+（\hint 算式可能會因 $i$、 $j$ 和 $k$ 的值而異。）
+\stopitem\stopigBase
+
+\startANSWER
+與分析快速排序類似，但需要考慮 $i$。
+所選主元位於 $\min(z_i,z_j,z_k)$ 和 $\max(z_i,z_j,z_k)$ 之間，
+若選中 $z_j$ 或 $z_k$ 就會比較他們，
+若選中 $z_j$ 和 $z_k$ 中間的數，就不會比較他們，
+若選中 $z_i$ 和 $[z_j,z_k]$ 中間的數，也不會比較他們。
+準確的算式依賴於 $i$ 與 $j$、 $k$ 的相對位置：
+\startformula
+E[X_{ijk}] = \startmathcases
+\NC 2 / (k - i + 1) \NC \text{若 $z_i \le z_j < z_k$，} \NR
+\NC 2 / (k - j + 1) \NC \text{若 $z_j \le z_i < z_k$，} \NR
+\NC 2 / (i - j + 1) \NC \text{若 $z_j < z_k \le z_i$。} \NR
+\stopmathcases
+\stopformula
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+在數列 $A$ 中查找 $z_i$ 時，令 $X_i$ 指示總的比較次數。證明：
+\startformula
+E[X_i] \le 2 \left(
+       \sum_{j=1}^i \sum_{k=i}^n \frac{1}{k - j + 1} +
+       \sum_{k=i+1}^n \frac{k - i - 1}{k - i + 1} +
+       \sum_{j=1}^{i-2} \frac{i - j - 1}{i - j + 1}
+       \right)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC E[X_i]
+    \NC = \sum_{j=1}^{n-1}   \sum_{k=j+1}^n E[X_{ijk}] \NR
+\NC \NC = \sum_{j=1}^i       \sum_{k=j+1}^n E[X_{ijk}]
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n E[X_{ijk}] \NR
+\NC \NC = \sum_{j=1}^i \left(\sum_{k=j+1}^{i-1}E[X_{ijk}]
+                                 + \sum_{k=i}^n E[X_{ijk}] \right)
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n E[X_{ijk}] \NR
+\NC \NC = \sum_{j=1}^i \sum_{k=j+1}^{i-1}E[X_{ijk}]
+            + \sum_{j=1}^i \sum_{k=i}^n E[X_{ijk}]
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n E[X_{ijk}] \NR
+\NC \NC = \sum_{j=1}^{i-2} \sum_{k=j+1}^{i-1}E[X_{ijk}]
+            + \sum_{j=1}^i \sum_{k=i}^n E[X_{ijk}]
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n E[X_{ijk}] \NR
+\NC \NC = \sum_{j=1}^{i-2} \sum_{k=j+1}^{i-1} \frac{2}{i-j+1}
+            + \sum_{j=1}^i \sum_{k=i}^n \frac{2}{k-j+1}
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n \frac{2}{k-i+1} \NR
+\NC \NC = 2\left(
+                \sum_{j=1}^{i-2} \sum_{k=j+1}^{i-1} \frac{1}{i-j+1}
+            + \sum_{j=1}^i \sum_{k=i}^n \frac{1}{k-j+1}
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n \frac{1}{k-i+1}
+          \right) \NR
+\NC \NC = 2\left(
+                \sum_{j=1}^{i-2} \frac{i-j-1}{i-j+1}
+            + \sum_{j=1}^i \sum_{k=i}^n \frac{1}{k-j+1}
+            + \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n \frac{1}{k-i+1}
+          \right) \NR
+\stopmathalignment\stopsplitformula
+接下來只須證明第三項：
+\startformula
+\sum_{j=i+1}^{n-1} \sum_{k=j+1}^n \frac{1}{k-i+1} \le \sum_{k=i+1}^{n}\frac{k-i-1}{k-i+1}
+\stopformula
+證明如下：
+\startsplitformula\startmathalignment
+\NC \NC \sum_{j=i+1}^{n-1} \sum_{k=j+1}^n \frac{1}{k-i+1} \NR
+\NC = \NC \sum_{k=i+2}^{n} \sum_{j=i+1}^{k-1} \frac{1}{k-i+1} \NR
+\NC = \NC \sum_{k=i+2}^{n} \frac{k-i-1}{k-i+1} \NR
+\NC \le \NC \sum_{k=i+1}^{n}\frac{k-i-1}{k-i+1} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+證明 $E[X_i]\le 4n$。
+\stopitem\stopigBase
+
+\startANSWER
+後兩項的和：
+\startformula
+\sum_{k=i+1}^n\frac{k-i-1}{k-i+1} + \sum_{j=1}^{i-2}\frac{i-j-1}{i-j+1}
+   \le \sum_{k=i+1}^n 1 + \sum_{j=1}^{i-2} 1
+   = n - i + i - 2
+   \le n
+\stopformula
+對於第一項，則可由下列矩陣來說明：
+\startsplitformula\startmatrix
+\NC j\backslash k  \NC i \NC i+1 \NC \ldots \NC n-1 \NC n \NR
+\NC i  \NC 1 \NC \frac{1}{2} \NC \ldots \NC \frac{1}{n-i} \NC \frac{1}{n-i+1} \NR
+\NC i-1\NC \frac{1}{2} \NC \frac{1}{3} \NC \ldots \NC \frac{1}{n-i+1} \NC \frac{1}{n-i+2} \NR
+\NC \cdots \NC \cdots \NC \cdots\NC \ddots \NC \cdots \NC \cdots \NR
+\NC 2  \NC \frac{1}{i-1} \NC \frac{1}{i}   \NC \ldots \NC \frac{1}{n-2} \NC \frac{1}{n-1} \NR
+\NC 1  \NC \frac{1}{i}   \NC \frac{1}{i+1} \NC \ldots \NC \frac{1}{n-1} \NC \frac{1}{n}   \NR
+\stopmatrix\stopsplitformula
+上面矩陣中，行坐標爲 $j=i,i-1,\ldots,1$，
+列坐標爲 $k=i,i+1,\ldots,n$，
+矩陣元素即爲 $\frac{1}{k - j + 1}$。
+左下到右上斜對角線上的元素相同均爲 $\frac{1}{m}$ 的形式，
+其中 $m=1,2,\ldots,n$。
+每個 $\frac{1}{m}$ 的個數都小於等於 $m$。因此整個矩陣元素的和小於 $n$。
+
+因此：
+\startformula
+E[X_i] \le 2 \left(
+       \sum_{j=1}^i \sum_{k=i}^n \frac{1}{k - j + 1} +
+       \sum_{k=i+1}^n \frac{k - i - 1}{k - i + 1} +
+       \sum_{j=1}^{i-2} \frac{i - j - 1}{i - j + 1}
+       \right) \le 2(n+n) = 4n
+\stopformula
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+證明：假設數列 $A$ 中的所有元素互異，
+則 \ALGO{RANDOMIZED-SELECT} 的期望運行時間爲 $O(n)$。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{RANDOMIZED-SELECT} 中的運算跟比較次數成線性關系，
+而比較次數的期望值又和 $n$ 成線性關系，
+因此期望運行時間爲線性的 $O(n)$。
+\stopANSWER
+
+\stopPROBLEM
