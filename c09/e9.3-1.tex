@@ -23,7 +23,7 @@ for j=p to p+g-1	// 對每組數據進行排序
 // 遞迴查找所有分組中位數的中位數
 x = \ALGO{SELECT(A,p+2g,p+3g-1,\lceil g/2\rceil)}
 q = \ALGO{PARTITION-AROUND(A,p,r,x)}	// 以 $x$ 爲主元進行劃分
-// 接下來就跟 \ALGO{RANDOMIZED-SELECT} 的第 3~9 行一樣了
+// 接下來就跟 \ALGO{RANDOMIZED-SELECT} 的第 3-9 行一樣了
 k = q-p+1
 if i==k
 	return A[q]	// 主元即爲所求
