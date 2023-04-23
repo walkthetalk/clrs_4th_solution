@@ -1,5 +1,5 @@
 
-\startEXERCISE
+\startEXERCISE[exercise:9_3_1]
 在算法 \ALGO{SELECT} 中，輸入元素分組後每組有 5 個元素。
 如果每組 7 個元素，該算法仍是線性時間嗎？
 證明：如果分成每組 3 個元素， \ALGO{SELECT} 的運行時間不是線性的。
@@ -74,7 +74,7 @@ T(n) = \startmathcases
 
 而對於 3 個一組，則大於或小於中位數的中位數的元素數目至少爲：
 \startformula
-2 \left(\lceil \frac{1}{2} \left\lceil \frac{n}{3} \rceil \right\rceil
+2 \left(\left\lceil \frac{1}{2} \left\lceil \frac{n}{3} \right\rceil \right\rceil
            - 2 \right) \ge \frac{n}{3} - 4
 \stopformula
 
