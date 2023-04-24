@@ -1,0 +1,50 @@
+\startEXERCISE
+重寫 \ALGO{ENQUEUE} 和 \ALGO{DEQUEUE} 以處理上溢和下溢的情況。
+\stopEXERCISE
+
+\startANSWER
+輔助過程：
+
+\CLRSH{NEXT(Q, i)}
+\startCLRSCODE
+if i == Q.length
+	return 1
+else
+	return i + 1
+\stopCLRSCODE
+
+\CLRSH{EMPTY(Q)}
+\startCLRSCODE
+if Q.head == Q.tail
+	return true
+else
+	return false
+\stopCLRSCODE
+
+\CLRSH{FULL(Q)}
+\startCLRSCODE
+if \ALGO{NEXT(Q, Q.tail)} == Q.head
+	return true
+else
+	return false
+\stopCLRSCODE
+
+實現：
+
+\CLRSH{ENQUEUE(Q, x)}
+\startCLRSCODE
+if \ALGO{FULL(Q)}
+	error "Queue overflow"
+Q[Q.tail] = x
+Q.tail = \ALGO{NEXT(Q, Q.tail)}
+\stopCLRSCODE
+
+\CLRSH{DEQUEUE(Q)}
+\startCLRSCODE
+if \ALGO{EMPTY(Q)}
+	error "Queue underflow"
+x = Q[Q.head]
+Q.head = \ALGO{NEXT(Q, Q.head)}
+return x
+\stopCLRSCODE
+\stopANSWER

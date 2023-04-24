@@ -1,0 +1,26 @@
+\startEXERCISE\DIFFICULT
+實現雙向鏈表，要求每個元素只用一個指針 $x.np$，而不是兩個（$next$ 和 $prev$）。
+假設所有指針都可視爲 $k$ 位整數，
+同時令 $x.np = x.next \mathbin{XOR} x.prev$，即 $x.prev$ 和 $x.next$ 的 $k$ 位“異或”。
+（0 表示 NIL。）
+要訪問鏈表頭需要哪些信息？
+如何實現 \ALGO{SEARCH}、 \ALGO{INSERT} 和 \ALGO{DELETE}？
+如何在 $O(1)$ 時間內反序？
+\stopEXERCISE
+
+\startANSWER
+如果是通過前驅節點訪問的當前節點，
+則已經知道了 $prev$ 的值，
+這時通過 $prev \mathbin{XOR} np$ 即可得 $next$ 的值。
+
+如果是通過後繼節點訪問的當前節點，
+則已經知道了 $next$ 的值，
+這時通過 $next \mathbin{XOR} np$ 即可得 $prev$ 的值。
+
+\ALGO{SEARCH}、 \ALGO{INSERT} 和 \ALGO{DELETE} 的實現與普通雙向鏈表沒什麼區別，
+只是增加了計算 $prev$、 $next$ 和 $np$ 的步驟。
+
+要訪問鏈表只需知道第一個元素或者最後一個元素的指針即可。
+
+反序只需要調換以下 $head$ 和 $tail$ 的值即可。
+\stopANSWER

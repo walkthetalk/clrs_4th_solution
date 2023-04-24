@@ -1,0 +1,11 @@
+\startEXERCISE
+爲什麼在單向鏈表上實現動態集合操作 \ALGO{INSERT} 需要時間爲 $O(1)$，
+而最壞情況下 \ALGO{DELETE} 卻需要 $\Theta(n)$？
+\stopEXERCISE
+
+\startANSWER
+在單項鏈表頭部進行插入操作。
+而刪除操作則無法在常數時間內完成，
+除非傳遞的參數是要刪除節點的前驅，
+或者可以修改節點的 $key$ 和衛星數據。
+\stopANSWER

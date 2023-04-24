@@ -1,0 +1,19 @@
+\startEXERCISE
+如何在 $\Theta(n)$ 時間內將含有 $n$ 個元素的單向鏈表反序，
+要求不能使用遞迴。
+除鏈表本身外，只允許使用固定大小的存儲空間。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{REVERSE(list)}
+\startCLRSCODE
+prev = list.NIL
+cur = list.NIL.next
+
+while cur != list.NIL
+	next = cur.next
+	cur.next = prev
+	prev = cur
+	cur = next
+\stopCLRSCODE
+\stopANSWER

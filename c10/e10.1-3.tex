@@ -1,0 +1,11 @@
+\startEXERCISE
+請說明如何讓兩個棧共用一個數列 $A[1..n]$，
+僅當兩個棧的所有元素數目爲 $n$ 時才會發生上溢。
+ \ALGO{PUSH} 和 \ALGO{POP} 要在 $O(1)$ 時間內完成。
+\stopEXERCISE
+
+\startANSWER
+其中一個棧從 $A[1]$ 向 $A[n]$ 方向增長，
+另一個從 $A[n]$ 向 $A[1]$ 方向增長。
+當兩個棧的棧頂相鄰時才會發生上溢。
+\stopANSWER

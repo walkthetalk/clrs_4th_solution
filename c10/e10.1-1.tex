@@ -1,0 +1,16 @@
+\startEXERCISE
+有行優先 $m\times n$ 矩陣，
+ $m$ 和 $n$ 都是 $2$ 的冪，
+行列索引均從 $0$ 開始。
+可以用二進制的方式表示行索引 $i$ 和列索引 $j$，
+ $i$ 是 $\lg{m}$ 位 $\langle i_{\lg{m}-1},i_{\lg{m}-2},\ldots,i_0\rangle$，
+ $j$ 是 $\lg{n}$ 位 $\langle j_{\lg{n}-1},j_{\lg{n}-2},\ldots,j_0\rangle$。
+將此矩陣劃分成 $2\times 2$ 塊，
+每塊有 $m/2$ 行 $n/2$ 列，
+用索引從 $0$ 開始的單個數列表示。
+如何用 $i$、 $j$ 構建索引（$\lg{m}+\lg{n}$ 位）訪問這個數列。
+\stopEXERCISE
+
+\startANSWER
+$\langle i_{\lg{m}-1},i_{\lg{m}-2},\ldots,i_0, j_{\lg{n}-1},j_{\lg{n}-2},\ldots,j_0\rangle$
+\stopANSWER

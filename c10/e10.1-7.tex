@@ -1,0 +1,10 @@
+\startEXERCISE[exercise:two_stack_to_queue]
+如何用兩個棧實現隊列？分析隊列操作的運行時間？
+\stopEXERCISE
+
+\startANSWER
+令兩個棧爲 $A$ 和 $B$， $B$ 用來入隊， $A$ 用來出隊。
+當 $A$ 爲空時，將 $B$ 中所有元素轉移到 $A$ 中。
+入隊時間爲 $O(1)$；當 $A$ 不空時，出隊時間爲 $O(1)$，
+否則爲 $\Theta(n)$，其中 $n$ 爲 $B$ 中元素的數目。
+\stopANSWER
