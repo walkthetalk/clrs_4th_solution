@@ -53,7 +53,7 @@ image(
 	fill fr shifted p withcolor .8white;
 	label(decimal(A.key[i]), p) withcolor black;
 
-	if known(A.left[i]):
+	if known(A.left[i]) and (A.left[i] >= 0):
 		save cp;
 		pair cp;
 		cp := (xpart p - nn * xunit, ypart p - yunit);
@@ -63,7 +63,7 @@ image(
 		draw img_bintree(A)(A.left[i], cp, nn, xunit, yunit, gsize);
 	fi;
 
-	if known(A.right[i]):
+	if known(A.right[i]) and (A.right[i] >= 0):
 		save cp;
 		pair cp;
 		cp := (xpart p + nn * xunit, ypart p - yunit);
@@ -79,17 +79,19 @@ image(
 	numeric A.key[], A.left[], A.right[];
 	numeric A.len;
 	A.len := 10;	% data length
+	numeric NIL;
+	NIL := -1;
 
-	A.key[ 1] := 12; A.left[ 1] := 7; A.right[ 1] := 3;
-	A.key[ 2] := 15; A.left[ 2] := 8; %A.right[ 2] := 3;
-	A.key[ 3] :=  4; A.left[ 3] :=10; %A.right[ 3] := 3;
-	A.key[ 4] := 10; A.left[ 4] := 5; A.right[ 4] := 9;
-	A.key[ 5] :=  2; %A.left[ 5] := 7; A.right[ 5] := 3;
-	A.key[ 6] := 18; A.left[ 6] := 1; A.right[ 6] := 4;
-	A.key[ 7] :=  7; %A.left[ 7] := 7; A.right[ 7] := 3;
-	A.key[ 8] := 14; A.left[ 8] := 6; A.right[ 8] := 2;
-	A.key[ 9] := 21; %A.left[ 9] := 7; A.right[ 9] := 3;
-	A.key[10] :=  5; %A.left[10] := 7; A.right[10] := 3;
+	A.key[ 1] := 17; A.left[ 1] := 8; A.right[ 1] := 9;
+	A.key[ 2] := 14; A.left[ 2] := NIL; A.right[ 2] := NIL;
+	A.key[ 3] := 12; A.left[ 3] := NIL; A.right[ 3] := NIL;
+	A.key[ 4] := 20; A.left[ 4] := 10; A.right[ 4] := NIL;
+	A.key[ 5] := 33; A.left[ 5] := 2; A.right[ 5] := NIL;
+	A.key[ 6] := 15; A.left[ 6] := 1; A.right[ 6] := 4;
+	A.key[ 7] := 28; A.left[ 7] := NIL; A.right[ 7] := NIL;
+	A.key[ 8] := 22; A.left[ 8] := NIL; A.right[ 8] := NIL;
+	A.key[ 9] := 13; A.left[ 9] := 3; A.right[ 9] := 7;
+	A.key[10] := 25; A.left[10] := NIL; A.right[10] := 5;
 
 	draw img_bintree(A)(6, (0,0), heap_interval(A.len), .5cm, .7cm, .5cm);
 )

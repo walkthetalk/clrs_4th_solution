@@ -1,0 +1,13 @@
+\startEXERCISE
+二叉樹有 $n$ 個節點，
+遞迴打印該樹所有節點的 key，
+要求運行時間位 $O(n)$。
+\stopEXERCISE
+
+\CLRSH{PRINT-BINARY-TREE(T)}
+\startCLRSCODE
+if T
+	\ALGO{PRINT(T.key)}
+	\ALGO{PRINT-BINARY-TREE(T.left)}
+	\ALGO{PRINT-BINARY-TREE(T.right)}
+\stopCLRSCODE

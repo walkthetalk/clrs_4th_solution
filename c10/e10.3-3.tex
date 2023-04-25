@@ -1,0 +1,20 @@
+\startEXERCISE
+二叉樹有 $n$ 個節點，
+打印該樹所有節點的 key，
+不允許使用遞迴，
+要求運行時間位 $O(n)$。
+可以使用棧結構作爲輔助。
+\stopEXERCISE
+
+\CLRSH{PRINT-BINARY-TREE(T)}
+\startCLRSCODE
+if T
+	\ALGO{PUSH(S, T)}
+while S.length > 0
+	T = \ALGO{POP(S)}
+	\ALGO{PRINT(T.key)}
+	if T.left
+		\ALGO{PUSH(S, T.left)}
+	if T.right
+		\ALGO{PUSH(S, T.right)}
+\stopCLRSCODE

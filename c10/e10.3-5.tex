@@ -1,0 +1,41 @@
+\startEXERCISE\DIFFICULT
+二叉樹有 $n$ 個節點，
+打印所有節點的關鍵字，
+不能用遞迴，時間爲 $O(n)$。
+除樹本身外，只能使用固定的額外存儲空間，
+且過程中不得修改樹，即使是臨時性的修改也不允許。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{PRINT-BINARY-TREE(T)}
+\startCLRSCODE
+prev = NIL
+curr = T
+while curr
+	if prev = curr.parent
+		if curr.left
+			prev = curr
+			curr = curr.left
+		else
+			\ALGO{PRINT(curr.key)}
+			if curr.right
+				prev = curr
+				curr = curr.right
+			else
+				prev = curr
+				curr = curr.parent
+	if prev = curr.left
+		\ALGO{PRINT(curr.key)}
+		if curr.right
+			prev = curr
+			curr = curr.right
+		else
+			prev = curr
+			curr = curr.parent
+	else if prev = curr.right
+		prev = curr
+		curr = curr.parent
+	else
+		error "logic error"
+\stopCLRSCODE
+\stopANSWER

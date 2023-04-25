@@ -1,0 +1,17 @@
+\startEXERCISE
+單根樹有 n 個節點，
+以左孩子右兄弟表示法存儲。
+打印所有節點關鍵字，
+要求時間爲 $O(n)$。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{PRINT-LCRS-TREE(T)}
+\startCLRSCODE
+\ALGO{PRINT(T.key)}
+if T.child
+	\ALGO{PRINT-LCRS-TREE(T.child)}
+if T.sibling
+	\ALGO{PRINT-LCRS-TREE(T.sibling)}
+\stopCLRSCODE
+\stopANSWER

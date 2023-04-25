@@ -1,0 +1,16 @@
+\startEXERCISE\DIFFICULT
+任意有根樹的左孩子右兄弟表示法中，
+每個節點用到三個指針：
+ left-child、 right-sibling 和 parent。
+對於任何節點，都可以在常數時間到達其父節點；
+且訪問所有孩子節點所需時間與孩子數目呈線性關系。
+如何才能保證訪問其父節點或其所有孩子節點所需時間與其孩子數呈線性關系，
+要求每個節點中只使用兩個指針和一個布爾值。
+\stopEXERCISE
+
+\startANSWER
+只需要兩個指針 left-child 和 next，
+其中 next 即 right-sibling，只有最後一個兄弟節點例外，
+最後一個兄弟節點的 right-sibling 指向其父節點。
+而布爾量則表示自己是不是最右一個兄弟節點。
+\stopANSWER
