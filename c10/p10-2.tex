@@ -1,0 +1,26 @@
+\startPROBLEM
+（Mergeable heaps using linked lists）
+\emph{可合並堆}（\emph{mergeable heap}）支持以下操作：
+ \ALGO{MAKE-HEAP}（創建一個空的可合並堆）、
+ \ALGO{INSERT}、 \ALGO{MINIMUM}、 \ALGO{EXTRACT-MIN} 和 \ALGO{UNION}
+\footnote{%
+由於我們定義的是 \ALGO{MINIMUM} 和 \ALGO{EXTRACT-MIN}，
+因此我們也可以將其稱爲\emph{可合並最小堆}；
+如果我們定義的是 \ALGO{MAXIMUM} 和 \ALGO{EXTRACT-MAX}，
+則可以將其稱爲\emph{可合並最大堆}。
+}。
+試說明下列各種情況下如何用鏈表實現可合並堆。
+試着使各種操作盡可能高效。
+根據動態集合的規模 $s$ 分析每種操作的運行時間。
+\startigBase[a]
+\item 鏈表已排序；
+\item 鏈表未排序；
+\item 鏈表未排序，且待合並的動態集合是不相交的。
+\stopigBase
+\stopPROBLEM
+
+\startANSWER
+\scomponent{tbl10-2.tex}
+
+對於未排序鏈表，所需時間與是否有相同元素無關。
+\stopANSWER
