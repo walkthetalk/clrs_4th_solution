@@ -9,32 +9,47 @@ define clean_misc =
 endef
 
 dir_fig:=${dir_main}/fig
-fig_srcs:=$(shell cd ${dir_fig}; find . -type f -name "*.mp" | cut -d '/' -f 2 | grep "^[e|p][0-9]")
-fig_dsts:=$(patsubst %.mp,$(output_dir)/%-1.pdf,$(fig_srcs))
+
+fig_srcs:=$(shell find ${dir_main} -type f -path "${dir_main}/c[0-9]*.mp")
+
+define mp_to_id =
+$(basename $(notdir $1))
+endef
+define mp_to_pdf =
+${output_dir}/$(call mp_to_id,$1)-1.pdf
+endef
+define mp_to_dep =
+${output_dir}/$(notdir $1).d
+endef
+
+# #1: mp
+# #2: pdf
+# #3: dep
+define mp_process_template =
+fig_dsts+=$2
+fig_deps+=$3
+DEP_$(call mp_to_id,$1):=$(shell ./gen_deps_for_mp.sh $1 ${dir_fig})
+$3:
+	@set -e; \
+	TMP_DEPS="`./gen_deps_for_mp.sh $1 ${dir_fig}`"; \
+	echo [gen dep] $1; \
+	echo "$3: $$$${TMP_DEPS}" > $3
+
+$2: $3
+	@set -e; \
+	COMPILE_DIR=$$$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
+	echo [compile] $1 at $$$${COMPILE_DIR}; \
+	cp $${DEP_$(call mp_to_id,$1)} $$$${COMPILE_DIR}/; \
+	cd $$$${COMPILE_DIR}; \
+	mptopdf $(notdir $1) > /dev/null; \
+	cp *.pdf ${output_dir}/; \
+	rm -r $$$${COMPILE_DIR}
+endef
+$(foreach tmp,${fig_srcs},$(eval $(call mp_process_template,${tmp},$(call mp_to_pdf,${tmp}),$(call mp_to_dep,${tmp}))))
 
 .PHONY: figs
 figs: ${fig_dsts}
 
 ${main_object}: ${fig_dsts}
 
-fig_deps:=$(patsubst %.mp,${output_dir}/%.mp.d,$(fig_srcs))
 include ${fig_deps}
-${output_dir}/%.mp.d:
-	@set -e; \
-	TMP_DEPS="`./gen_deps_for_mp.sh ${dir_fig}/$*.mp`"; \
-	echo [gen dep] $*; \
-	echo -e "DEP_$*.mp:=$${TMP_DEPS}\n\
-${output_dir}/$*.mp.d: $${TMP_DEPS}\n\
-${output_dir}/$*-1.pdf: ${output_dir}/$*.mp.d $${TMP_DEPS}\n\
-" > $@
-
-# 此处需要拷贝文件，DEP_$*.mp的内容在依赖文件.d中
-$(output_dir)/%-1.pdf:
-	@set -e; \
-	COMPILE_DIR=$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
-	echo [compile] $* at $${COMPILE_DIR}; \
-	cp ${DEP_$*.mp} $${COMPILE_DIR}/; \
-	cd $${COMPILE_DIR}; \
-	mptopdf $*.mp > /dev/null; \
-	cp *.pdf ${output_dir}/; \
-	rm -r $${COMPILE_DIR}
