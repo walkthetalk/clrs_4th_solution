@@ -1,0 +1,16 @@
+\startEXERCISE
+如何實現直接尋址表，才能使得元素的關鍵字可以重復且可以有衛星數據？
+三個字典操作（\ALGO{INSERT}、 \ALGO{DELETE} 和 \ALGO{SEARCH}）
+的運行時間均應爲 $O(1)$。
+（不要忘記 \ALGO{DELETE} 的參數是要刪除對象的指針而不是關鍵字）
+\stopEXERCISE
+
+\startANSWER
+用雙向鏈表。
+
+\startigBase[a]
+\item \ALGO{INSERT} 插入鏈表需要常數時間；
+\item \ALGO{DELETE} 由鏈表移除元素也需常數時間；
+\item \ALGO{SEARCH} 返回鏈表中的第一個元素，也是常數時間。
+\stopigBase
+\stopANSWER
