@@ -1,0 +1,26 @@
+\startEXERCISE
+假設用一個散列函數 $h$ 將 $n$ 個不同的關鍵字
+散列到數列 $T$ （長度爲 $m$）中。
+假設採用的是簡單均勻散列，
+那麼產生的衝突數目期望值是多少？
+更準確地，集合 $\{\{k_1,k_2\}: k_1\ne k_2, \text{且 }h(k_1)=h(k_2)\}$ 基的期望值是多少？
+\stopEXERCISE
+
+\startANSWER
+對於每對關鍵字 k 和 l，其中 $k\ne l$，
+定義指示器隨機變量 $X_{kl}=I\{h(k)=h(l)\}$。
+由於我們假設簡單均勻散列，
+因此 $\Pr\{X_{kl}=1\} = \Pr\{h(k)=h(l)\} = 1/m$，
+從而 $E[X_{kl}] = 1/m$。
+
+現在定義指示器隨機變量 Y，用來表示衝突的總數，
+因此 $Y=\sum_{k\ne l}X_{kl}$。衝突數的期望值爲：
+\startsplitformula\startmathalignment
+\NC E[Y]
+    \NC = E\left[ \sum_{k\ne l} X_{kl} \right] \NR
+\NC \NC = \sum_{k\ne l} E\left[ X_{kl} \right] \NR
+\NC \NC = \binom{n}{2}\frac{1}{m} \NR
+\NC \NC = \frac{n(n-1)}{2}\times \frac{1}{m} \NR
+\NC \NC = \frac{n(n-1)}{2m} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
