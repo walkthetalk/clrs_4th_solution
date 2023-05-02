@@ -1,0 +1,22 @@
+\startEXERCISE
+將長度爲 $r$ 的字串視爲一個以 128 爲基的數，
+用除法散列到 $m$ 個槽位中。
+我們可以將數 $m$ 表示爲一個 32 位的機器字，
+但是對於長度爲 $r$ 的字串，若將其視爲以 128 爲基的數，
+就要佔用若幹個機器字。
+如何用除法來計算一個字串的散列值，
+要求除該字串本身外，只利用常數個機器字？
+\stopEXERCISE
+
+\startANSWER
+程序如下，其中 $p$、 $b$、 $c$ 均小於 $m$， $c$ 爲最終結果：
+\startCLRSCODE
+p = 1
+b = 128 \mod m
+c = 0
+for i = 0 to r - 1
+	c = (c + a[i] * p \mod m) \mod m
+	p = p * b \mod m
+return c
+\stopCLRSCODE
+\stopANSWER

@@ -1,0 +1,18 @@
+\startEXERCISE
+考慮除法散列的另一個版本，
+其中 $h(k) = k \mod m$， $m=2^p-1$，
+ $k$ 爲按基數 $2^p$ 表示的字串。
+試證明：如果字串 $x$ 可由字串 $y$ 通過其自身的字符置換排列而成，
+則 $x$ 和 $y$ 的散列值相同。
+並舉例說明，
+哪些情況下我們不希望散列函數出現這種性質。
+\stopEXERCISE
+
+\startANSWER
+若 $m=2^p-1$，
+則 $k = \sum_{i=0}^{n}a_i(m+1)^i$。
+因此 $k \mod m = \left(\sum_{i=0}^{n}a_i\right)\mod m$。
+
+因此只要字串 $x$ 和 $y$ 可相互置換，
+則散列值必定相同。
+\stopANSWER

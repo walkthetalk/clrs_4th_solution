@@ -1,0 +1,19 @@
+\startEXERCISE\DIFFICULT
+假設開放尋址散列表的裝載因子爲 $\alpha$，
+查找所需探測次數期望值記爲 $\beta$。
+找到非零值 $\alpha$，
+使得查找不成功時 $\beta$ 是查找成功時 $\beta$ 的兩倍。
+對於探測次數期望值，可以使用定理 11.6 和 11.8 所給出的上界。
+\stopEXERCISE
+
+\startANSWER
+查找不成功時探測次數的期望值爲 $1/(1-\alpha)$。
+
+查找成功時探測次數的期望值爲 $\frac{1}{\alpha}\ln\frac{1}{1-\alpha}$。
+
+\startformula
+\frac{1}{1-\alpha} = 2 \cdot \frac{1}{\alpha}\ln\frac{1}{1-\alpha}
+\stopformula
+
+$\alpha\approx 0.71533$。
+\stopANSWER

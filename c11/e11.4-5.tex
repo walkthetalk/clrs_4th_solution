@@ -1,0 +1,15 @@
+\startEXERCISE\DIFFICULT
+假設採用雙重散列來解決衝突，
+即所用的散列函數爲 $h(k, i)=(h_1(k)+i h_2(k)) \mod m$。
+試證明：
+如果對某個關鍵字 $k$， $m$ 和 $h_2(k)$ 有最大公約數 $d\ge 1$，
+若查找 $k$ 不成功，在返回槽 $h_1(k)$ 之前，
+需要檢查散列表中所有元素的 $1/d$。
+於是，當 $d=1$ 時， $m$ 與 $h_2(k)$ 互素，
+查找操作可能要檢查整個散列表。
+（\hint 見\inchapter[number_theoretic]）
+\stopEXERCISE
+
+\startANSWER
+在循環過程中，每 $d$ 次循環，模 $m$ 的結果會重複一遍。
+\stopANSWER

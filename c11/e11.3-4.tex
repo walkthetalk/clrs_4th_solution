@@ -1,0 +1,32 @@
+\startEXERCISE
+考慮一個大小爲 $m=1000$ 的散列表
+和對應的散列函數 $h(k)=\lfloor m(kA\mod 1)\rfloor$，
+其中 $A=(\sqrt{5}-1)/2$，
+試計算關鍵字 61、 62、 63、 64 和 65 所映射到的位置。
+\stopEXERCISE
+
+\startANSWER
+用 maxima 執行下列命令：
+\startcodebox
+for a:61 step 1 thru 65 do
+	display(floor(mod((sqrt(5)-1)/2 * a, 1) * 1000));
+\stopcodebox
+結果爲：
+\startcodebox
+             61 (sqrt(5) - 1)
+ floor(1000 (---------------- - 37)) = 700
+                    2
+
+ floor(1000 (31 (sqrt(5) - 1) - 38)) = 318
+
+             63 (sqrt(5) - 1)
+ floor(1000 (---------------- - 38)) = 936
+                    2
+
+ floor(1000 (32 (sqrt(5) - 1) - 39)) = 554
+
+             65 (sqrt(5) - 1)
+ floor(1000 (---------------- - 40)) = 172
+                    2
+\stopcodebox
+\stopANSWER

@@ -1,0 +1,62 @@
+\startEXERCISE\DIFFICULT
+對於值 $k$，翻轉某個比特位 $k_i$後，
+ $f_a^{(r)}(k)$ 會產生什麼變化？
+令 $k=\sum_{i=0}^{w-1}k_{i}2^{i}$，
+ $g_a(k)=\sum_{j=0}^{w-1}b_j 2^j$，
+其中 $k_0$ 是最低位，
+ $g_a(k)=(2k^2+ak)\mod 2^w$，
+ $f_a(k)=swap(g_a(k))$。
+假設翻轉 $k$ 中的某個比特位 $k_i$，
+可能會導致 $g_a(k)$ 中的某個比特位 $b_j$ 發生翻轉
+（$j\ge i$）。
+要想通過翻轉 $k_i$ 使得 $f_a^{(r)}(k)$ 中的某個比特位翻轉，
+ $r$ 最小是多少？
+\stopEXERCISE
+
+\startANSWER
+情況一：假設 $k_i=0$，翻轉後 $k_i=1$， $k$ 變爲 $k'$，
+ $k'=k+2^i$，因爲 $a$ 爲正奇數，令 $a=2n+1$， $n\in \naturalnumbers$。
+
+\startsplitformula\startmathalignment
+\NC g_a(k') \NC = g_a(k+2^i) \NR
+\NC \NC = (2(k+2^i)^2 + a(k+2^i)) \mod 2^w \NR
+\NC \NC = (2k^2 + ak + 2^{i+2}k + 2^{2i+1} + (2n+1)2^i) \mod 2^w \NR
+\NC \NC = (g_a(k) + (k2^{i+2} + 2^{2i+1} + n2^{i+1} + 2^i) \mod 2^w) \mod 2^w \NR
+\NC \NC = (g_a(k) + (k2^{i+2}\mod 2^w) + (2^{2i+1}\mod 2^w) + (n2^{i+1}\mod 2^w) + 2^i) \NR
+\NC \NC \qquad \mod 2^w \NR
+\stopmathalignment\stopsplitformula
+假設 $k2^{i+2},2^{2i+1},n2^{i+1}$ 模 $2^w$ 均爲 $0$，則
+\startformula
+g_a(k') = (g_a(k)+2^i) \mod 2^w
+\stopformula
+由於 $0\le i\le w-1$，則 $b_i$ 必然會翻轉，
+由於 $k2^{i+2}>2^i$ 或者 $k2^{i+2}=0$，
+ $2^{2i+1}>2^i$， $n2^{i+1}>2^i$ 或者 $n2^{i+1}=0$，
+這些項要麼沒影響，要麼會使得 $b_j$ 翻轉， $j>i$。
+綜上， $k_i$ 翻轉會導致 $b_j$ 翻轉，其中 $j\ge i$。
+由於 $f_a(k)=swap(g_a(k))$，因此 $f_a(k)$ 的某位會翻轉。
+
+情況二：假設 $k_i=1$，翻轉後 $k_i=0$， $k$ 變爲 $k'$，
+ $k'=k-2^i$，因爲 $a$ 爲正奇數，令 $a=2n+1$， $n\in \naturalnumbers$。
+
+\startsplitformula\startmathalignment
+\NC g_a(k') \NC = g_a(k-2^i) \NR
+\NC \NC = (2(k-2^i)^2 + a(k-2^i)) \mod 2^w \NR
+\NC \NC = (2k^2 + ak - 2^{i+2}k + 2^{2i+1} - (2n+1)2^i) \mod 2^w \NR
+\NC \NC = (g_a(k) + (-k2^{i+2} + 2^{2i+1} - n2^{i+1} - 2^i) \mod 2^w) \mod 2^w \NR
+\NC \NC = (g_a(k) - (k2^{i+2}\mod 2^w) + (2^{2i+1}\mod 2^w) - (n2^{i+1}\mod 2^w) - 2^i) \NR
+\NC \NC \qquad \mod 2^w \NR
+\stopmathalignment\stopsplitformula
+假設 $k2^{i+2},2^{2i+1},n2^{i+1}$ 模 $2^w$ 均爲 $0$，則
+\startformula
+g_a(k') = (g_a(k)-2^i) \mod 2^w
+\stopformula
+由於 $0\le i\le w-1$，則 $b_i$ 必然會翻轉，
+由於 $k2^{i+2}>2^i$ 或者 $k2^{i+2}=0$，
+ $2^{2i+1}>2^i$， $n2^{i+1}>2^i$ 或者 $n2^{i+1}=0$，
+這些項要麼沒影響，要麼會使得 $b_j$ 翻轉， $j>i$。
+綜上， $k_i$ 翻轉會導致 $b_j$ 翻轉，其中 $j\ge i$。
+由於 $f_a(k)=swap(g_a(k))$，因此 $f_a(k)$ 的某位會翻轉。
+
+綜上，至少執行一輪 $g_a$，即至少執行一輪 $f_a$， $r$ 至少爲 $1$。
+\stopANSWER

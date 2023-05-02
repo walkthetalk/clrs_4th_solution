@@ -1,0 +1,41 @@
+\startEXERCISE\DIFFICULT
+完成證明：
+對於任意正奇數 $a$ 和任意整數 $r\ge 0$，
+函數 $f_{a}^{(r)}$ 是一對一映射。
+用反證法，並利用 $f_a$ 對 $2^w$ 取餘這個條件。
+附：
+\startformula
+f_{a}(k)=swap((2k^2+ak)\mod 2^w)
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+假設當 $r\ge 0$ 時，
+ $\exists k\ne k': f_{a}^{(r)}(k)=f_{a}^{(r)}(k')$。
+\startsplitformula\startmathalignment[n=3]
+\NC f_{a}^{(k)} \NC = \NC f_{a}^{(r)}(k') \NR
+\NC swap((2(f_{a}^{(r-1)}(k))^2 + a f_{a}^{(r-1)}(k))\mod 2^w)
+   \NC =
+   \NC swap((2(f_{a}^{(r-1)}(k'))^2 + a f_{a}^{(r-1)}(k'))\mod 2^w) \NR
+\NC (2(f_{a}^{(r-1)}(k))^2 + a f_{a}^{(r-1)}(k))\mod 2^w
+   \NC =
+   \NC (2(f_{a}^{(r-1)}(k'))^2 + a f_{a}^{(r-1)}(k'))\mod 2^w \NR
+\NC 2(f_{a}^{(r-1)}(k))^2 + a f_{a}^{(r-1)}(k)
+   - 2(f_{a}^{(r-1)}(k'))^2 - a f_{a}^{(r-1)}(k') \NC \equiv \NC 0 (\mod 2^w) \NR
+\NC (2(f_{a}^{(r-1)}(k) + f_{a}^{(r-1)}(k')) + a)(f_{a}^{(r-1)}(k) - f_{a}^{(r-1)}(k'))
+   \NC \equiv \NC 0 (\mod 2^w) \NR
+\stopmathalignment\stopsplitformula
+由於 $a$ 爲正奇數，
+ $(2(f_{a}^{(r-1)}(k) + f_{a}^{(r-1)}(k')) + a)$ 爲奇數，所以：
+\startformula
+(2(f_{a}^{(r-1)}(k) + f_{a}^{(r-1)}(k')) + a) \mod 2^w \ne 0
+\stopformula
+由同餘定理，對於同一個除數，兩個數的乘積與他們同餘的乘積同餘，所以：
+\startformula
+(f_{a}^{(r-1)}(k) - f_{a}^{(r-1)}(k')) \equiv 0 (\mod 2^w)
+\stopformula
+又當 $r\ge 1$ 時， $0\le f_{a}^{(r-1)}<2^w$，
+所以 $f_{a}^{(r-1)}(k)=f_{a}^{(r-1)}(k')$。
+重複以上步驟，可得 $f_{a}^{(0)}(k)=f_{a}^{(0)}(k')$，
+即 $k=k'$，與 $k\ne k'$ 矛盾。
+\stopANSWER

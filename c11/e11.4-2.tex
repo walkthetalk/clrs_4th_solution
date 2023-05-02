@@ -1,0 +1,36 @@
+\startEXERCISE
+試寫出 \ALGO{HASH-DELETE} 的僞碼，
+用特殊值 \ALGO{DELETED} 填充所刪除的槽位。
+如果有必要，請修改 \ALGO{HASH-SEARCH} 和 \ALGO{HASH-INSERT}，
+使之能處理特殊值 \ALGO{DELETED}。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{HASH-DELETE(T, k)}
+\startCLRSCODE
+i = 0
+repeat
+	j = h(k, i)
+	if T[j] == k
+		T[j] = \ALGO{DELETED}
+		return
+	else
+		i = i + 1
+until i == m
+error "hash table underflow"
+\stopCLRSCODE
+
+\CLRSH{HASH-INSERT(T, k)}
+\startCLRSCODE
+i = 0
+repeat
+	j = h(k, i)
+	if T[j] == NIL or T[j] == \ALGO{DELETED}
+		T[j] = k
+		return j
+	else
+		i = i + 1
+until i == m
+error "hash table overflow"
+\stopCLRSCODE
+\stopANSWER

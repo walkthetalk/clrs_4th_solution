@@ -1,0 +1,24 @@
+\startEXERCISE\DIFFICULT
+當 $\alpha=1$，即 $n=m$ 時，
+若查找成功，所需探測數目的期望值是 $H_m$，
+第 $m$ 個調和級數。
+\stopEXERCISE
+
+\startANSWER
+調和級數：
+\startformula
+H_m = \sum_{i=1}^{m}\frac{1}{i}
+\stopformula
+
+查找关键字 $k$ 的探测序列和插入关键字 $k$ 的探测序列是相同的，
+假设 $k$ 是第 $i+1$ 个被插入到散列表中的关键字，
+则此前散列表的装填因子为 $i/m$，
+根据推论11.7，查找 $k$ 所需探测次数的期望为
+ $1/(1-i/m)=m/(m-i)$。又 $n=m$，
+则查找成功所需探测次数的期望为：
+\startsplitformula\startmathalignment
+\NC \frac{1}{n}\sum_{i=0}^{n-1}\frac{m}{m-i}
+    \NC = \frac{m}{n}\sum_{i=0}^{m-1}\frac{1}{m-i} \NR
+\NC \NC = \sum_{k=1}^{m}\frac{1}{k} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

@@ -1,0 +1,35 @@
+\startEXERCISE[exercise:model_zero]\DIFFICULT
+${\cal H}$ 是從有限集合 $U$ 到有限集合 $Q$ 上的散列函數族，
+證明：
+如果 ${\cal H}$ 是 \emph{$\epsilon$ 全域}的，
+那麼 $\epsilon \ge 1/|Q| - 1/|U|$。
+ $\epsilon$ 全域：
+對 U 中任意兩個不同元素 k 和 l，都有：
+\startformula
+\Pr\{h(k)=h(l)\}\le\epsilon
+\stopformula
+其中 $h$ 是函數族 ${\cal H}$ 中的任一散列函數。
+\stopEXERCISE
+
+\startANSWER
+令 $n=|U|$、 $m=|Q|$。
+對於 $Q$ 中的第 $i$ 個槽位，
+其元素個數爲 $x_i$，
+則 $C(x_i, 2) = x_i * (x_i - 1) / 2$ 種衝突。
+則衝突總數爲：
+\startsplitformula\startmathalignment
+\NC \sum_{i=1}^{m}x_i (x_i - 1)/2
+     =\NC \frac{1}{2}\sum_{i=1}^{m}x_i^2 - \frac{1}{2}\sum_{i=1}^{m}x_i \NR
+\NC\ge\NC \frac{n^2}{2m} - \frac{n}{2}
+\stopmathalignment\stopsplitformula
+
+因此：
+\startsplitformula\startmathalignment
+\NC \Pr\{h(k)=h(l)\}
+    \ge \NC \frac{\frac{n(n-m)}{2m}}{C(n,2)} \NR
+\NC =   \NC \frac{n-m}{m(n-1)} \NR
+\NC \ge \NC \frac{n-m}{mn} \NR
+\NC =   \NC \frac{1}{m} - \frac{1}{n} \NR
+\NC =   \NC \frac{1}{|Q|} - \frac{1}{|U|} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

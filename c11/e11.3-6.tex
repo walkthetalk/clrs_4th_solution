@@ -1,0 +1,35 @@
+\startEXERCISE\DIFFICULT
+設 $U$ 爲 $d$ 元組集合，
+其中所有元素均取自 $\integers_p$，
+且 $Q=\integers_p$，
+其中 $p$ 爲素數。
+對於一個取自 $U$ 的 $d$ 元組 $\langle a_0,a_1,\ldots,a_{d-1}\rangle$，
+定義其上的散列函數 $h_b: U\rightarrow B(b\in \integers_p)$ 爲：
+\startformula
+h_b(\langle a_0, a_1, \ldots, a_{d-1} \rangle) =
+   \left(\sum_{j=0}^{d-1} a_j b^j \right) \mod p
+\stopformula
+令 ${\cal H} = \{h_b : b \in \integers_p\}$。
+根據上一個練習中 $\epsilon$ 全域的定義，
+證明 ${\cal H}$ 是 $((d-1)/p)$ 全域的。
+（\hint 參考\inexercise[model_zero]）
+\stopEXERCISE
+
+\startANSWER
+令 $k=\langle k_0,k_1,\ldots,k_{n-1}\rangle \in U$，
+ $l=\langle l_0,l_1,\ldots,l_{n-1}\rangle \in U$，
+且 $k_i \ne l_i$， $b\in \mathbb{Z}_p$。
+則：
+\startsplitformula\startmathalignment
+\NC \Pr\{h_b(k)=h_b(l)\}
+   = \NC \Pr\{h_b(k)-h_b(l)=0\} \NR
+\NC= \NC \Pr\{\sum_{j=0}^{d-1}(k_j-l_j)b^j = 0\} \NR
+\stopmathalignment\stopsplitformula
+其中 $\sum_{j=0}^{n-1}(k_j-l_j)b^j = 0$ 爲 $d-1$ 次多項式，
+最多有 $d-1$ 個解。
+因此：
+\startformula
+\Pr\{h_b(k)=h_b(l)\} \le \frac{d-1}{p} \qquad b \in \integers_p
+\stopformula
+所以 ${\cal H}$ 是 $((d-1)/p)$ 全域的。
+\stopANSWER
