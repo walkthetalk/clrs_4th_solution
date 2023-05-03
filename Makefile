@@ -32,7 +32,7 @@ endef
 define mp_process_template =
 fig_dsts+=$2
 fig_deps+=$3
-$3:
+$3: | ${output_dir}/
 	@set -e; \
 	TMP_DEPS="`./gen_deps_for_mp.sh $1 ${dir_fig}`"; \
 	echo [gen dep] $1; \
@@ -41,7 +41,7 @@ $3: \$$$${$4}\n\
 $2: $3 \$$$${$4}\n\
 " > $3
 
-$2:
+$2: | ${output_dir}/
 	@set -e; \
 	COMPILE_DIR=$$$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
 	echo [compile] $1 at $$$${COMPILE_DIR}; \
