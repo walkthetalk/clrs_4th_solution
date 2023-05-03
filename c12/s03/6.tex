@@ -1,0 +1,100 @@
+\startEXERCISE
+假設每個節點 x 不是用屬性 $x.p$ 來指向其父節點，
+而是用屬性 $x.succ$ 指向其後繼節點，
+給出用這種方法表示的二叉搜索樹 $T$ 上的
+ \ALGO{SEARCH}、 \ALGO{INSERT} 和 \ALGO{DELETE} 操作的僞碼。
+這些過程應在 $O(h)$ 時間內完成，
+其中 $h$ 是 $T$ 的高度。
+（\hint 你可能需要實現一個子過程來返回父節點）
+\stopEXERCISE
+
+\startANSWER
+\ALGO{SEARCH} 不用變。
+
+\CLRSH{TREE-INSERT(T,z)}
+\startCLRSCODE
+y = NIL
+x = T.root
+while x \ne NIL
+	y = x
+	if z.key < x.key
+		x = x.left
+	else
+		x = x.right
+if y == NIL
+	T.root = z	// $T$ 爲空
+	z.succ = NIL
+elseif z.key < y.key
+	y.left = z
+	z.succ = y
+else
+	y.right = z
+	z.succ = y.succ
+	y.succ = z
+\stopCLRSCODE
+
+\CLRSH{TREE-PARENT(T, z)}
+\startCLRSCODE
+x = z
+while x.right \ne NIL
+	x = x.right
+x = x.succ
+if x == NIL
+	y = T.root
+	while y.right \ne z
+		y = y.right
+	return y
+else
+	if x.left == z
+		return x	// $x$ 是其父節點的左孩子
+	else
+		y = x.left
+		while y.right \ne z
+			y = y.right
+		return y
+\stopCLRSCODE
+
+\CLRSH{TREE-PREDECESSOR(T, z)}
+\startCLRSCODE
+if z.left \ne NIL
+	y = z.left
+	while y.right \ne NIL
+		y = y.right
+	return y
+else
+	p = \ALGO{TREE-PARENT(T, z)}
+	if p.left == z
+		return NIL
+	esle
+		return p
+\stopCLRSCODE
+
+\CLRSH{TREE-TRANSPLANT(T, u, v)}
+\startCLRSCODE
+y = \ALGO{TREE-PARENT(T, u)}
+if y == NIL
+	T.root = v
+else if u == y.left
+	y.left = v
+else
+	y.right = v
+\stopCLRSCODE
+
+\CLRSH{TREE-DELETE(T, z)}
+\startCLRSCODE
+if z.left == NIL
+	\ALGO{TREE-TRANSPLANT(T, z, z.right)}
+else if z.right == NIL
+	\ALGO{TREE-TRANSPLANT(T, z, z.left)}
+else
+	y = \ALGO{TREE-MINIMUM(z.right)}
+	if y \ne z.right
+		\ALGO{TREE-TRANSPLANT(T, y, y.right)}
+		y.right = z.right
+	\ALGO{TREE-TRANSPLANT(T, z, y)}
+	y.left = z.left
+pd = \ALGO{TREE-PREDECESSOR(T, z)}
+if pd \ne NIL
+	pd.succ = z.succ
+\stopCLRSCODE
+\stopANSWER

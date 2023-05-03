@@ -1,0 +1,39 @@
+\startEXERCISE
+如果 \ALGO{TREE-DELETE} 中的節點 $z$ 有兩個子節點，
+我們可以選擇其前驅作爲 $y$ 而不是後繼。
+如果這樣做，我們還需要對 \ALGO{TREE-DELETE} 做哪些修改？
+有些人提出了一個公平策略，
+即賦予前驅和後繼相同的優先級，
+從而得到了更好的性能。
+如何修改 \ALGO{TREE-DELETE} 來實現這樣的策略？
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{TREE-DELETE(T, z)}
+\startCLRSCODE
+if z.left == NIL
+	\ALGO{TRANSPLANT(T, z, z.right)}
+else if z.right == NIL
+	\ALGO{TRANSPLANT(T, z, z.left)}
+else
+	flag = \ALGO{RANDOM()}		// 0 or 1
+	if flag == 0
+		y = \ALGO{TREE-MAXIMUM(z.left)}
+		if y ！= z.left
+			\ALGO{TRANSPLANT(T, y, y.left)}
+			y.left = z.left
+			y.left.p = y
+		\ALGO{TRANSPLANT(T, z, y)}
+		y.right = z.right
+		y.right.p = y
+	else
+		y = \ALGO{TREE-MINIMUM(z.right)}
+		if y != z.right
+			\ALGO{TRANSPLANT(T, y, y.right)}
+			y.right = z.right
+			y.right.p = y
+		\ALGO{TRANSPLANT(T, z, y)}
+		y.left = z.left
+		y.left.p = y
+\stopCLRSCODE
+\stopANSWER

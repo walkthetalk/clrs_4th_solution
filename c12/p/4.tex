@@ -1,0 +1,116 @@
+\startPROBLEM
+（Number of different binary trees）
+令 $b_n$ 表示由 $n$ 個節點所構成的二叉樹的數目。
+本題會給出 $b_n$ 的公式以及漸進估計。
+\startigBase[a]\startitem
+證明 $b_0=1$，且當 $n\ge 1$ 時，
+\startformula
+b_n = \sum_{k=0}^{n-1}b_k b_{n-1-k}
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+主要考慮根節點的左右兩棵子樹中的節點數目。
+\stopANSWER
+
+\startigBase[continue]\startitem
+參考\refproblem{generating_function} 中生成函數的定義，
+令 $B(x)$ 爲生成函數：
+\startformula
+B(x) = \sum_{n=0}^{\infty}b_n x^n
+\stopformula
+試證明 $B(x) = x B(x)^2 + 1$，也可用如下形式表示 $B(x)$：
+\startformula
+B(x) = \frac{1}{2x}(1 - \sqrt{1-4x})
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+\startformula\startmathalignment
+\NC B(x) \NC = \sum_{n=0}^{\infty}b_n x^n \NR
+\NC \NC = 1 + \sum_{n=1}^{\infty}b_n x^n \NR
+\NC \NC = 1 + \sum_{n=1}^{\infty}\sum_{k=0}^{n-1}b_k b_{n-k-1} x^n \NR
+\NC \NC = 1 + x \sum_{n=1}^{\infty}\sum_{k=0}^{n-1}b_k x^k b_{n-k-1} x^{n-k-1} \NR
+\NC \NC = 1 + x \sum_{n=0}^{\infty}\sum_{k=0}^{n}b_k x^k b_{n-k} x^{n-k} \NR
+\NC \NC = 1 + x B(x)^2\NR
+\stopmathalignment\stopformula
+
+$xB(x)^2 + 1 = x \cdot \frac{1}{4x^2}(1+1-4x-2\sqrt{1-4x}) + 1 = B(x)$。
+\stopANSWER
+
+$f(x)$ 在 $x=a$ 處\emph{泰勒展開式（Taylor expansion）}爲：
+\startformula
+f(x) = \sum_{k=0}^{\infty}\frac{f^{(k)}(a)}{k!}(x-a)^k
+\stopformula
+其中 $f^{(k)}(x)$ 是 $f$ 對 $x$ 的 $k$ 階導數。
+
+% c
+\startigBase[continue]\startitem
+用 $\sqrt{1-4x}$ 在 $x=0$ 處的泰勒展開式證明：
+\startformula
+b_n = \frac{1}{n+1}\binom{2n}{n}
+\stopformula
+（即第 $n$ 個 \emph{Catalan number}）
+如果不想用泰勒展開式，
+也可以使用二項展開式，
+參見\insection[geometric_binom]，
+將其推廣到非整數的指數 $n$ 上去，
+也就是對於所有實數 $n$ 和任一整數 $k$，
+當 $k\ge 0$ 時，$\binom{n}{k}$ 可以表示爲 $n(n-1)\cdots(n-k+1)/k!$，否則爲 0。
+\stopitem\stopigBase
+
+\startANSWER
+令 $f(x) = \sqrt{1-4x}$，其泰勒展開式爲：
+\startformula
+\sqrt{1-4x} = 1 - \frac{2}{1!}x
+             - \frac{4}{2!}x^2
+	     - \frac{24}{3!}x^3
+	     - \frac{240}{4!}x^4
+	     - \cdots
+\stopformula
+因此：
+\startsplitformula\startmathalignment
+\NC B(x) \NC = \frac{1}{2x}(1-\sqrt{1-4x}) \NR
+\NC      \NC = \frac{2}{1!}x
+               + \frac{4}{2!}x^2
+	       + \frac{24}{3!}x^3
+	       + \frac{240}{4!}x^4
+	       + \cdots \NR
+\NC      \NC = \frac{1}{1!}
+               + \frac{2}{2!}x
+	       + \frac{12}{3!}x^2
+	       + \frac{120}{4!}x^3
+	       + \cdots \NR
+\NC      \NC = \sum_{n=1}^{\infty}\frac{(2n-2)!}{n(n-1)!(n-1)!}x^{n-1} \NR
+\NC      \NC = \sum_{n=0}^{\infty}\frac{1}{n+1}\binom{2n}{n}x^n \NR
+\stopmathalignment\stopsplitformula
+又由於 $B(x) \NC = \sum_{n=0}^{\infty}b_n x^n$，所以：
+\startformula
+b_n = \frac{1}{n+1}\binom{2n}{n}
+\stopformula
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+證明：
+\startformula
+b_n = \frac{4^n}{\sqrt{\pi}n^{3/2}}(1+O(1/n))
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+根據 Stirling 近似：
+\startformula
+n! = \sqrt{2\pi n}
+     \left(\frac{n}{e}\right)^n
+     \left(1 + \Theta\left(\frac{1}{n}\right)\right)
+\stopformula
+可得：
+\startformula
+b_n = \frac{1}{n+1}\binom{2n}{n}
+    = \frac{4^n}{\sqrt{\pi}n^{3/2}}
+      \left(1 + O\left(\frac{1}{n}\right)\right)
+\stopformula
+\stopANSWER
+
+\stopPROBLEM

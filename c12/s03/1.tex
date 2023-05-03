@@ -1,0 +1,30 @@
+\startEXERCISE
+給出遞迴版本的 \ALGO{TREE-INSERT}。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{TREE-INSERT-REC(T, z)}
+\startCLRSCODE
+if T.root == NIL
+	T.root = z
+	z.p = NIL
+else
+	TIR(T.root, z)
+\stopCLRSCODE
+
+\CLRSH{TIR(p, z)}
+\startCLRSCODE
+if z.key < p.key
+	if p.left == NIL
+		p.left = z
+		z.p = p
+	else
+		\ALGO{TIR(p.left,z)}
+else
+	if p.right == NIL
+		p.right = z
+		z.p = p
+	else
+		\ALGO{TIR(p.right,z)}
+\stopCLRSCODE
+\stopANSWER

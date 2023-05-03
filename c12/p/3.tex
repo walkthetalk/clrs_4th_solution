@@ -1,0 +1,100 @@
+\startPROBLEM
+（Average node depth in a randomly built binary search tree）
+由 $n$ 個關鍵字\emph{隨機構建二叉搜索樹}（randomly built binary search tree）：
+以空樹開始，然後以隨機次序插入關鍵字，
+也就是說 $n!$ 種排列機會均等。
+証明其節點平均深度為 $O(\lg{n})$。
+構建二叉搜索樹的過程，
+與\insection[rand_quicksort] 中
+ \ALGO{RANDOMIZED-QUICKSORT} 的執行過程驚人的相似。
+
+給定二叉搜索樹 $T$，
+其中任一節點 $x$ 的深度為 $d(x, T)$，
+ $T$ 中所有節點深度 $d(x,T)$ 的和
+爲\emph{總路徑長度}（total path length） $P(T)$，
+% a
+\startigBase[a]\startitem
+証明 $T$ 中節點的平均深度為：
+\startformula
+\frac{1}{n}\sum_{x\in T} d(x,T) = \frac{1}{n} P(T)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+根據定義 $P(T)=\sum_{x\in T}d(x,T)$，兩邊同除以 $n$ 即可。
+\stopANSWER
+
+下面來証明 $P(T)$ 的期望值為 $O(n\lg{n})$。
+% b
+\startigBase[continue]\startitem
+令 $T$ 的左右子樹分別為 $T_L$ 和 $T_R$。
+証明如果 $T$ 有 $n$ 個節點，則：
+\startformula
+P(T) = P(T_L) + P(T_R) + n - 1
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+對於 $T_L$ 中任一節點 $x$，
+有 $d(x, T) = d(x, T_L) + 1$。則：
+\startsplitformula\startmathalignment
+\NC P(T) \NC = \sum_{x\in T}d(x, T) \NR
+\NC      \NC = \sum_{x\in T_L}d(x, T) + \sum_{x\in T_R}d(x, T) \NR
+\NC      \NC = \sum_{x\in T_L}(d(x, T_L) + 1) + \sum_{x\in T_R}(d(x, T_R) + 1) \NR
+\NC      \NC = \sum_{x\in T_L}d(x, T_L) + \sum_{x\in T_R}d(x, T_R) + (n - 1) \NR
+\NC      \NC = P(T_L) + P(T_R) + n - 1 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+所有具有 $n$ 個節點的隨機構建的二叉搜索樹，
+令其總路徑長度的平均值為 $P(n)$。証明：
+\startformula
+P(n) = \frac{1}{n}\sum_{i=0}^{n-1}(P(i) + P(n-i-1) + n - 1)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+既然是隨機構建，則左右子樹的節點數目也是隨機的，共有 \m{n} 種情況，
+即左右子樹的節點數是 $(0,n-1), (1,n-2), \cdots, (n-1,0)$ 中的任一種。
+根據上一項的結果即得。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+如何將 $P(n)$ 改寫為：
+\startformula
+P(n) = \frac{2}{n}\sum_{k=1}^{n-1}P(k)+\Theta(n)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+展開上一項的結果，並去除 $P(0)$ 即可。
+（$P(0) = 0$）
+\stopANSWER
+
+\startigBase[continue]\startitem
+回顧一下\refproblem{alt_quicksort_analysis} 中對隨機快速排序的分析，
+試證明： $P(n)=O(n\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+請參考\refproblem{alt_quicksort_analysis} 的解答。
+\stopANSWER
+
+快速排序中每次遞迴調用，
+我們都會隨機選擇一個主元來分割要排序的元素。
+二叉搜索樹中，每個節點都可以看作是分割其子樹的主元。
+\startigBase[continue]\startitem
+試說明快速排序時所進行的比較與往二叉搜索樹中插入元素所進行的比較相同。
+（比較的次序可能不同，但肯定有）
+\stopitem\stopigBase
+
+\startANSWER
+將快速排序時所選的主元作爲子樹的根節點。
+主元將子數列分成了兩部分，
+這兩部分就是主元的左右兩棵子樹。
+\stopANSWER
+
+\stopPROBLEM

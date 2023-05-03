@@ -1,0 +1,21 @@
+\startEXERCISE
+寫出遞迴版本的 \ALGO{TREE-MINIMUM} 和 \ALGO{TREE-MAXIMUM}。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{TREE-MINIMUM(x)}
+\startCLRSCODE
+if x.lchild == NIL
+	return x;
+else
+	\ALGO{TREE-MINIMUM(x.lchild)}
+\stopCLRSCODE
+
+\CLRSH{TREE-MAXIMUM(x)}
+\startCLRSCODE
+if x.rchild == NIL
+	return x;
+else
+	\ALGO{TREE-MAXIMUM(x.rchild)}
+\stopCLRSCODE
+\stopANSWER

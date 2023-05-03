@@ -1,0 +1,18 @@
+\startEXERCISE[exercise:cont_successor]
+證明：在高度爲 $h$ 的二叉搜索樹中，
+不論從哪個節點開始，
+連續調用 $k$ 次 \ALGO{TREE-SUCCESSOR} 所需時間爲 $O(k+h)$。
+\stopEXERCISE
+
+\startANSWER
+假設從節點 $x$ 開始調用 \ALGO{TREE-SUCCESSOR}，
+令 $x$ 的第 $k$ 個後繼節點爲 $y$，
+ $x$ 和 $y$ 的最低共祖爲 $z$。
+ \ALGO{TREE-SUCCESSOR} 的執行過程與遍歷類似，
+對任何一條邊而言，最多遍歷兩次，
+所以我們訪問一個節點最多也就三次。
+而且，對於任一節點，如果其值不在 $x$ 和 $y$ 之間，
+最多只檢查一次，且僅在 $x$ 到 $z$ 或 $y$ 到 $z$ 的一條簡單路徑上出現。
+由於這些路徑長度由 $h$ 限定，
+運行時間上限爲 $3k+2h=O(k+h)$。
+\stopANSWER

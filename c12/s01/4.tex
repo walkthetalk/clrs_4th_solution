@@ -1,0 +1,23 @@
+\startEXERCISE
+對於一棵有 $n$ 個節點的二叉搜索樹，
+設計遞迴算法進行先序遍歷和後序遍歷，
+要求在 $\Theta(n)$ 時間內完成。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{PREORDER-TREE-WALK(x)}
+\startCLRSCODE
+if x \ne NIL
+	\ALGO{PRINT(x.key)}
+	\ALGO{PREORDER-TREE-WALK(x.left)}
+	\ALGO{PREORDER-TREE-WALK(x.right)}
+\stopCLRSCODE
+
+\CLRSH{POSTORDER-TREE-WALK(x)}
+\startCLRSCODE
+if x \ne NIL
+	\ALGO{POSTORDER-TREE-WALK(x.left)}
+	\ALGO{POSTORDER-TREE-WALK(x.right)}
+	\ALGO{PRINT(x.key)}
+\stopCLRSCODE
+\stopANSWER

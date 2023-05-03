@@ -1,0 +1,37 @@
+\startEXERCISE
+設計一個執行中序遍歷的非遞迴算法。
+（\hint 一種較爲簡單的方法是使用棧作爲輔助結構；
+另一種較複雜但比較簡潔的做法不用棧，但要能判斷兩個指針是否相等。）
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{INORDER-TREE-WALK(root)}
+\startCLRSCODE
+prev = NIL
+n = root
+while n \ne NIL
+	if prev == n.p
+		if n.left \ne NIL
+			prev = n
+			n = n.left
+		else
+			\ALGO{PRINT(n.key)}
+			if n.right \ne NIL
+				prev = n
+				n = n.right
+			else
+				prev = n
+				n = n.p
+	else if prev == n.left
+		\ALGO{PRINT(n.key)}
+		if n.right \ne NIL
+			prev = n
+			n = n.right
+		else
+			prev = n
+			n = n.p
+	else if prev == n.right
+		prev = n
+		n = n.p
+\stopCLRSCODE
+\stopANSWER

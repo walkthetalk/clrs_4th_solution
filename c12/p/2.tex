@@ -1,0 +1,40 @@
+\startPROBLEM
+（Radix trees）
+給定兩個字串 $a=a_0 a_1 \ldots a_p$ 和 $b=b_0 b_1 \ldots b_q$，
+這裏每個 $a_i$ 和 $b_j$ 分別屬於一個有序字符集，
+如果下面兩種規則之一成立，
+就稱字串 $a$ \emph{按字典序小於}（lexicographically less than）字串 $b$：
+\startigBase[n]
+\startitem
+存在一個整數 $j$，其中 $0\le j \le \min\{p,q\}$，
+使得對所有的 $i=0,1,\ldots,j-1$， $a_i=b_i$ 都成立，且 $a_j < b_j$。
+\stopitem
+
+\startitem
+$p<q$，且對所有的 $i=0,1,\ldots,p$，都有 $a_i=b_i$。
+\stopitem
+\stopigBase
+
+例如，如果 $a$ 和 $b$ 是位串，
+那麼 $10 100 < 10 110$ （由規則 1，取 $j=3$），
+ $10 100 < 101 000$ （由規則 2）。
+這種次序類似於英語字典中的排序。
+
+\emph{基數樹}（radix tree）數據結構（也成爲 \emph{trie}）如下圖所示，
+這個樹存儲了位串 $1011$、 $10$、 $011$、 $100$ 和 $0$。
+查找關鍵字 $a=a_0 a_1 \ldots a_p$ 時，
+在深度爲 $i$ 的節點處，
+如果 $a_i=0$，則左拐；
+如果 $a_i=1$，則右拐。
+集合 $S$ 由各不相同的位串組成，
+位串長度總和爲 $n$。
+說明如何使用基數樹對 $S$ 按字典排序，要求時間爲 $\Theta(n)$。
+對於下圖所示的例子，
+排序後的輸出應爲 $0$、 $011$、 $10$、 $100$、 $1011$。
+
+\externalfigure[output/p12_2-1]
+\stopPROBLEM
+
+\startANSWER
+前序遍歷即可。
+\stopANSWER

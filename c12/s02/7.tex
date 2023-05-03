@@ -1,0 +1,12 @@
+\startEXERCISE
+二叉搜索樹有 $n$ 個節點，用另一種方法來實現中序遍歷：
+先調用 \ALGO{TREE-MINIMUM} 找到這棵樹中的最小元素，
+然後再調用 $n-1$ 次 \ALGO{TREE-SUCCESSOR}。
+證明：該算法的運行時間爲 $\Theta(n)$。
+\stopEXERCISE
+
+\startANSWER
+此方法等同於 \ALGO{INORDER-TREE-WALK}。
+
+在 $n-1$ 條邊上，通過每條邊最多兩次。
+\stopANSWER

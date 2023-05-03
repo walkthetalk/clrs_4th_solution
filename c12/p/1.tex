@@ -1,0 +1,70 @@
+\startPROBLEM
+（Binary search trees with equal keys）
+相同的關鍵字給二叉搜索樹的實現帶來一個難題。
+% a
+\startigBase[a]\startitem
+二叉搜索樹初始爲空，
+當用 \ALGO{TREE-INSERT} 插入 $n$ 個具有相同關鍵字的數據，
+其漸進性能是多少？
+\stopitem\stopigBase
+
+\startANSWER
+最壞情況下會形成一個只有右子樹的鏈，
+漸進性能爲 $\sum_{i=1}^{n}i = O(n^2)$。
+\stopANSWER
+
+我們建議通過以下方式改進 \ALGO{TREE-INSERT}：
+在第 5 行前比較 $z.key == x.key$，
+在第 11 行前比較 $z.key == y.key$。
+如果比較結果相等，我們根據以下策略之一來實現。
+對於每種策略，找到上一項的答案。
+（對於第 5 行，策略是比較 $z$ 和 $x$，
+而對於第 11 行，是比較 $z$ 和 $y$）
+
+% b
+\startigBase[continue]\startitem
+在節點 $x$ 中維護一個布爾標志 $x.b$，
+並根據 $x.b$ 的值將 $x$ 設置成 $x.left$ 或者 $x.right$，
+這樣當插入的關鍵字與 $x$ 相同時，
+ $x.b$ 的值就會在 FALSE 和 TRUE 間來回切換。
+\stopitem\stopigBase
+
+\startANSWER
+所構造的是平衡二叉樹，
+所構造的兩棵子樹大小最多差 1。
+高度爲 $\Theta(\lg{n})$。
+時間爲 $\sum_{i=1}^{n}\lg{n} = \Theta(\lg{n})$。
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+在 $x$ 中維護一個鏈表，
+存儲關鍵字與 $x$ 相同的節點，
+將 $z$ 插入此鏈表。
+\stopitem\stopigBase
+
+\startANSWER
+樹的高度將是 0，
+單次插入所花時間爲 $\Theta(1)$。
+總時間爲 $\Theta(n)$。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+隨機地將 $x$ 設置成 $x.left$ 或 $x.right$。
+（給出最壞情況的性能，並推測期望運行時間）
+\stopitem\stopigBase
+
+\startANSWER
+所謂最壞情況，就是隨機的結果始終如一，
+全部爲左或全部爲右。
+結果與第一項一樣，時間爲 $\Theta(n^2)$。
+
+接下來看期望運行時間。
+隨機選擇的結果是幾乎一半爲左，另一半爲右，
+也就是說說生成的是平衡二叉樹，
+高度爲 $\lg n$，
+期望運行時間爲 $n\lg n$。
+\stopANSWER
+
+\stopPROBLEM

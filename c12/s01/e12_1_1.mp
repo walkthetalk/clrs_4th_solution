@@ -246,6 +246,16 @@ image(
 )
 enddef;
 
+vardef draw_bin_search_tree(suffix A) :=
+	save m;
+	picture m;
+	m := img_bin_search_tree(A)(0.5cm, 0.8cm,0.8cm);
+	draw m shifted (-xpart (llcorner m), 0);
+	draw preorder_tree_walk(A)(1, 0.5cm, 0cm) shifted (2cm,0);
+	draw inorder_tree_walk(A)(1, 0.5cm, -0.5cm) shifted (2cm,0);
+	draw postorder_tree_walk(A)(1, 0.5cm, -1.0cm) shifted (2cm,0);
+enddef;
+
 beginfig(1);
 	numeric data[];
 	numeric data.len;
@@ -258,10 +268,7 @@ beginfig(1);
 	data[7] := 21;
 	data.len := 7;
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-	draw preorder_tree_walk(data)(1, 0.5cm, 0cm);
-	draw inorder_tree_walk(data)(1, 0.5cm, -1cm);
-	draw postorder_tree_walk(data)(1, 0.5cm, -2cm);
+	draw_bin_search_tree(data);
 endfig;
 
 beginfig(2);
@@ -276,10 +283,7 @@ beginfig(2);
 	data[15] := 21;
 	data.len := 15;
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-	draw preorder_tree_walk(data)(1, 0.5cm, 0cm);
-	draw inorder_tree_walk(data)(1, 0.5cm, -1cm);
-	draw postorder_tree_walk(data)(1, 0.5cm, -2cm);
+	draw_bin_search_tree(data);
 endfig;
 
 beginfig(3);
@@ -294,10 +298,7 @@ beginfig(3);
 	data[31] := 21;
 	data.len := 31;
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-	draw preorder_tree_walk(data)(1, 0.5cm, 0cm);
-	draw inorder_tree_walk(data)(1, 0.5cm, -1cm);
-	draw postorder_tree_walk(data)(1, 0.5cm, -2cm);
+	draw_bin_search_tree(data);
 endfig;
 
 beginfig(4);
@@ -312,10 +313,7 @@ beginfig(4);
 	data[63] := 21;
 	data.len := 63;
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-	draw preorder_tree_walk(data)(1, 0.5cm, 0cm);
-	draw inorder_tree_walk(data)(1, 0.5cm, -1cm);
-	draw postorder_tree_walk(data)(1, 0.5cm, -2cm);
+	draw_bin_search_tree(data);
 endfig;
 
 beginfig(5);
@@ -330,10 +328,7 @@ beginfig(5);
 	data[127] := 21;
 	data.len := 127;
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-	draw preorder_tree_walk(data)(1, 0.5cm, 0cm);
-	draw inorder_tree_walk(data)(1, 0.5cm, -1cm);
-	draw postorder_tree_walk(data)(1, 0.5cm, -2cm);
+	draw_bin_search_tree(data);
 endfig;
 
 end;

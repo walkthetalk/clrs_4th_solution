@@ -1,0 +1,16 @@
+\startEXERCISE
+寫出 \ALGO{TREE-PREDECESSOR} 的僞碼。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{TREE_PREDECESSOR(x)}
+\startCLRSCODE
+if x.lchild \ne NIL
+	return \ALGO{TREE-MAXIMUM(x.lchild)}
+y = x.p
+while y \ne NIL and y.lchild == x
+	x = y
+	y = y.p
+return y
+\stopCLRSCODE
+\stopANSWER

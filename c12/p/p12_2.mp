@@ -1,3 +1,5 @@
+input clrs;
+
 bboxmargin := 0;
 
 % for any def, use expr/primary, don't use suffix
@@ -28,9 +30,9 @@ image(
 	fr := fullcircle xscaled (2 * gsize) yscaled gsize;
 
 	if A[i] = "":
-		fill fr withcolor .5white;
+		fill fr withcolor clrsCfB;
 	else:
-		fill fr withcolor .8white;
+		fill fr withcolor clrsCfA;
 		label(A[i], (0,0)) withcolor black;
 	fi;
 
@@ -88,7 +90,7 @@ beginfig(1);
 	data[13] := "";
 	data[27] := "1011";
 
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
+	draw img_bin_search_tree(data)(0.5cm, 0.8cm,1.0cm);
 endfig;
 
 end;
