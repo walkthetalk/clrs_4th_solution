@@ -1,0 +1,77 @@
+\startPROBLEM
+（Longest-probe bound for hashing）
+有開放尋址散列表，大小爲 $m$，
+用於存儲 $n$ （$n\le m/2$）個數據項。
+% a
+\startigBase[a]\startitem
+假設採用獨立均勻散列，證明：
+對於 $i=1,2,\ldots,n$，
+第 $i$ 次插入所需探查次數嚴格多於 $k$ 次的概率至多爲 $2^{-k}$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC \Pr\{x>k\}
+    \NC = \Pr\{x\ge k+1\} \NR
+\NC \NC = \frac{n}{m} \cdot \frac{n-1}{m-1}
+          \cdot \ldots \cdot
+	  \frac{n-k+1}{m-k+1} \qquad \text{參見定理 11.6} \NR
+\NC \NC < (\frac{n}{m})^k \NR
+\NC \NC \le (\frac{1}{2})^k \NR
+\NC \NC = 2^{-k} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+證明：對於 $i=1,2,\ldots,n$，
+第 $i$ 次插入所需探查次數多於 $2\lg{n}$ 的概率爲 $O(1/n^2)$。
+\stopitem\stopigBase
+
+\startANSWER
+根據上一項的結果：
+\startformula
+\Pr\{x>k\} \le 2^{-k} = 2^{-2\lg{n}} = \frac{1}{n^2}
+\stopformula
+\stopANSWER
+
+令隨機變量 $X_i$ 表示第 $i$ 次插入所需的探查次數。
+在上面 (b) 中已證明 $\Pr\{X_i>2\lg{n} = O(1/n^2)\}$。
+令隨機變量 $X=\max\{X_i: 1\le i\le n\}$ 表示
+任意 $n$ 次插入過程中所需探查數的最大值。
+
+% c
+\startigBase[continue]\startitem
+證明： $\Pr\{X>2\lg{n}\} = O(1/n)$。
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+\Pr\{X>2\lg{n}\}
+  \le \sum_{i=1}^{n}\Pr\{X_i>2\lg{n}\}
+  \le \sum_{i=1}^{n}\frac{1}{n^2}
+  = n \cdot \frac{1}{n^2}
+  = \frac{1}{n}
+\stopformula
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+證明：最長探查序列的期望長度爲 $E[x]=O(\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC E[x]
+    \NC = \sum_{k=1}^{n}k\Pr\{X=k\} \NR
+\NC \NC = \sum_{k=1}^{2\lg{n}}k\Pr\{X=k\} + \sum_{k=2\lg{n}+1}^{n}k\Pr\{X=k\} \NR
+\NC \NC < 2\lg{n}\sum_{k=1}^{2\lg{n}}\Pr\{X=k\} + n\sum_{k=2\lg{n}+1}^{n}\Pr\{X=k\} \NR
+\NC \NC = 2\lg{n}\Pr\{X\le 2\lg{n}\} + n\Pr\{X>2\lg{n}\} \NR
+\intertext{其中 $\Pr\{X\le 2\lg{n}\}\le 1$， $\Pr\{X>2\lg{n}\} \le \frac{1}{n^2}$：}
+\NC \NC \le 2\lg{n} + n \cdot \frac{1}{n^2} \NR
+\NC \NC < 2\lg{n} + 1 \NR
+\NC \NC = O(\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\stopPROBLEM

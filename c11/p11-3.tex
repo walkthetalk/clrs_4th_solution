@@ -1,0 +1,118 @@
+\startPROBLEM
+（Slot-size bound for chaining）
+假設散列表有 $n$ 個槽位，用鏈接法解決衝突。
+向表中插入 $n$ 個關鍵字，
+每個關鍵字被等可能地散列到各個槽中。
+插入所有關鍵字後，令 $M$ 爲各槽中所含關鍵字數目的最大值。
+讀者的任務是證明 $E[M]$ （$M$ 的期望值）
+的上界爲 $O(\lg{n}/\lg\lg{n})$。
+% a
+\startigBase[a]\startitem
+證明：正好有 k 個關鍵字被散列到某一特定槽中的概率 $Q_k$ 爲：
+\startformula
+Q_k = \left(\frac{1}{n}\right)^k
+      \left(1-\frac{1}{n}\right)^{n-k}
+      \binom{n}{k}
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+先在 $n$ 個關鍵字中選出 $k$ 個，
+這 $k$ 個關鍵字都會散列到特定槽中（每次散列的概率爲 $1/n$），
+其他關鍵字都散列到其他槽中（每次散列的概率爲 $1- 1/n$）。
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+令 $P_k$ 爲 $M=k$ 的概率，
+即包含最多關鍵字的槽中有 $k$ 個關鍵字的概率。
+證明： $P_k\le n Q_k$。
+\stopitem\stopigBase
+
+\startANSWER
+所選特定槽可能是 $n$ 個槽中的任何一個，且概率相等。
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+應用 Stirling 近似公式 3.25 證明： $Q_k < e^k / k^k$。
+附 Stirling 近似公式：
+\startformula
+n! = \sqrt{2\pi n}
+     \left(\frac{n}{e}\right)^n
+     \left(1 + \Theta\left(\frac{1}{n}\right)\right)
+\stopformula
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC Q_k
+    \NC = \left(\frac{1}{n}\right)^k
+          \left(1-\frac{1}{n}\right)^{n-k} \binom{n}{k} \NR
+\NC \NC < \frac{1}{n^k} \frac{n!}{k!(n-k)!} \NR
+\NC \NC < \frac{1}{k!} \NR
+\NC \NC < \frac{1}{(\frac{k}{e})^k} \NR
+\NC \NC = \frac{e^k}{k^k} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+證明：存在常數 $c>1$，
+使得 $Q_{k_0} < 1/n^3$ 對 $k_0 = c \lg{n}/\lg\lg{n}$ 成立。
+並有結論：對於 $k\ge k_0 = c\lg{n}/\lg\lg{n}$， $P_k < 1/n^2$ 成立。
+\stopitem\stopigBase
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC \frac{e^{k_0}}{{k_0}^{k_0}} \NC< \frac{1}{n^3} \NR
+\NC (\frac{k_0}{e})^{k_0} \NC> n^3 \NR
+\intertext{兩邊同取對數：}
+\NC k_0 (\lg{k_0} - 1) \NC> 3 \lg{n} \NR
+\NC c \frac{\lg{n}}{\lg\lg{n}} (\lg(\frac{c\lg{n}}{\lg\lg{n}}) - 1)
+   \NC> 3 \lg{n} \NR
+\NC c \frac{\lg{n}}{\lg\lg{n}} (\lg{c} + \lg\lg{n} - \lg\lg\lg{n} - 1)
+   \NC> 3 \lg{n} \NR
+\NC c (\lg{c} + \lg\lg{n} - \lg\lg\lg{n} - 1)
+   \NC> 3 \lg\lg{n} \NR
+\NC c (\lg{c} - \lg\lg\lg{n} - 1) + c \lg\lg{n}
+   \NC> 3 \lg\lg{n} \NR
+\intertext{令 $c>3$：}
+\NC c (\lg{c} - \lg\lg\lg{n} - 1) \NC> 0 \NR
+\NC \lg{c} - \lg\lg\lg{n} \NC> 1 \NR
+\NC c / \lg\lg{n} \NC> e \NR
+\NC c \NC> e \lg\lg{n} \NR
+\stopmathalignment\stopsplitformula
+
+對於 $k\ge k_0 = c\lg{n}/\lg\lg{n}$，
+由 b）可知 $P_k\le n Q_k$，又 $Q_k<1/n^3$，因此 $P_k < 1/n^2$。
+\stopANSWER
+
+% e
+\startigBase[continue]\startitem
+證明：
+\startformula
+E[M] \le \Pr\{ M>\frac{c\lg{n}}{\lg\lg{n}} \} \cdot n
+         + \Pr\{ M\le \frac{c\lg{n}}{\lg\lg{n}} \} \cdot \frac{c\lg{n}}{\lg\lg{n}}
+\stopformula
+並有結論： $E[M] = O(\lg{n}/\lg\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+令 $k_0 = \frac{c\lg{n}}{\lg\lg{n}}$，則：
+\startsplitformula\startmathalignment
+\NC E[M]
+    \NC = \sum_{k=1}^{n}k\Pr\{M=k\} \NR
+\NC \NC = \sum_{k=1}^{k_0}k\Pr\{M=k\}
+          + \sum_{k=k_0+1}^{n}k\Pr\{M=k\} \NR
+\NC \NC < k_0 \sum_{k=1}^{k_0}\Pr\{M=k\}
+          + n\sum_{k=k_0+1}^{n}\Pr\{M=k\} \NR
+\NC \NC = k_0 \Pr\{M\le k_0\} + n\Pr\{M>k_0\} \NR
+\intertext{其中 $\Pr\{M\le k_0\}\le 1$， $\Pr\{M>k_0\} = P_k < \frac{1}{n^2}$：}
+\NC \NC < k_0 + n \cdot \frac{1}{n^2} \NR
+\NC \NC < k_0 + 1 \NR
+\NC \NC = O(k_0) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\stopPROBLEM

@@ -1,0 +1,34 @@
+\startPROBLEM
+（Searching a static set）
+實現一個可搜索的集合，內含 $n$ 個元素，關鍵字是數值。
+此集合是靜態的（不允許 \ALGO{INSERT} 和 \ALGO{DELETE}），
+只允許 \ALGO{SEARCH}。
+我們有足夠的時間對這 $n$ 個元素進行預處理，
+以保證 \ALGO{SEARCH} 儘量快。
+
+% a
+\startigBase[a]\startitem
+如何使 \ALGO{SEARCH} 在最壞情況下的運行時間爲 $O(\lg n)$，
+除了元素本身存儲所需空間外，不允許使用額外的存儲空間。
+\stopitem\stopigBase
+
+\startANSWER
+略。
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+在 $m$ 個槽位上用開放尋址散列實現這個集合，
+假設散列是獨立均勻排列。
+如果 \ALGO{SEARCH} 不成功，
+要使其平均性能至少要與 a）中的上界一樣好，
+所需額外存儲空間 $m-n$ 最少要是多少？
+用 $m-n$ 關於 $n$ 的漸進界表示。
+\stopitem\stopigBase
+
+\startANSWER
+每個槽位中的元素用有序數列存儲產生衝突的元素，
+可以用二分查找在有序數列中進行查找。
+\stopANSWER
+
+\stopPROBLEM

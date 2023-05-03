@@ -1,0 +1,148 @@
+\startPROBLEM
+（Hashing and authentication）
+有散列函數族 ${\cal H}$，
+其中每個函數 $h\in{\cal H}$ 都可以
+將關鍵字的全域 $U$ 映射到 $\{0,1,\ldots,m-1\}$ 上。
+如果對於任意 $k$ 個互不相同的關鍵字
+構成的的固定序列 $\langle x_1,x_2,\ldots,x_k \rangle$，
+以及從 ${\cal H}$ 中隨機選出的 $h$，
+序列 $\langle h(x_1),h(x_2),\ldots,h(x_k) \rangle$
+ 是 $m^k$ 種長度爲 $k$ 的序列
+（其元素取自 $\{0,1,\ldots,m-1\}$）中任意一個，其可能性相同,
+我們稱 ${\cal H}$ 是 \emph{k-獨立}（k-independent）的。
+\startigBase[a]\startitem%a
+證明：如果散列函數族 ${\cal H}$ 是 2-獨立的，則他是全域的。
+\stopitem\stopigBase
+
+\startANSWER
+如果 ${\cal H}$ 是 2-獨立的，則對於兩個特定關鍵字 $x\ne y$，
+序列 $\langle x, y\rangle$ 是 $m^2$ 種序列中的任一個，概率相同。
+因此，由於 $h$ 是 ${\cal H}$ 中的任意一個，
+產生衝突 $h(x) = h(y)$ 的概率爲 $(1/m)|{\cal H}|$，
+所以 ${\cal H}$ 是全域的。
+\stopANSWER
+
+\startigBase[continue]\startitem%b
+設全域 $U$ 爲取自 $\integers_p = \{0,1,\ldots,p-1\}$ 中數值的 $n$ 元組集合，
+其中 p 是素數。
+考慮元素 $x=\langle x_0,x_1,\ldots,x_{n-1} \rangle \in U$。
+對於任意 n 元組 $a=\langle a_0,a_1,\ldots,a_{n-1} \rangle \in U$，
+定義散列函數 $h_a$ 爲：
+\startformula
+h_a(x) = \left( \sum_{j=0}^{n-1}a_j x_j \right) \mod p
+\stopformula
+令 ${\cal H}=\{h_a: a\in U\}$。
+證明： ${\cal H}$ 是全域的，但不是 2-獨立的。
+（\hint 找一個關鍵字，
+使得 ${\cal H}$ 中所有散列函數得到的值相同。）
+\stopitem\stopigBase
+
+\startANSWER
+假設在 ${\cal H}$ 中選擇函數 $h$，
+如果 $a=\langle 0,0,\ldots,0\rangle$，則對於序列 $\langle x,y\rangle$，
+有 $h_a(x)=h_a(y) = 0 \mod p = 0$，
+即這種情況下無論關鍵字是什麼，
+映射對結果永遠是 $\langle 0,0\rangle$，所以不是 2-獨立的。
+\stopANSWER
+
+\startigBase[continue]\startitem%c
+假設將 (b) 中的 ${\cal H}$ 略作修改：
+對任意 $a\in U$ 以及任意 $b\in\integers_p$，定義：
+\startformula
+h'_{ab}(x) = \left( \sum_{j=0}^{n-1}a_j x_j + b \right) \mod p
+\stopformula
+且 ${\cal H}'=\{h'_{ab}: a \in U, b\in\integers_p\}$。
+論證 ${\cal H}'$ 是 2-獨立的。
+（\hint 考慮固定的 n 元組 $x\in U$ 和 $y\in U$，
+對某個 $i$ 有 $x_i\ne y_i$。
+當 $a_i$ 和 $b$ 超過 $\integers_p$ 時，
+ $h'_{ab}(x)$ 和 $h'_{ab}(y)$ 會如何？）
+\stopitem\stopigBase
+
+\startANSWER
+對於每一對關鍵字 $\langle x,y\rangle$，其中 $x\ne y$，
+我們要證明所有值對 $(h_{ab}(x),h_{ab}(y))$ 的概率相同，
+其中 $h_{ab}$ 是從 ${\cal H}$ 中隨機選出，
+即 $\langle a_0,a_1,\ldots,a_{n-1}\rangle$ 和 $b$ 是隨機選出的。
+
+既然 $x\ne y$，那麼肯定存在 $i$ 使得 $x_i\ne y_i$，
+假設 $i=0$，令：
+\startformula
+\alpha = h_{ab}(x)
+\qquad \beta = h_{ab}(y)
+\stopformula
+且：
+\startformula
+X=\sum_{j=1}^{n-1}a_j x_j
+\qquad Y=\sum_{j=1}^{n-1}a_j y_j
+\stopformula
+則：
+\startformula
+\alpha = (a_0 x_0 + b + X) \mod p
+\qquad \beta = (a_0 y_0 + b + Y) \mod p
+\stopformula
+由於 $x_0 \ne y_0$ 且 $p$ 是素數，
+那麼對於 $\alpha$ 和 $\beta$ 而言，
+上式有唯一解 $a_0$ 和 $b$。
+
+更明顯一點，考慮我們要生成所有可能的值對 $\alpha,\beta$，
+他與值對 $\alpha,\alpha-\beta$ 是雙射的。而：
+\startformula
+\alpha-\beta=a_0(x_0-y_0) + X - Y (\mod p)
+\stopformula
+所以：
+\startformula
+a_0 = (\alpha - \beta -X + Y) (x_0 - y_0)^{(-1)} (\mod p)
+\stopformula
+
+由於 $x_0 \ne y_0$ 且 $p$ 是素數，
+則 $(x_0 - y_0)^{(-1)}$ 肯定存在且唯一。
+對於特定 $a_0$ 而言，我們可以隨意選擇 $\alpha-\beta$ 的值。
+對於特定 $b$ 而言，我們可以隨意選擇 $\alpha$ 的值。
+即對於特定的 $a_0$ 和 $b$，
+我們可以隨意選擇 $\alpha$ 和 $\beta$，
+只要保證 $(\alpha-\beta)\mod p$ 的值相同即可。
+
+因此，對於任意給定的 $\langle a_0,a_1,\ldots,a_{n-1}\rangle$，
+我們可以找到散列函數 $h_{ab}$，
+通過選擇合適的 $a_0$ 和 $b$，
+使其可以生成任何可能的 $\langle\alpha,\beta\rangle$。
+
+由於 $a_0$ 和 $b$ 的選擇共有 $p^2$ 種，
+並且 $\langle\alpha,\beta\rangle$ 也有 $p^2$ 種，
+每個 $\langle\alpha,\beta\rangle$ 都對應唯一的 $\langle a_0,b\rangle$。
+這對 $a_1,\ldots,a_{n-1}$ 的 $p^{n-1}$ 種選擇均成立。
+
+因此，有 $p^{n-1}$ 種函數 $h_{ab}$ 可以生成每個值對 $\langle\alpha,\beta\rangle$。
+如果 $h_{ab}$ 是隨機選擇的，
+則每個值對的概率相同，
+因此 ${\cal H}$ 是 2-獨立的。
+\stopANSWER
+
+\startigBase[continue]\startitem%d
+假設 Alice 和 Bob 悄悄地約定了一個散列函數 $h$，
+取自 2-獨立的散列函數族 ${\cal H}$。
+每個 $h\in {\cal H}$ 將關鍵字全域 U 映射到 $\integers_p$ 上，此處 $p$ 爲素數。
+後來， Alice 通過互聯網向 Bob 發送了一個消息 $m$，其中 $m\in U$。
+她同時還通過發送一個認證標記 $t=h(m)$ 來向 Bob 認證這一消息，
+而 Bob 則要檢查他所收到的 $(m,t)$ 對是否確實滿足 $t=h(m)$。
+假設某一對手半路截獲了 $(m,t)$，
+並試圖將該值對替換爲令一值對 $(m',t')$ 來欺騙 Bob。
+論證無論該對手的計算機性能多好，
+他成功欺騙 Bob 接受 $(m',t')$ 的概率至多爲 $1/p$，
+即使他知道所用的散列函數族 ${\cal H}$。
+\stopitem\stopigBase
+
+\startANSWER
+對於關鍵字對 $\langle m,m'\rangle$，如果 $h$ 是隨機選取的，
+則所有散列值對 $\langle h(m),h(m')\rangle$ 的概率相同。
+這就是 ${\cal H}$ 爲 2-獨立的意思。
+
+即 p 種值對 $\langle t,t'\rangle$ 的概率相同，
+所以即使他知道 ${\cal H}$，根據 m 和 t 也無法得出 $h(m')$。
+由於 p 種情況的概率相同，且總和爲 1，
+任一種可能的 $h(m')$ 概率均爲 $1/p$，
+所以他只能靠猜，沒有更好的辦法。
+\stopANSWER
+
+\stopPROBLEM
