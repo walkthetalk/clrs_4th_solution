@@ -1,92 +1,98 @@
-bboxmargin := 0;
+input clrs_rbtree;
 
-% for any def, use expr/primary, don't use suffix
-vardef lchild primary $ =
-	($ * 2)
-enddef;
+numeric data[];
+data[1] := 8;
+data[2] :=  4;
+data[3] := 12;
+data[4] :=  2;
+data[5] :=  6;
+data[6] := 10;
+data[7] := 14;
+data[8] := 1;
+data[9] := 3;
+data[10] := 5;
+data[11] := 7;
+data[12] := 9;
+data[13] := 11;
+data[14] := 13;
+data[15] := 15;
 
-vardef rchild primary $ =
-	($ * 2 + 1)
-enddef;
-
-vardef parent primary $ =
-	(floor($ / 2))
-enddef;
-
-vardef validate(suffix A)(expr i) :=
-	if known(A[i]):
-		i
-	else:
-		0
-	fi;
-enddef;
-
-vardef img_sub_bin_search_fine_tree(suffix A)(expr i, xunit, yunit, gsize) :=
-image(
-	save fr;
-	path fr;
-	fr := fullcircle scaled gsize;
-
-	fill fr withcolor .8white;
-	label(decimal(A[i]), (0,0)) withcolor black;
-
-	if known(A[lchild(i)]):
-		save subpic;
-		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(lchild(i), xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-xpart(urcorner subpic) - (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
-	fi;
-
-	if known(A[rchild(i)]):
-		save subpic;
-		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(rchild(i), xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-xpart(ulcorner subpic) + (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
-	fi;
-)
-enddef;
-
-vardef img_bin_search_tree(suffix A)(expr gsize, xunit, yunit) :=
-image(
-	draw img_sub_bin_search_fine_tree(A)(1, xunit, yunit, gsize);
-)
-enddef;
+color ncolor[];
 
 beginfig(1);
-	numeric data[];
-	numeric data.len;
-	data[1] := 8;
-	data[2] :=  4;
-	data[3] := 12;
-	data[4] :=  2;
-	data[5] :=  6;
-	data[6] := 10;
-	data[7] := 14;
-	data[8] := 1;
-	data[9] := 3;
-	data[10] := 5;
-	data[11] := 7;
-	data[12] := 9;
-	data[13] := 11;
-	data[14] := 13;
-	data[15] := 15;
-	data.len := 15;
-
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
+	ncolor[0] := black;	% color of label
+	ncolor[1] := .8white;
+	ncolor[2] := .8white;
+	ncolor[3] := .8white;
+	ncolor[4] := .8white;
+	ncolor[5] := .8white;
+	ncolor[6] := .8white;
+	ncolor[7] := .8white;
+	ncolor[8] := .8white;
+	ncolor[9] := .8white;
+	ncolor[10] := .8white;
+	ncolor[11] := .8white;
+	ncolor[12] := .8white;
+	ncolor[13] := .8white;
+	ncolor[14] := .8white;
+	ncolor[15] := .8white;
+	draw img_bin_search_tree(data, ncolor)(false, 0.5cm, 0.8cm,0.8cm);
+endfig;
+beginfig(2);
+	ncolor[0] := white;	% color of label
+	ncolor[1] := rbcBlack;
+	ncolor[2] := rbcRed;
+	ncolor[3] := rbcRed;
+	ncolor[4] := rbcBlack;
+	ncolor[5] := rbcBlack;
+	ncolor[6] := rbcBlack;
+	ncolor[7] := rbcBlack;
+	ncolor[8] := rbcRed;
+	ncolor[9] := rbcRed;
+	ncolor[10] := rbcRed;
+	ncolor[11] := rbcRed;
+	ncolor[12] := rbcRed;
+	ncolor[13] := rbcRed;
+	ncolor[14] := rbcRed;
+	ncolor[15] := rbcRed;
+	draw img_bin_search_tree(data, ncolor)(true, 0.5cm, 0.8cm,0.8cm);
+endfig;
+beginfig(3);
+	ncolor[0] := white;	% color of label
+	ncolor[1] := rbcBlack;
+	ncolor[2] := rbcRed;
+	ncolor[3] := rbcRed;
+	ncolor[4] := rbcBlack;
+	ncolor[5] := rbcBlack;
+	ncolor[6] := rbcBlack;
+	ncolor[7] := rbcBlack;
+	ncolor[8] := rbcBlack;
+	ncolor[9] := rbcBlack;
+	ncolor[10] := rbcBlack;
+	ncolor[11] := rbcBlack;
+	ncolor[12] := rbcBlack;
+	ncolor[13] := rbcBlack;
+	ncolor[14] := rbcBlack;
+	ncolor[15] := rbcBlack;
+	draw img_bin_search_tree(data, ncolor)(true, 0.5cm, 0.8cm,0.8cm);
+endfig;
+beginfig(4);
+	ncolor[1] := rbcBlack;
+	ncolor[2] := rbcBlack;
+	ncolor[3] := rbcBlack;
+	ncolor[4] := rbcBlack;
+	ncolor[5] := rbcBlack;
+	ncolor[6] := rbcBlack;
+	ncolor[7] := rbcBlack;
+	ncolor[8] := rbcBlack;
+	ncolor[9] := rbcBlack;
+	ncolor[10] := rbcBlack;
+	ncolor[11] := rbcBlack;
+	ncolor[12] := rbcBlack;
+	ncolor[13] := rbcBlack;
+	ncolor[14] := rbcBlack;
+	ncolor[15] := rbcBlack;
+	draw img_bin_search_tree(data, ncolor)(true, 0.5cm, 0.8cm,0.8cm);
 endfig;
 
 end;
