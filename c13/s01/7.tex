@@ -1,0 +1,47 @@
+\startEXERCISE
+有一紅黑樹，含 $n$ 個關鍵字，
+其內部節點中紅色的個數和黑色的個數比值最大是多少？
+最小又是多少？
+\stopEXERCISE
+
+\startANSWER
+紅黑樹內部節點個數爲 $n$，則樹高爲：
+\startformula
+h=\lfloor \lg{n} \rfloor + 1
+\stopformula
+
+若紅色節點最多：
+\startigBase[a]
+\startitem
+若 $h$ 爲偶數，從根節點到數據節點的最長路徑爲 BRBR...BR：
+\startsplitformula\startmathalignment
+\NC \#(B) \NC =2^0+2^2+\ldots + 2^{h-2} \NR
+\NC ratio \NC = \frac{n-\#(B)}{\#(B)} \NR
+\stopmathalignment\stopsplitformula
+\stopitem
+
+\startitem
+若 $h$ 爲奇數，從根結點到數據結點的最長路徑爲 BRBR...BBR：
+\startsplitformula\startmathalignment
+\NC \#(B) \NC = \startmathcases
+\NC 1		\MC h=1 \NR
+\NC 2^0+2^2+\ldots +2^{h-3}+2^{h-2}	\MC h\ge 3 \NR
+\stopmathcases \NR
+\NC ratio \NC = \frac{n-\#(B)}{\#(B)} \NR
+\stopmathalignment\stopsplitformula
+\stopitem
+\stopigBase
+
+若紅色節點最少：
+\startsplitformula\startmathalignment
+\NC \#(R) \NC = \startmathcases
+\NC 0		\MC h=2^h-1 \NR
+\NC n-(2^{n-1}-1)	\MC n\ne 2^h-1 \NR
+\stopmathcases \NR
+\NC ratio \NC = \frac{n-\#(R)}{\#(R)} \NR
+\stopmathalignment\stopsplitformula
+
+當 $n=3$ 時，最多有 2 個紅色節點，紅黑比值爲 2。
+
+若內部節點均爲黑色，紅黑比值爲 0。
+\stopANSWER
