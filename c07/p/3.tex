@@ -87,8 +87,8 @@ E[T(n)] = \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n)
 
 % e
 \startigBase[a,continue]\startitem
-利用\refformula{7_4} 給出的界證明：
-\refformula{7_3} 中的遞迴式解爲 $E[T(n)]=\Theta(n\lg{n})$。
+利用\informula[7_4] 給出的界證明：
+\informula[7_3] 中的遞迴式解爲 $E[T(n)]=\Theta(n\lg{n})$。
 （\hint 用代入法，證明對於某個正常數 $a$ 和足夠大的 $n$，
 有 $E[T(n)]\le an\lg{n}$。）
 \stopitem\stopigBase
@@ -100,7 +100,7 @@ E[T(n)] = \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n)
    \NC=   \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n) \NR
 \NC\NC\le \frac{2}{n}\sum_{q=2}^{n-1}aq\lg{q} + \Theta(n) \qquad \text{（根據猜測）} \NR
 \NC\NC\le \frac{2a}{n}\left(\frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2\right)
-                 + \Theta(n) \qquad \text{（\refformula{7_4}）} \NR
+                 + \Theta(n) \qquad \text{（\informula[7_4]）} \NR
 \NC\NC=   an\lg{n} - \frac{a}{4}n + \Theta(n) \qquad \text{（根據 $\Theta$ 記號的定義）} \NR
 \NC\NC\le an\lg{n} \NR
 \stopmathalignment\stopsplitformula

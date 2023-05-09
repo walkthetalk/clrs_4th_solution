@@ -291,10 +291,6 @@
 %conversion	numbers characters Characters romannumerals Romannumerals text
 ]
 
-\define[1]\refformula{%
-\in{公式}{}[formula:#1]%
-}
-
 \define\DIFFICULT{★}
 
 \startluacode

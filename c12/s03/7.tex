@@ -19,7 +19,7 @@ else
 	flag = \ALGO{RANDOM()}		// 0 or 1
 	if flag == 0
 		y = \ALGO{TREE-MAXIMUM(z.left)}
-		if y ！= z.left
+		if y \ne z.left
 			\ALGO{TRANSPLANT(T, y, y.left)}
 			y.left = z.left
 			y.left.p = y
@@ -28,7 +28,7 @@ else
 		y.right.p = y
 	else
 		y = \ALGO{TREE-MINIMUM(z.right)}
-		if y != z.right
+		if y \ne z.right
 			\ALGO{TRANSPLANT(T, y, y.right)}
 			y.right = z.right
 			y.right.p = y
