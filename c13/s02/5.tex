@@ -1,0 +1,20 @@
+\startEXERCISE
+有二叉搜索樹 $T_1$，通過一系列右旋操作變成二叉搜索樹 $T_2$，
+則稱 $T_1$ 可以\emph{右轉（right-converted）}成 $T_2$。
+試舉反例，描述 $T_1$ 不能右轉成 $T_2$ 的情況。
+然後證明：如果 $T_1$ 可以右轉成 $T_2$，
+那麼可以通過 $O(n^2)$ 次右旋來實現。
+\stopEXERCISE
+
+\startANSWER
+\startcombination[2*1]
+{\externalfigure[output/e13_2_5-1]}{}
+{\externalfigure[output/e13_2_5-2]}{}
+\stopcombination
+
+$T_1$ 中右孩子都不可能變成根節點。
+所以新的根節點只能是 $T_1$ 的根節點到最小節點路徑上的節點。
+我們可以在 $O(n)$ 時間解決根節點，然後遞迴解決左右子樹，時間複雜度爲：
+$T(n)=T(n_L)+T(n_R)+O(n)=O(n^2)$，
+其中 $n_L+n_R=n-1$。
+\stopANSWER

@@ -1,0 +1,22 @@
+\startEXERCISE
+寫出 \ALGO{RIGHT-ROTATE} 的僞碼。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{RIGHT-ROTATE(T, y)}
+\startCLRSCODE
+x = y.left
+y.left = x.right
+if x.right \ne T.nil
+	x.right.p = y
+x.p = y.p
+if y.p == T.nil
+	T.root = x
+elseif y == y.p.left
+	y.p.left = x
+else
+	y.p.right = x
+x.right = y
+y.p = x
+\stopCLRSCODE
+\stopANSWER

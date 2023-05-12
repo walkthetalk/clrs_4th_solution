@@ -1,4 +1,5 @@
 input TEX;
+input clrs;
 
 bboxmargin := 0;
 
@@ -15,6 +16,10 @@ vardef parent primary $ =
 	(floor($ / 2))
 enddef;
 
+vardef isleaf(suffix A)(expr i) =
+	(known(A[lchild(i)]) or known(A[lchild(i)]))
+enddef;
+
 vardef validate(suffix A)(expr i) :=
 	if known(A[i]):
 		i
@@ -23,21 +28,23 @@ vardef validate(suffix A)(expr i) :=
 	fi;
 enddef;
 
-vardef img_sub_bin_search_fine_tree(suffix A)(expr i, xunit, yunit, gsize) :=
+
+vardef img_sub_bin_search_fine_tree(suffix A)(expr fill_leaf, i, xunit, yunit, gsize) :=
 image(
 	save fr;
 	path fr;
 	fr := fullcircle scaled gsize;
 
-	if known(A[lchild(i)]) or known(A[lchild(i)]):
-		fill fr withcolor .8white;
+	if fill_leaf or isleaf(A)(i):
+		fill fr withcolor clrsCfA;
+		draw fr withcolor clrsClA;
 	fi;
-	label(TEX("$" & A[i] & "$"), (0,0)) withcolor black;
+	label(TEX(A[i]), (0,0)) withcolor black;
 
 	if known(A[lchild(i)]):
 		save subpic;
 		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(lchild(i), xunit, yunit, gsize);
+		subpic := img_sub_bin_search_fine_tree(A)(fill_leaf, lchild(i), xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
@@ -51,7 +58,7 @@ image(
 	if known(A[rchild(i)]):
 		save subpic;
 		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(rchild(i), xunit, yunit, gsize);
+		subpic := img_sub_bin_search_fine_tree(A)(fill_leaf, rchild(i), xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
@@ -66,22 +73,6 @@ enddef;
 
 vardef img_bin_search_tree(suffix A)(expr gsize, xunit, yunit) :=
 image(
-	draw (0, gsize/2)--(0,gsize/2+yunit/2);
-	draw img_sub_bin_search_fine_tree(A)(1, xunit, yunit, gsize);
+	draw img_sub_bin_search_fine_tree(A)(true, 1, xunit, yunit, gsize);
 )
 enddef;
-
-beginfig(1);
-	string data[];
-	numeric data.len;
-	data[1] := "y";
-	data[2] := "x";
-	data[3] := "\gamma";
-	data[4] := "\alpha";
-	data[5] := "\beta";
-	data.len := 5;
-
-	draw img_bin_search_tree(data)(0.5cm, 0.8cm,0.8cm);
-endfig;
-
-end;
