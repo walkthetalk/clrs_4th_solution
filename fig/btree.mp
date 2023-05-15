@@ -427,6 +427,7 @@ image(
 enddef;
 
 vardef btree_declare(suffix tree) :=
+numeric tree.maxnodes;
 numeric tree.free_list[];
 numeric tree.t;
 numeric tree.height;

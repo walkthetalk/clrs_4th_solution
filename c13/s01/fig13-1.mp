@@ -1,6 +1,8 @@
 input clrs_rbtree;
 
 beginfig(1);
+	rbtree_declare(RRR);
+	rbtree_build(RRR)(26,B)((17,R)()())();
 	numeric data[];
 	color ncolor[];
 	ncolor[0] := white;	% color of label

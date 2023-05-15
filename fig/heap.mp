@@ -1,6 +1,7 @@
 input memory;
 
 vardef heap_declare(suffix heap) :=
+numeric heap.maxnodes;
 numeric heap.free_list[];
 
 %NOTE: the 'root' and 'n' should be maintained by user
