@@ -1,4 +1,4 @@
-input memory;
+input clrs_bintree;
 
 boolean R;
 R := false;
@@ -6,30 +6,21 @@ boolean B;
 B := true;
 
 vardef rbtree_declare(suffix tree) :=
-	declare_tree(tree);
-
-	numeric tree[]key;
-	numeric tree[]lft;
-	numeric tree[]rt;
+	bintree_declare(tree);
 	boolean tree[]isblack;
 enddef;
 
 vardef rbtree_alloc(suffix tree) :=
 	save ret;
 	numeric ret;
-	ret := alloc_slot(tree);
-
-	% init node
-	tree[ret]key := -1;
-	tree[ret]lft := nullptr;
-	tree[ret]rt  := nullptr;
+	ret := bintree_alloc(tree);
 	tree[ret]isblack := false;
 
 	ret
 enddef;
 
 vardef rbtree_free(suffix tree)(expr idx) :=
-	free_slot(tree)(idx);
+	bintree_free(tree)(idx);
 enddef;
 
 vardef rbtree_isleaf(suffix tree)(expr idx) :=
@@ -43,61 +34,73 @@ enddef;
 vardef rbtree_newnode(suffix tree)(expr k, is_black) :=
 	save idx;
 	numeric idx;
-	idx := rbtree_alloc(tree);
-
-	tree[idx]key := k;
+	idx := bintree_newnode(tree)(k);
 	tree[idx]isblack := is_black;
-	tree[idx]lft := nullptr;
-	tree[idx]rt  := nullptr;
 
 	idx
 enddef;
 
-vardef isempty(text a) :=
-	save i;
-	numeric i;
-	i := 0;
-	for t=a:
-		i := i + 1;
+vardef rbtree_ass(suffix tree)(expr parent, child, idx) :=
+	if idx = 1:
+		tree[parent]lft := child;
+	elseif idx = 2:
+		tree[parent]rt := child;
+	fi;
+enddef;
+
+vardef rbtree_build(suffix tree) expr s :=
+	save len;
+	numeric len;
+	len := length s;
+	numeric lvl;
+	numeric idx[];
+	numeric pNode[];
+	string lastCH;
+	lvl := 0;
+	idx[lvl] := 0;
+	pNode[lvl] := nullptr;
+	lastCH := "";
+
+	string ch;
+	numeric newnodeBegin;
+	string nodecontent;
+	for i := 0 upto (len - 1):
+		ch := substring (i,i+1) of s;
+		% todo: skip spaces
+		if ch = "(":
+			if lastCH = ")":
+				idx[lvl] := idx[lvl] + 1;
+				%message decimal(lvl) & " " & "idx -> " & decimal(idx[lvl]);
+			else:
+				lvl := lvl + 1;
+				idx[lvl] := 0;
+				%message decimal(lvl) & " " & decimal(idx[lvl]);
+			fi;
+			% begin new node
+			newnodeBegin := i+1;
+		elseif ch = ")":
+			if lastCH = ")":
+				lvl := lvl - 1;
+				%message decimal(lvl) & " ^ " & decimal(idx[lvl]);
+			else:
+				nodecontent := substring (newnodeBegin, i) of s;
+				%message "##### " & decimal(lvl) & " " & decimal(idx[lvl]) & " " & nodecontent & " " & decimal(idx[lvl-1]);
+				if nodecontent <> "":
+					if idx[lvl] <> 0:
+						pNode[lvl+1] := rbtree_newnode(tree)(scantokens(nodecontent));
+						rbtree_ass(tree)(pNode[lvl], pNode[lvl+1], idx[lvl]);
+					else:
+						pNode[lvl] := rbtree_newnode(tree)(scantokens(nodecontent));
+						rbtree_ass(tree)(pNode[lvl-1], pNode[lvl], idx[lvl-1]);
+					fi;
+				fi;
+			fi;
+		fi;
+
+		lastCH := ch;
 	endfor;
 
-	if i > 0:
-		false
-	else:
-		true
-	fi
-enddef;
-
-vardef rbtree_recbuild(suffix tree)(text a)(text b)(text c) :=
-	save idx, l, r;
-	numeric idx;
-	numeric l;
-	numeric r;
-
-	if isempty(b):
-		message "b is numeric";
-		l := nullptr;
-	else:
-		message "b is tree";
-		l := rbtree_recbuild(tree) b;
-	fi;
-	if numeric c:
-		message "r is numeric";
-		r := nullptr;
-	else:
-		message "r is tree";
-		r := rbtree_recbuild(tree) c;
-	fi;
-	idx := rbtree_newnode(tree)(a);
-
-	tree[idx]lft := l;
-	tree[idx]rt  := r;
-
-	idx
-enddef;
-
-vardef rbtree_build(suffix tree)(text a)(text b)(text c) :=
-	tree.root := rbtree_recbuild(tree)(a)(b)(c);
+	tree.root := pNode[1];
 enddef;
 
 vardef rbtree_subimg(suffix tree)(expr drawnil, i, xunit, yunit, gsize) :=
