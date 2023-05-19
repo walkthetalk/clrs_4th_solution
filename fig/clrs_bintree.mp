@@ -1,9 +1,24 @@
+input TEX;
+
 input memory;
+input clrs;
+input clrs_base_tree;
 
 vardef declare.bintree(suffix tree) :=
 	declare_tree(tree);
 
-	numeric tree[]key;
+	% draw options
+	boolean tree.isfull;
+	tree.isfull := true;
+
+	numeric tree.gsize;
+	numeric tree.xunit;
+	numeric tree.yunit;
+	tree.gsize := 0.5cm;
+	tree.xunit := 0.8cm;
+	tree.yunit := 0.8cm;
+
+	string tree[]key;
 	numeric tree[]lft;
 	numeric tree[]rt;
 enddef;
@@ -14,7 +29,7 @@ vardef alloc.bintree(suffix tree) :=
 	ret := alloc_slot(tree);
 
 	% init node
-	tree[ret]key := -1;
+	tree[ret]key := "";
 	tree[ret]lft := nullptr;
 	tree[ret]rt  := nullptr;
 
@@ -44,24 +59,34 @@ vardef associate.bintree(suffix tree)(expr parent, child, idx) :=
 	fi;
 enddef;
 
+vardef isleaf.bintree(suffix tree)(expr idx) :=
+	if (tree[idx]lft = nullptr) and (tree[idx]rt = nullptr):
+		true
+	else:
+		false
+	fi
+enddef;
 
-vardef subimg.bintree(suffix tree)(expr i, xunit, yunit, gsize) :=
+vardef subimg.bintree(suffix tree)(expr isfull, i, xunit, yunit, gsize) :=
 image(
 	save fr;
 	path fr;
 	fr := fullcircle scaled gsize;
 
-	fill fr withcolor .8white;
-	label(decimal(tree[i]key), (0,0));
+	if isfull or (not (isleaf.bintree(tree)(i))):
+		fill fr withcolor clrsCfA;
+		draw fr withcolor clrsClA;
+	fi;
+	label(TEX("$" & tree[i]key & "$"), (0,0));
 
 	if (tree[i]lft <> nullptr):
 		save subpic;
 		picture subpic;
-		subpic := subimg.bintree(tree)(tree[i]lft, xunit, yunit, gsize);
+		subpic := subimg.bintree(tree)(isfull, tree[i]lft, xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
-		subroot := (-xpart(urcorner subpic) - (xunit-gsize)/2, -yunit);
+		subroot := (-max(xpart(urcorner subpic),gsize) - (xunit-gsize)/2, -yunit);
 
 		drawarrow (fr intersectionpoint ((0,0) -- subroot))
 			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
@@ -71,11 +96,11 @@ image(
 	if (tree[i]rt <> nullptr):
 		save subpic;
 		picture subpic;
-		subpic := subimg.bintree(tree)(tree[i]rt, xunit, yunit, gsize);
+		subpic := subimg.bintree(tree)(isfull, tree[i]rt, xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
-		subroot := (-xpart(ulcorner subpic) + (xunit-gsize)/2, -yunit);
+		subroot := (-min(xpart(ulcorner subpic),-gsize) + (xunit-gsize)/2, -yunit);
 
 		drawarrow (fr intersectionpoint ((0,0) -- subroot))
 			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
@@ -84,9 +109,12 @@ image(
 )
 enddef;
 
-vardef img.bintree(suffix tree)(expr gsize, xunit, yunit) :=
+vardef img.bintree(suffix tree) :=
 image(
+	if not tree.isfull:
+		draw (0, tree.yunit)--(0, 0);
+	fi;
 	% check if root is nullptr
-	draw subimg.bintree(tree)(tree.root, xunit, yunit, gsize);
+	draw subimg.bintree(tree)(tree.isfull, tree.root, tree.xunit, tree.yunit, tree.gsize);
 )
 enddef;

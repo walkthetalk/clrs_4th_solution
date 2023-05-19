@@ -7,6 +7,11 @@ B := true;
 
 vardef declare.rbtree(suffix tree) :=
 	declare.bintree(tree);
+
+	% draw options;
+	boolean tree.drawnil;
+	tree.drawnil := true;
+
 	boolean tree[]isblack;
 enddef;
 
@@ -23,8 +28,8 @@ vardef free.rbtree(suffix tree)(expr idx) :=
 	bintree_free(tree)(idx);
 enddef;
 
-vardef rbtree_isleaf(suffix tree)(expr idx) :=
-	if tree[idx]lft = nullptr and tree[idx]rt = nullptr:
+vardef isleaf.rbtree(suffix tree)(expr idx) :=
+	if (tree[idx]lft = nullptr) and (tree[idx]rt = nullptr):
 		true
 	else:
 		false
@@ -48,58 +53,7 @@ vardef associate.rbtree(suffix tree)(expr parent, child, idx) :=
 	fi;
 enddef;
 
-vardef build@#(suffix tree) expr s :=
-	save lvl, idx, pNode, lastCH;
-	numeric lvl;
-	numeric idx[];
-	numeric pNode[];
-	string lastCH;
-	lvl := 0;
-	idx[lvl] := 0;
-	pNode[lvl] := nullptr;
-	lastCH := "";
-
-	save ch, newnodeBegin, newnodeContent, newnodeLvl;
-	string ch;
-	numeric newnodeBegin;
-	string newnodeContent;
-	numeric newnodeLvl;
-	for i := 0 upto ((length s) - 1):
-		ch := substring (i,i+1) of s;
-		% todo: skip spaces
-		if ch = "(":
-			if lastCH = ")":
-				idx[lvl] := idx[lvl] + 1;
-			else:
-				lvl := lvl + 1;
-				idx[lvl] := 0;
-			fi;
-			% begin new node
-			newnodeBegin := i+1;
-		elseif ch = ")":
-			if lastCH = ")":
-				lvl := lvl - 1;
-			else:
-				newnodeContent := substring (newnodeBegin, i) of s;
-				if newnodeContent <> "":
-					if idx[lvl] <> 0:
-						newnodeLvl := lvl+1;
-					else:
-						newnodeLvl := lvl;
-					fi;
-					pNode[newnodeLvl] := newnode@#(tree)(scantokens(newnodeContent));
-					associate@#(tree)(pNode[newnodeLvl-1], pNode[newnodeLvl], idx[newnodeLvl-1]);
-				fi;
-			fi;
-		fi;
-
-		lastCH := ch;
-	endfor;
-
-	tree.root := pNode[1];
-enddef;
-
-vardef subimg.rbtree(suffix tree)(expr drawnil, i, xunit, yunit, gsize) :=
+vardef subimg.rbtree(suffix tree)(expr isfull, drawnil, i, xunit, yunit, gsize) :=
 image(
 	save fr;
 	path fr;
@@ -111,20 +65,27 @@ image(
 			label("N", (0,0)) withcolor white;
 		fi;
 	else:
-		save ccc;
-		color ccc;
+		save fillcolor, lblcolor;
+		color fillcolor;
+		color lblcolor;
 		if tree[i]isblack:
-			ccc := black;
+			fillcolor := black;
 		else:
-			ccc := 0.75red;
+			fillcolor := 0.75red;
 		fi;
-		fill fr withcolor ccc;
-		label(decimal(tree[i]key), (0,0)) withcolor white;
+		if (not isfull) and (isleaf.rbtree(tree)(i)):
+			lblcolor := black;
+		else:
+			lblcolor := white;
+			fill fr withcolor fillcolor;
+		fi;
+
+		label(TEX("$" & tree[i]key & "$"), (0,0)) withcolor lblcolor;
 
 		if (tree[i]lft <> nullptr) or drawnil:
 			save subpic;
 			picture subpic;
-			subpic := subimg.rbtree(tree)(drawnil, tree[i]lft, xunit, yunit, gsize);
+			subpic := subimg.rbtree(tree)(isfull, drawnil, tree[i]lft, xunit, yunit, gsize);
 
 			save subroot;
 			pair subroot;
@@ -138,7 +99,7 @@ image(
 		if (tree[i]rt <> nullptr) or drawnil:
 			save subpic;
 			picture subpic;
-			subpic := subimg.rbtree(tree)(drawnil, tree[i]rt, xunit, yunit, gsize);
+			subpic := subimg.rbtree(tree)(isfull, drawnil, tree[i]rt, xunit, yunit, gsize);
 
 			save subroot;
 			pair subroot;
@@ -152,8 +113,11 @@ image(
 )
 enddef;
 
-vardef img.rbtree(suffix tree)(expr hasnil, gsize, xunit, yunit) :=
+vardef img.rbtree(suffix tree) :=
 image(
-	draw subimg.rbtree(tree)(hasnil, tree.root, xunit, yunit, gsize);
+	if not tree.isfull:
+		draw (0, tree.yunit)--(0, 0);
+	fi;
+	draw subimg.rbtree(tree)(tree.isfull, tree.drawnil, tree.root, tree.xunit, tree.yunit, tree.gsize);
 )
 enddef;
