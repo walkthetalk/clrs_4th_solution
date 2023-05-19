@@ -1,6 +1,6 @@
 input memory;
 
-vardef bintree_declare(suffix tree) :=
+vardef declare.bintree(suffix tree) :=
 	declare_tree(tree);
 
 	numeric tree[]key;
@@ -8,7 +8,7 @@ vardef bintree_declare(suffix tree) :=
 	numeric tree[]rt;
 enddef;
 
-vardef bintree_alloc(suffix tree) :=
+vardef alloc.bintree(suffix tree) :=
 	save ret;
 	numeric ret;
 	ret := alloc_slot(tree);
@@ -21,14 +21,14 @@ vardef bintree_alloc(suffix tree) :=
 	ret
 enddef;
 
-vardef bintree_free(suffix tree)(expr idx) :=
+vardef free.bintree(suffix tree)(expr idx) :=
 	free_slot(tree)(idx);
 enddef;
 
-vardef bintree_newnode(suffix tree)(expr k) :=
+vardef newnode.bintree(suffix tree)(expr k) :=
 	save idx;
 	numeric idx;
-	idx := bintree_alloc(tree);
+	idx := alloc.bintree(tree);
 
 	tree[idx]key := k;
 	tree[idx]lft := nullptr;
@@ -36,9 +36,16 @@ vardef bintree_newnode(suffix tree)(expr k) :=
 
 	idx
 enddef;
+vardef associate.bintree(suffix tree)(expr parent, child, idx) :=
+	if idx = 1:
+		tree[parent]lft := child;
+	elseif idx = 2:
+		tree[parent]rt := child;
+	fi;
+enddef;
 
 
-vardef bintree_subimg(suffix tree)(expr i, xunit, yunit, gsize) :=
+vardef subimg.bintree(suffix tree)(expr i, xunit, yunit, gsize) :=
 image(
 	save fr;
 	path fr;
@@ -50,7 +57,7 @@ image(
 	if (tree[i]lft <> nullptr):
 		save subpic;
 		picture subpic;
-		subpic := bintree_subimg(tree)(tree[i]lft, xunit, yunit, gsize);
+		subpic := subimg.bintree(tree)(tree[i]lft, xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
@@ -64,7 +71,7 @@ image(
 	if (tree[i]rt <> nullptr):
 		save subpic;
 		picture subpic;
-		subpic := bintree_subimg(tree)(tree[i]rt, xunit, yunit, gsize);
+		subpic := subimg.bintree(tree)(tree[i]rt, xunit, yunit, gsize);
 
 		save subroot;
 		pair subroot;
@@ -77,8 +84,9 @@ image(
 )
 enddef;
 
-vardef bintree_img(suffix tree)(expr gsize, xunit, yunit) :=
+vardef img.bintree(suffix tree)(expr gsize, xunit, yunit) :=
 image(
-	draw bintree_subimg(tree)(tree.root, xunit, yunit, gsize);
+	% check if root is nullptr
+	draw subimg.bintree(tree)(tree.root, xunit, yunit, gsize);
 )
 enddef;

@@ -5,21 +5,21 @@ R := false;
 boolean B;
 B := true;
 
-vardef rbtree_declare(suffix tree) :=
-	bintree_declare(tree);
+vardef declare.rbtree(suffix tree) :=
+	declare.bintree(tree);
 	boolean tree[]isblack;
 enddef;
 
-vardef rbtree_alloc(suffix tree) :=
+vardef alloc.rbtree(suffix tree) :=
 	save ret;
 	numeric ret;
-	ret := bintree_alloc(tree);
+	ret := alloc.bintree(tree);
 	tree[ret]isblack := false;
 
 	ret
 enddef;
 
-vardef rbtree_free(suffix tree)(expr idx) :=
+vardef free.rbtree(suffix tree)(expr idx) :=
 	bintree_free(tree)(idx);
 enddef;
 
@@ -31,16 +31,16 @@ vardef rbtree_isleaf(suffix tree)(expr idx) :=
 	fi
 enddef;
 
-vardef rbtree_newnode(suffix tree)(expr k, is_black) :=
+vardef newnode.rbtree(suffix tree)(expr k, is_black) :=
 	save idx;
 	numeric idx;
-	idx := bintree_newnode(tree)(k);
+	idx := newnode.bintree(tree)(k);
 	tree[idx]isblack := is_black;
 
 	idx
 enddef;
 
-vardef rbtree_ass(suffix tree)(expr parent, child, idx) :=
+vardef associate.rbtree(suffix tree)(expr parent, child, idx) :=
 	if idx = 1:
 		tree[parent]lft := child;
 	elseif idx = 2:
@@ -48,10 +48,8 @@ vardef rbtree_ass(suffix tree)(expr parent, child, idx) :=
 	fi;
 enddef;
 
-vardef rbtree_build(suffix tree) expr s :=
-	save len;
-	numeric len;
-	len := length s;
+vardef build@#(suffix tree) expr s :=
+	save lvl, idx, pNode, lastCH;
 	numeric lvl;
 	numeric idx[];
 	numeric pNode[];
@@ -61,38 +59,36 @@ vardef rbtree_build(suffix tree) expr s :=
 	pNode[lvl] := nullptr;
 	lastCH := "";
 
+	save ch, newnodeBegin, newnodeContent, newnodeLvl;
 	string ch;
 	numeric newnodeBegin;
-	string nodecontent;
-	for i := 0 upto (len - 1):
+	string newnodeContent;
+	numeric newnodeLvl;
+	for i := 0 upto ((length s) - 1):
 		ch := substring (i,i+1) of s;
 		% todo: skip spaces
 		if ch = "(":
 			if lastCH = ")":
 				idx[lvl] := idx[lvl] + 1;
-				%message decimal(lvl) & " " & "idx -> " & decimal(idx[lvl]);
 			else:
 				lvl := lvl + 1;
 				idx[lvl] := 0;
-				%message decimal(lvl) & " " & decimal(idx[lvl]);
 			fi;
 			% begin new node
 			newnodeBegin := i+1;
 		elseif ch = ")":
 			if lastCH = ")":
 				lvl := lvl - 1;
-				%message decimal(lvl) & " ^ " & decimal(idx[lvl]);
 			else:
-				nodecontent := substring (newnodeBegin, i) of s;
-				%message "##### " & decimal(lvl) & " " & decimal(idx[lvl]) & " " & nodecontent & " " & decimal(idx[lvl-1]);
-				if nodecontent <> "":
+				newnodeContent := substring (newnodeBegin, i) of s;
+				if newnodeContent <> "":
 					if idx[lvl] <> 0:
-						pNode[lvl+1] := rbtree_newnode(tree)(scantokens(nodecontent));
-						rbtree_ass(tree)(pNode[lvl], pNode[lvl+1], idx[lvl]);
+						newnodeLvl := lvl+1;
 					else:
-						pNode[lvl] := rbtree_newnode(tree)(scantokens(nodecontent));
-						rbtree_ass(tree)(pNode[lvl-1], pNode[lvl], idx[lvl-1]);
+						newnodeLvl := lvl;
 					fi;
+					pNode[newnodeLvl] := newnode@#(tree)(scantokens(newnodeContent));
+					associate@#(tree)(pNode[newnodeLvl-1], pNode[newnodeLvl], idx[newnodeLvl-1]);
 				fi;
 			fi;
 		fi;
@@ -103,7 +99,7 @@ vardef rbtree_build(suffix tree) expr s :=
 	tree.root := pNode[1];
 enddef;
 
-vardef rbtree_subimg(suffix tree)(expr drawnil, i, xunit, yunit, gsize) :=
+vardef subimg.rbtree(suffix tree)(expr drawnil, i, xunit, yunit, gsize) :=
 image(
 	save fr;
 	path fr;
@@ -128,7 +124,7 @@ image(
 		if (tree[i]lft <> nullptr) or drawnil:
 			save subpic;
 			picture subpic;
-			subpic := rbtree_subimg(tree)(drawnil, tree[i]lft, xunit, yunit, gsize);
+			subpic := subimg.rbtree(tree)(drawnil, tree[i]lft, xunit, yunit, gsize);
 
 			save subroot;
 			pair subroot;
@@ -142,7 +138,7 @@ image(
 		if (tree[i]rt <> nullptr) or drawnil:
 			save subpic;
 			picture subpic;
-			subpic := rbtree_subimg(tree)(drawnil, tree[i]rt, xunit, yunit, gsize);
+			subpic := subimg.rbtree(tree)(drawnil, tree[i]rt, xunit, yunit, gsize);
 
 			save subroot;
 			pair subroot;
@@ -156,8 +152,8 @@ image(
 )
 enddef;
 
-vardef rbtree_img(suffix tree)(expr hasnil, gsize, xunit, yunit) :=
+vardef img.rbtree(suffix tree)(expr hasnil, gsize, xunit, yunit) :=
 image(
-	draw rbtree_subimg(tree)(hasnil, tree.root, xunit, yunit, gsize);
+	draw subimg.rbtree(tree)(hasnil, tree.root, xunit, yunit, gsize);
 )
 enddef;
