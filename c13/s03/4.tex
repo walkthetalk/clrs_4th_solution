@@ -1,0 +1,44 @@
+\startEXERCISE
+Teach 教授擔心 \ALGO{RB-INSERT-FIXUP} 會將 $T.nil.color$ 設爲紅色，
+這樣如果 $z$ 爲根節點，會通過第 $1$ 行的測試，循環不會終止。
+試說明這個教授完全是杞人憂天，
+ \ALGO{RB-INSERT-FIXUP} 絕不會將 $T.nil.color$ 設爲紅色。
+
+\CLRSH{RB-INSERT-FIXUP(T,z)}
+\startCLRSCODE
+while z.p.color == \color[red]{RED}
+	if z.p == z.p.p.left	// $z$ 的父節點是左孩子？
+		y = z.p.p.right	// $y$ 是 $z$ 的叔叔
+		if y.color == \color[red]{RED} // $z$ 的父親和叔叔均爲紅色？
+			z.p.color = \color[black]{BLACK}
+			y.color = \color[black]{BLACK}
+			z.p.p.color = \color[red]{RED}
+			z = z.p.p
+		else
+			if z == z.p.right // $z$ 是右孩子
+				z = z.p
+				\ALGO{LEFT-ROTATE(T,z)}
+			z.p.color = \color[black]{BLACK}
+			z.p.p.color = \color[red]{RED}
+			\ALGO{RIGHT-ROTATE(T,z.p.p)}
+	else // 與上面的分支内容相似，只是“左”和“右”換了。
+		y = z.p.p.left
+		if y.color == \color[red]{RED}
+			z.p.color = \color[black]{BLACK}
+			y.color = \color[black]{BLACK}
+			z.p.p.color = \color[red]{RED}
+			z = z.p.p
+		else
+			if z == z.p.left
+				z = z.p
+				\ALGO{RIGHT-ROTATE(T,z)}
+			z.p.color = \color[black]{BLACK}
+			z.p.p.color = \color[red]{RED}
+			\ALGO{LEFT-ROTATE(T,z.p.p)}
+T.root.color = \color[black]{BLACK}
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+略。
+\stopANSWER
