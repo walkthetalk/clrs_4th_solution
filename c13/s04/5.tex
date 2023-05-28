@@ -1,0 +1,14 @@
+\startEXERCISE
+\ALGO{RB-DELETE-FIXUP} 的哪行代碼
+可能會檢查或修改哨兵 $T.nil$？
+\stopEXERCISE
+
+\startANSWER
+第 2 行會檢查 $x$，
+第 11,22,32,43 行會修改 $x$。
+
+刪除黑色節點後，首先會告訴其孩子（所刪除節點最多只有一個孩子），
+如果他沒有孩子，則會檢查或修改 $T.nil$。
+
+$x$ 的兄弟 $w$ 沒有孩子，或者沒有左孩子但要左旋，或者沒有右孩子卻要右旋。
+\stopANSWER

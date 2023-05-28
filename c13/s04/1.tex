@@ -1,0 +1,56 @@
+\startEXERCISE
+證明：在 \ALGO{RB-DELETE} 中，如果節點 $y$ 是紅色，
+那麼黑高不會發生變化。
+
+\CLRSH{RB-DELETE}
+\startCLRSCODE
+y=z
+y-original-color=y.color
+if z.left == T.nil \hfill // case 1
+	x = z.right
+	\ALGO{RB-TRANSPLANT(T,z,z.right)} // 用右孩子代替 $z$
+elseif z.right == T.nil \hfill // case 2
+	x=z.left
+	\ALGO{RB-TRANSPLANT(T,z,z.left)} // 用左孩子代替 $z$
+else \hfill // case 3
+	y=\ALGO{TREE-MINIMUM(z.right)} // $y$ 是 $z$ 的後繼
+	y-original-color=y.color
+	x=y.right
+	if y\ne z.right // $y$ 是否節點下移
+		\ALGO{RB-TRANSPLANT(T,y,y.right)} // 用右孩子代替 $y$
+		y.right=z.right // $z$ 的右孩子變成 $y$ 的右孩子
+		y.right.p=y
+	else
+		x.p = y
+	\ALGO{RB-TRANSPLANT(T,z,y)} // 用後繼 $y$ 代替 $z$
+	y.left = z.left // 將 $z$ 的左孩子給 $y$
+	y.left.p = y
+	y.color = z.color
+if y-original-color == BLACK // 如果破壞了紅黑規則就進行修正
+	\ALGO{RB-DELETE-FIXUP(T,x)}
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+$y$ 初始化成了待刪除的節點 $z$。
+如果 $y$ 爲紅色，則無需最後的修正，這時：
+
+前兩種情況顯然不影響黑高。
+
+第三種情況： $z$ 的兩個孩子均爲黑色，
+ $y$ 變成的 $z$ 的後繼，因此 $y$ 的左孩子肯定是哨兵；
+又因爲 $y$ 爲紅色，他的右孩子也只能是哨兵，
+否則違反了性質 5。
+所以 $y$ 的兩個孩子均爲哨兵。
+根據操作流程，先將哨兵移動到 $y$ 節點的位置，
+然後將 $z$ 替換爲 $y$，顏色也與 $z$ 保持一致。
+比較刪除前 $z$ 爲根節點的子樹和刪除後 $y$ 爲根節點的子樹，
+後者比前者少了一個紅色節點，
+所有簡單路徑上的黑色節點數量保持不變，即黑高不變。
+
+綜上，如果 \ALGO{RB-DELETE} 中 $y$ 是紅色的，
+那麼黑高不會發生變化。
+
+注意，根據性質 5，左右子樹的黑高應相同，
+任何節點也不可能有且只有一個孩子爲內部節點。
+\stopANSWER

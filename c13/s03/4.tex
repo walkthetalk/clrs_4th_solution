@@ -10,16 +10,16 @@ while z.p.color == \color[red]{RED}
 	if z.p == z.p.p.left	// $z$ 的父節點是左孩子？
 		y = z.p.p.right	// $y$ 是 $z$ 的叔叔
 		if y.color == \color[red]{RED} // $z$ 的父親和叔叔均爲紅色？
-			z.p.color = \color[black]{BLACK}
-			y.color = \color[black]{BLACK}
-			z.p.p.color = \color[red]{RED}
+			z.p.color = \color[black]{BLACK} \hfill // case 1
+			y.color = \color[black]{BLACK} \hfill // case 1
+			z.p.p.color = \color[red]{RED} \hfill // case 1
 			z = z.p.p
 		else
 			if z == z.p.right // $z$ 是右孩子
-				z = z.p
-				\ALGO{LEFT-ROTATE(T,z)}
-			z.p.color = \color[black]{BLACK}
-			z.p.p.color = \color[red]{RED}
+				z = z.p \hfill // case 2
+				\ALGO{LEFT-ROTATE(T,z)} \hfill // case 2
+			z.p.color = \color[black]{BLACK} \hfill // case 3
+			z.p.p.color = \color[red]{RED} \hfill // case 3
 			\ALGO{RIGHT-ROTATE(T,z.p.p)}
 	else // 與上面的分支内容相似，只是“左”和“右”換了。
 		y = z.p.p.left
@@ -40,5 +40,15 @@ T.root.color = \color[black]{BLACK}
 \stopEXERCISE
 
 \startANSWER
-略。
+第一種情況：調整完後 $z$ 和 $z.p.p$ 均爲紅色，
+如果 $z.p.p$ 是哨兵，則 $z.p$ 是根節點，
+而如果 $z.p$ 是根節點，則 $z.p$ 爲黑色。
+這與 while 循環條件矛盾，
+即 $z.p$ 不可能是根節點，
+因此 $z.p.p$ 不可能是哨兵。
+
+第二種情況經過一次旋轉後變爲第三種情況。
+
+第三種情況：調整完後 $z$ 爲紅色，且 $z$ 不可能是根節點，
+ $z$ 不可能是根節點，更不可能是根節點的父指針指向的哨兵。
 \stopANSWER

@@ -1,0 +1,11 @@
+\startEXERCISE[exercise:13.3-6]
+說明如果紅黑樹中不提供父指針，如何高效實現 \ALGO{RB-INSERT}。
+\stopEXERCISE
+
+\startANSWER
+可以採用自頂向下的插入，
+一旦紅黑樹性質遭到破壞就通過修改顏色、旋轉以恢復紅黑樹的性質。
+ case 2 和 case 3 都能在本節點完成，
+ case 1 會使節點 $z$ 上升兩層至 $z.p.p$，
+但這時不會再遇到 case 1，因爲向下搜索時已經把這種情況消除了。
+\stopANSWER

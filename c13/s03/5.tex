@@ -1,0 +1,11 @@
+\startEXERCISE
+用 \ALGO{RB-INSERT} 插入 $n$ 個節點形成一棵紅黑樹。
+證明：如果 $n>1$，則該樹至少有一個紅節點。
+\stopEXERCISE
+
+\startANSWER
+$n=2$ 時，有一個內部節點是紅的。
+以後每次運行 \ALGO{RB-INSERT-FIXUP} 時，
+如果是第一種情況，則 $z$ 保持紅色，
+另外兩種情況都不會減少紅色節點的數量。
+\stopANSWER

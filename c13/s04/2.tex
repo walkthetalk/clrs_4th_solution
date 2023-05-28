@@ -1,0 +1,58 @@
+\startEXERCISE
+證明：執行 \ALGO{RB-DELETE-FIXUP} 之後，樹根一定是黑色的。
+
+\CLRSH{RB-DELETE-FIXUP}
+\startCLRSCODE
+while x \ne T.root and x.color == BLACK
+	if x == x.p.left		// $x$ 是不是左孩子？
+		w = x.p.right		// $w$ 是 $x$ 的兄弟
+		if w.color == RED
+			w.color == BLACK \hfill // case 1
+			x.p.color = RED \hfill // case 1
+			\ALGO{LEFT-ROTATE(T,x.p)} \hfill // case 1
+			w = x.p.right
+		if w.left.color == BLACK and w.right.color == BLACK
+			w.color = RED \hfill // case 2
+			x = x.p \hfill // case 2
+		else
+			if w.right.color == BLACK
+				w.left.color = BLACK \hfill // case 3
+				w.color = RED \hfill // case 3
+				\ALGO{RIGHT-ROTATE(T,w)} \hfill // case 3
+				w = x.p.right
+			w.color = x.p.color \hfill // case 4
+			x.p.color = BLACK \hfill // case 4
+			w.right.color = BLACK \hfill // case 4
+			\ALGO{LEFT-ROTATE(T,x.p)} \hfill // case 4
+			x = T.root
+	else // 與上一分支相同，只是“左”和“右”互換
+		w = w.p.left
+		if w.color == RED
+			w.color = BLACK
+			x.p.color = RED
+			\ALGO{RIGHT-ROTATE(T,x.p)}
+			w = x.p.left
+		if w.right.color == BLACK and w.left.color == BLACK
+			w.color = RED
+			x = x.p
+		else
+			if w.left.color == BLACK
+				w.right.color = BLACK
+				w.color = RED
+				\ALGO{LEFT-ROTATE(T,w)}
+				w = x.p.left
+			w.color = x.p.color
+			x.p.color = BLACK
+			w.left.color = BLACK
+			\ALGO{RIGHT-ROTATE(T,x.p)}
+			x = T.root
+x.color = BLACK
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+\ALGO{RB-DELETE-FIXUP} 中的 while 循環會向上搜索，直到到達樹根或者一個紅色節點。
+如果找到樹根，則會將其染成黑色，無論這個根是怎麼來的。
+
+如果在到達根節點之前先碰到了紅色節點，則根節點還會繼續保持黑色。
+\stopANSWER
