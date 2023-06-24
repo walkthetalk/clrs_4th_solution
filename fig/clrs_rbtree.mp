@@ -1,10 +1,5 @@
 input clrs_bintree;
 
-boolean R;
-R := false;
-boolean B;
-B := true;
-
 vardef declare.rbtree(suffix tree) :=
 	declare.bintree(tree);
 
@@ -12,14 +7,14 @@ vardef declare.rbtree(suffix tree) :=
 	boolean tree.drawnil;
 	tree.drawnil := true;
 
-	boolean tree[]isblack;
+	string tree[]ncolor;
 enddef;
 
 vardef alloc.rbtree(suffix tree) :=
 	save ret;
 	numeric ret;
 	ret := alloc.bintree(tree);
-	tree[ret]isblack := false;
+	tree[ret]ncolor := "black";
 
 	ret
 enddef;
@@ -36,11 +31,11 @@ vardef isleaf.rbtree(suffix tree)(expr idx) :=
 	fi
 enddef;
 
-vardef newnode.rbtree(suffix tree)(expr k, is_black, comment) :=
+vardef newnode.rbtree(suffix tree)(expr k, nodecolor, comment) :=
 	save idx;
 	numeric idx;
 	idx := newnode.bintree(tree)(k, comment);
-	tree[idx]isblack := is_black;
+	tree[idx]ncolor := nodecolor;
 
 	idx
 enddef;
@@ -69,19 +64,29 @@ image(
 			label("N", (0,0)) withcolor white;
 		fi;
 	else:
-		save fillcolor, lblcolor;
+		save fillcolor, lblcolor, outlinecolor;
 		color fillcolor;
+		color outlinecolor;
 		color lblcolor;
-		if tree[i]isblack:
+		if tree[i]ncolor = "B":
 			fillcolor := black;
-		else:
+			outlinecolor := black;
+		elseif tree[i]ncolor = "R":
 			fillcolor := 0.75red;
+			outlinecolor := (148/255.0,31/255.0,40/255.0);
+		elseif tree[i]ncolor = "U":
+			fillcolor := (192/255.0,139/255.0,117/255.0);
+			outlinecolor := (144/255.0,75/255.0,78/255.0);
+		else:
+			fillcolor := scantokens(tree[i]ncolor);
 		fi;
+
 		if (not isfull) and (isleaf.rbtree(tree)(i)):
 			lblcolor := black;
 		else:
 			lblcolor := white;
 			fill fr withcolor fillcolor;
+			draw fr withcolor outlinecolor;
 		fi;
 
 		label(TEX("$" & tree[i]key & "$"), (0,0)) withcolor lblcolor;

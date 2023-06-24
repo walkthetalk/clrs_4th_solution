@@ -13,10 +13,9 @@ vardef build@#(suffix tree) expr s :=
 	pNode[lvl] := nullptr;
 	lastCH := "";
 
-	save ch, newnodeBegin, newnodeContent, nnc, newnodeLvl;
+	save ch, newnodeBegin, nnc, newnodeLvl;
 	string ch;
 	numeric newnodeBegin;
-	string newnodeContent;
 	string nnc;
 	string comment;
 	numeric newnodeLvl;
@@ -36,22 +35,8 @@ vardef build@#(suffix tree) expr s :=
 			if lastCH = ")":
 				lvl := lvl - 1;
 			else:
-				newnodeContent := substring (newnodeBegin, i) of s;
-				if newnodeContent <> "":
-					nnc := char(34) & newnodeContent & char(34);
-					for j := 0 upto ((length newnodeContent)-1):
-						if (substring(j,j+1)of newnodeContent) = ",":
-							nnc := char(34) & (substring(0, j) of newnodeContent) & char(34)
-								& (substring(j, (length newnodeContent))of newnodeContent);
-							exitif true;
-						fi;
-					endfor;
-					if idx[lvl] <> 0:
-						newnodeLvl := lvl+1;
-					else:
-						newnodeLvl := lvl;
-					fi;
-
+				nnc := substring (newnodeBegin, i) of s;
+				if nnc <> "":
 					comment := "";
 					for k := 0 upto ((length nnc) - 1):
 						if (substring(k,k+1) of nnc) = ";":
@@ -60,6 +45,19 @@ vardef build@#(suffix tree) expr s :=
 							exitif true;
 						fi;
 					endfor;
+					nnc := char(34) & nnc & char(34);
+					for j := ((length nnc)-1) downto 0:
+						if (substring(j,j+1)of nnc) = ",":
+							nnc := (substring(0,j) of nnc) & char(34) & "," & char(34)
+								& (substring(j+1, (length nnc))of nnc);
+						fi;
+					endfor;
+					if idx[lvl] <> 0:
+						newnodeLvl := lvl+1;
+					else:
+						newnodeLvl := lvl;
+					fi;
+
 					pNode[newnodeLvl] := newnode@#(tree)(scantokens(nnc), comment);
 					associate@#(tree)(pNode[newnodeLvl-1], pNode[newnodeLvl], idx[newnodeLvl-1]);
 				fi;
