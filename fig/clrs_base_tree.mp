@@ -18,6 +18,7 @@ vardef build@#(suffix tree) expr s :=
 	numeric newnodeBegin;
 	string newnodeContent;
 	string nnc;
+	string comment;
 	numeric newnodeLvl;
 	for i := 0 upto ((length s) - 1):
 		ch := substring (i,i+1) of s;
@@ -50,7 +51,16 @@ vardef build@#(suffix tree) expr s :=
 					else:
 						newnodeLvl := lvl;
 					fi;
-					pNode[newnodeLvl] := newnode@#(tree)(scantokens(nnc));
+
+					comment := "";
+					for k := 0 upto ((length nnc) - 1):
+						if (substring(k,k+1) of nnc) = ";":
+							comment := (substring(k+1, length nnc) of nnc);
+							nnc := substring(0,k) of nnc;
+							exitif true;
+						fi;
+					endfor;
+					pNode[newnodeLvl] := newnode@#(tree)(scantokens(nnc), comment);
 					associate@#(tree)(pNode[newnodeLvl-1], pNode[newnodeLvl], idx[newnodeLvl-1]);
 				fi;
 			fi;

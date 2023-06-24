@@ -43,6 +43,7 @@ $2: $3 \$$$${$4}\n\
 
 $2: | ${output_dir}/
 	@set -e; \
+	${CMD_SET_LMTX_ENV}; \
 	COMPILE_DIR=$$$$(mktemp -d /tmp/CLRSMP.XXXXXXXX); \
 	echo [compile] $1 at $$$${COMPILE_DIR}; \
 	cp $${$4} $$$${COMPILE_DIR}/; \

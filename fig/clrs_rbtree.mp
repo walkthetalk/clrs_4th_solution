@@ -36,10 +36,10 @@ vardef isleaf.rbtree(suffix tree)(expr idx) :=
 	fi
 enddef;
 
-vardef newnode.rbtree(suffix tree)(expr k, is_black) :=
+vardef newnode.rbtree(suffix tree)(expr k, is_black, comment) :=
 	save idx;
 	numeric idx;
-	idx := newnode.bintree(tree)(k);
+	idx := newnode.bintree(tree)(k, comment);
 	tree[idx]isblack := is_black;
 
 	idx
@@ -51,6 +51,10 @@ vardef associate.rbtree(suffix tree)(expr parent, child, idx) :=
 	elseif idx = 2:
 		tree[parent]rt := child;
 	fi;
+enddef;
+
+vardef drawcomments.rbtree(suffix tree)(expr gsize, cmt) :=
+	drawcomments.bintree(tree)(gsize, cmt);
 enddef;
 
 vardef subimg.rbtree(suffix tree)(expr isfull, drawnil, i, xunit, yunit, gsize) :=
@@ -81,6 +85,11 @@ image(
 		fi;
 
 		label(TEX("$" & tree[i]key & "$"), (0,0)) withcolor lblcolor;
+
+		% draw comment
+		if tree[i]comment <> "":
+			drawcomments.rbtree(tree)(gsize, tree[i]comment);
+		fi;
 
 		if (tree[i]lft <> nullptr) or drawnil:
 			save subpic;

@@ -14,13 +14,16 @@ vardef declare.bintree(suffix tree) :=
 	numeric tree.gsize;
 	numeric tree.xunit;
 	numeric tree.yunit;
+	numeric tree.commentdist;
 	tree.gsize := 0.5cm;
 	tree.xunit := 0.8cm;
 	tree.yunit := 0.8cm;
+	tree.commentdist := 0.05cm;
 
 	string tree[]key;
 	numeric tree[]lft;
 	numeric tree[]rt;
+	string tree[]comment;
 enddef;
 
 vardef alloc.bintree(suffix tree) :=
@@ -40,7 +43,7 @@ vardef free.bintree(suffix tree)(expr idx) :=
 	free_slot(tree)(idx);
 enddef;
 
-vardef newnode.bintree(suffix tree)(expr k) :=
+vardef newnode.bintree(suffix tree)(expr k, cmt) :=
 	save idx;
 	numeric idx;
 	idx := alloc.bintree(tree);
@@ -48,6 +51,8 @@ vardef newnode.bintree(suffix tree)(expr k) :=
 	tree[idx]key := k;
 	tree[idx]lft := nullptr;
 	tree[idx]rt  := nullptr;
+
+	tree[idx]comment := cmt;
 
 	idx
 enddef;
@@ -65,6 +70,55 @@ vardef isleaf.bintree(suffix tree)(expr idx) :=
 	else:
 		false
 	fi
+enddef;
+
+vardef drawcomments.bintree(suffix tree)(expr gsize, cmt) :=
+	save j;
+	numeric j;
+	for j := 0 upto (length cmt):
+		if substring(j,j+1) of cmt = ".":
+			save cmtpic;
+			picture cmtpic;
+			cmtpic := scantokens("thelabel(TEX(" & char(34) & substring(j+1, length cmt) of cmt & char(34) & "), (0,0))");
+
+			save pos;
+			string pos;
+			pos := substring(0,j) of cmt;
+
+			save halfw,halfh,dist;
+			numeric halfw,halfh,dist;
+			halfw := xpart(lrcorner cmtpic);
+			halfh := ypart(urcorner cmtpic);
+			dist  := gsize/2 + tree.commentdist;
+			if pos = "rt":
+				draw cmtpic shifted (dist + halfw,0);
+			elseif pos = "lft":
+				draw cmtpic shifted (-dist - halfw,0);
+			elseif pos = "top":
+				draw cmtpic shifted (0,dist + halfh);
+			elseif pos = "toplft":
+				draw cmtpic shifted (-halfw,dist + halfh);
+			elseif pos = "toprt":
+				draw cmtpic shifted (halfw,dist + halfh);
+			elseif pos = "bot":
+				draw cmtpic shifted (0,-dist - halfh);
+			elseif pos = "botlft":
+				draw cmtpic shifted (-halfw,-dist - halfh);
+			elseif pos = "botrt":
+				draw cmtpic shifted (halfw,-dist - halfh);
+			elseif pos = "urt":
+				draw cmtpic shifted (halfw + dist/sqrt(2),dist/sqrt(2) + halfh);
+			elseif pos = "ulft":
+				draw cmtpic shifted (-halfw - dist/sqrt(2),dist/sqrt(2) + halfh);
+			elseif pos = "lrt":
+				draw cmtpic shifted (halfw + dist/sqrt(2),-dist/sqrt(2) - halfh);
+			elseif pos = "llft":
+				draw cmtpic shifted (-halfw - dist/sqrt(2),-dist/sqrt(2) - halfh);
+			fi;
+
+			exitif true;
+		fi;
+	endfor;
 enddef;
 
 vardef subimg.bintree(suffix tree)(expr isfull, i, xunit, yunit, gsize) :=
