@@ -73,50 +73,64 @@ vardef isleaf.bintree(suffix tree)(expr idx) :=
 enddef;
 
 vardef drawcomments.bintree(suffix tree)(expr gsize, cmt) :=
+	save i;
+	numeric i;
 	save j;
 	numeric j;
-	for j := 0 upto (length cmt):
-		if substring(j,j+1) of cmt = ".":
-			save cmtpic;
-			picture cmtpic;
-			cmtpic := scantokens("thelabel(TEX(" & char(34) & substring(j+1, length cmt) of cmt & char(34) & "), (0,0))");
+	save start;
+	numeric start;
+	start := 0;
+	for i := 0 upto (length cmt):
+		if (i = (length cmt)) or (substring(i,i+1) of cmt = ","):
+			save scmt;
+			string scmt;
+			scmt := substring(start, i) of cmt;
+			start := i+1;
 
-			save pos;
-			string pos;
-			pos := substring(0,j) of cmt;
+			for j := 0 upto (length scmt - 1):
+				if substring(j,j+1) of scmt = ".":
+					save cmtpic;
+					picture cmtpic;
+					cmtpic := scantokens("thelabel(TEX(" & char(34) & substring(j+1, length scmt) of scmt & char(34) & "), (0,0))");
 
-			save halfw,halfh,dist;
-			numeric halfw,halfh,dist;
-			halfw := xpart(lrcorner cmtpic);
-			halfh := ypart(urcorner cmtpic);
-			dist  := gsize/2 + tree.commentdist;
-			if pos = "rt":
-				draw cmtpic shifted (dist + halfw,0);
-			elseif pos = "lft":
-				draw cmtpic shifted (-dist - halfw,0);
-			elseif pos = "top":
-				draw cmtpic shifted (0,dist + halfh);
-			elseif pos = "toplft":
-				draw cmtpic shifted (-halfw,dist + halfh);
-			elseif pos = "toprt":
-				draw cmtpic shifted (halfw,dist + halfh);
-			elseif pos = "bot":
-				draw cmtpic shifted (0,-dist - halfh);
-			elseif pos = "botlft":
-				draw cmtpic shifted (-halfw,-dist - halfh);
-			elseif pos = "botrt":
-				draw cmtpic shifted (halfw,-dist - halfh);
-			elseif pos = "urt":
-				draw cmtpic shifted (halfw + dist/sqrt(2),dist/sqrt(2) + halfh);
-			elseif pos = "ulft":
-				draw cmtpic shifted (-halfw - dist/sqrt(2),dist/sqrt(2) + halfh);
-			elseif pos = "lrt":
-				draw cmtpic shifted (halfw + dist/sqrt(2),-dist/sqrt(2) - halfh);
-			elseif pos = "llft":
-				draw cmtpic shifted (-halfw - dist/sqrt(2),-dist/sqrt(2) - halfh);
-			fi;
+					save pos;
+					string pos;
+					pos := substring(0,j) of scmt;
 
-			exitif true;
+					save halfw,halfh,dist;
+					numeric halfw,halfh,dist;
+					halfw := xpart(lrcorner cmtpic);
+					halfh := ypart(urcorner cmtpic);
+					dist  := gsize/2 + tree.commentdist;
+					if pos = "rt":
+						draw cmtpic shifted (dist + halfw,0);
+					elseif pos = "lft":
+						draw cmtpic shifted (-dist - halfw,0);
+					elseif pos = "top":
+						draw cmtpic shifted (0,dist + halfh);
+					elseif pos = "toplft":
+						draw cmtpic shifted (-halfw,dist + halfh);
+					elseif pos = "toprt":
+						draw cmtpic shifted (halfw,dist + halfh);
+					elseif pos = "bot":
+						draw cmtpic shifted (0,-dist - halfh);
+					elseif pos = "botlft":
+						draw cmtpic shifted (-halfw,-dist - halfh);
+					elseif pos = "botrt":
+						draw cmtpic shifted (halfw,-dist - halfh);
+					elseif pos = "urt":
+						draw cmtpic shifted (halfw + dist/sqrt(2),dist/sqrt(2) + halfh);
+					elseif pos = "ulft":
+						draw cmtpic shifted (-halfw - dist/sqrt(2),dist/sqrt(2) + halfh);
+					elseif pos = "lrt":
+						draw cmtpic shifted (halfw + dist/sqrt(2),-dist/sqrt(2) - halfh);
+					elseif pos = "llft":
+						draw cmtpic shifted (-halfw - dist/sqrt(2),-dist/sqrt(2) - halfh);
+					fi;
+
+					exitif true;
+				fi;
+			endfor;
 		fi;
 	endfor;
 enddef;

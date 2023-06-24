@@ -45,11 +45,11 @@ beginfig(2);
 	imgRRR := img.rbtree(RRR);
 
 	declare.rbtree(SSS);
-	build.rbtree(SSS) "(B,U;rt.$c$)"
+	build.rbtree(SSS) "(B,U;lft.$x$,rt.$c$)"
 		& "((A,B)(\alpha,B;bot.$1+c$)(\beta,B;bot.$1+c$))"
 		& "((D,R)"
-			& "((C,B;lft.$x$)(\gamma,B;bot.$1+c$)(\delta,B;bot.$1+c$))"
-			& "((E,B;toprt.$w$)(\epsilon,B;bot.$1+c$)(\zeta,B;bot.$1+c$)))";
+			& "((C,B)(\gamma,B;bot.$1+c$)(\delta,B;bot.$1+c$))"
+			& "((E,B)(\epsilon,B;bot.$1+c$)(\zeta,B;bot.$1+c$)))";
 
 	SSS.isfull := false;
 	SSS.drawnil := false;
