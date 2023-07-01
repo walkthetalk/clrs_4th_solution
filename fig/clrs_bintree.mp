@@ -16,14 +16,25 @@ vardef declare.bintree(suffix tree) :=
 	numeric tree.yunit;
 	numeric tree.commentdist;
 	tree.gsize := 0.5cm;
-	tree.xunit := 0.8cm;
-	tree.yunit := 0.8cm;
+	tree.xunit := 0.6cm;
+	tree.yunit := 1.0cm;
 	tree.commentdist := 0.05cm;
 
 	string tree[]key;
 	numeric tree[]lft;
 	numeric tree[]rt;
 	string tree[]comment;
+
+	color   tree[]frcolor;
+	color   tree[]fillcolor;
+	color   tree[]lblcolor;
+
+	path    tree.fr;
+	numeric tree[]lvl;
+	numeric tree[]x;
+	numeric tree[]y;
+
+	tree.fr = fullcircle scaled tree.gsize;
 enddef;
 
 vardef alloc.bintree(suffix tree) :=
@@ -51,7 +62,6 @@ vardef newnode.bintree(suffix tree)(expr k, cmt) :=
 	tree[idx]key := k;
 	tree[idx]lft := nullptr;
 	tree[idx]rt  := nullptr;
-
 	tree[idx]comment := cmt;
 
 	idx
@@ -72,11 +82,12 @@ vardef isleaf.bintree(suffix tree)(expr idx) :=
 	fi
 enddef;
 
-vardef drawcomments.bintree(suffix tree)(expr gsize, cmt) :=
+vardef drawcommentsOf(expr position, dist, cmt) :=
 	save i;
 	numeric i;
 	save j;
 	numeric j;
+
 	save start;
 	numeric start;
 	start := 0;
@@ -89,44 +100,45 @@ vardef drawcomments.bintree(suffix tree)(expr gsize, cmt) :=
 
 			for j := 0 upto (length scmt - 1):
 				if substring(j,j+1) of scmt = ".":
-					save cmtpic;
-					picture cmtpic;
-					cmtpic := scantokens("thelabel(TEX(" & char(34) & substring(j+1, length scmt) of scmt & char(34) & "), (0,0))");
-
 					save pos;
 					string pos;
 					pos := substring(0,j) of scmt;
 
-					save halfw,halfh,dist;
-					numeric halfw,halfh,dist;
-					halfw := xpart(lrcorner cmtpic);
-					halfh := ypart(urcorner cmtpic);
-					dist  := gsize/2 + tree.commentdist;
+					save poffset;
+					pair poffset;
 					if pos = "rt":
-						draw cmtpic shifted (dist + halfw,0);
+						poffset := (dist,0);
 					elseif pos = "lft":
-						draw cmtpic shifted (-dist - halfw,0);
+						poffset := (-dist,0);
 					elseif pos = "top":
-						draw cmtpic shifted (0,dist + halfh);
-					elseif pos = "toplft":
-						draw cmtpic shifted (-halfw,dist + halfh);
-					elseif pos = "toprt":
-						draw cmtpic shifted (halfw,dist + halfh);
+						poffset := (0,dist);
 					elseif pos = "bot":
-						draw cmtpic shifted (0,-dist - halfh);
+						poffset := (0,-dist);
+					elseif pos = "toplft":
+						poffset := (0,dist);
+						pos := "ulft";
+					elseif pos = "toprt":
+						poffset := (0,dist);
+						pos := "urt";
 					elseif pos = "botlft":
-						draw cmtpic shifted (-halfw,-dist - halfh);
+						poffset := (0,-dist);
+						pos := "llft";
 					elseif pos = "botrt":
-						draw cmtpic shifted (halfw,-dist - halfh);
+						poffset := (0,-dist);
+						pos := "lrt";
 					elseif pos = "urt":
-						draw cmtpic shifted (halfw + dist/sqrt(2),dist/sqrt(2) + halfh);
+						poffset := (dist/sqrt(2),dist/sqrt(2));
 					elseif pos = "ulft":
-						draw cmtpic shifted (-halfw - dist/sqrt(2),dist/sqrt(2) + halfh);
+						poffset := (-dist/sqrt(2),dist/sqrt(2));
 					elseif pos = "lrt":
-						draw cmtpic shifted (halfw + dist/sqrt(2),-dist/sqrt(2) - halfh);
+						poffset := (dist/sqrt(2),-dist/sqrt(2));
 					elseif pos = "llft":
-						draw cmtpic shifted (-halfw - dist/sqrt(2),-dist/sqrt(2) - halfh);
+						poffset := (-dist/sqrt(2),-dist/sqrt(2));
+					else:
+						message "error: unkown position of comments: " & pos;
 					fi;
+					poffset := poffset + position;
+					scantokens("label." & pos & "(TEX(" & char(34) & substring(j+1, length scmt) of scmt & char(34) & "), poffset)");
 
 					exitif true;
 				fi;
@@ -135,54 +147,101 @@ vardef drawcomments.bintree(suffix tree)(expr gsize, cmt) :=
 	endfor;
 enddef;
 
-vardef subimg.bintree(suffix tree)(expr isfull, i, xunit, yunit, gsize) :=
-image(
-	save fr;
-	path fr;
-	fr := fullcircle scaled gsize;
+vardef lftNof(suffix tree)(expr n) :=
+	save r;
+	numeric r;
 
-	if isfull or (not (isleaf.bintree(tree)(i))):
-		fill fr withcolor clrsCfA;
-		draw fr withcolor clrsClA;
+	if tree[n]lft <> nullptr:
+		r := lftNof(tree)(tree[n]lft);
+		r := r + rtNof(tree)(tree[n]lft);
+	else:
+		r := 1;
 	fi;
-	label(TEX("$" & tree[i]key & "$"), (0,0));
+
+	r
+enddef;
+
+vardef rtNof(suffix tree)(expr n) :=
+	save r;
+	numeric r;
+
+	if tree[n]rt <> nullptr:
+		r := lftNof(tree)(tree[n]rt);
+		r := r + rtNof(tree)(tree[n]rt);
+	else:
+		r := 1;
+	fi;
+
+	r
+enddef;
+
+vardef prepare.bintree(suffix tree)(expr idx, xx, yy) :=
+	if tree.isfull or (not (isleaf.bintree(tree)(idx))):
+		if unknown tree[idx]frcolor:
+			tree[idx]frcolor := clrsClA;
+		fi;
+		if unknown tree[idx]fillcolor:
+			tree[idx]fillcolor := clrsCfA;
+		fi;
+	fi;
+	if unknown tree[idx]lblcolor:
+		tree[idx]lblcolor := black;
+	fi;
+
+	tree[idx]lvl := l;
+	tree[idx]x   := xx;
+	tree[idx]y   := yy;
+	if tree[idx]lft <> nullptr:
+		prepare.bintree(tree)(tree[idx]lft, xx - rtNof(tree)(tree[idx]lft), yy-1);
+	fi;
+	if tree[idx]rt <> nullptr:
+		prepare.bintree(tree)(tree[idx]rt, xx + lftNof(tree)(tree[idx]rt), yy-1);
+	fi;
+enddef;
+
+vardef positionOf(suffix tree)(expr i) :=
+	(tree.xunit * tree[i]x, tree.yunit * tree[i]y)
+enddef;
+
+vardef linkof(expr fr, sp, ep) :=
+	save lpath;
+	path lpath;
+	lpath := (sp--ep);
+	((fr shifted (point 0 of lpath)) intersectionpoint lpath)
+		-- ((fr shifted (point 1 of lpath)) intersectionpoint lpath)
+enddef;
+
+vardef linkOf.bintree(suffix tree)(expr i, j) :=
+	linkof(tree.fr, positionOf(tree)(i), positionOf(tree)(j))
+enddef;
+
+vardef subdraw.bintree(suffix tree)(expr i) :=
+	if known tree[i]fillcolor:
+		fill tree.fr shifted positionOf(tree)(i) withcolor tree[i]fillcolor;
+	fi;
+	if known tree[i]frcolor:
+		draw tree.fr shifted positionOf(tree)(i) withcolor tree[i]frcolor;
+	fi;
+	label(TEX("$" & tree[i]key & "$"), positionOf(tree)(i)) withcolor tree[i]lblcolor;
 
 	if (tree[i]lft <> nullptr):
-		save subpic;
-		picture subpic;
-		subpic := subimg.bintree(tree)(isfull, tree[i]lft, xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-max(xpart(urcorner subpic),gsize) - (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
+		subdraw.bintree(tree)(tree[i]lft);
+		drawarrow linkOf.bintree(tree)(i, tree[i]lft) withcolor black;
 	fi;
 
 	if (tree[i]rt <> nullptr):
-		save subpic;
-		picture subpic;
-		subpic := subimg.bintree(tree)(isfull, tree[i]rt, xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-min(xpart(ulcorner subpic),-gsize) + (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
+		subdraw.bintree(tree)(tree[i]rt);
+		drawarrow linkOf.bintree(tree)(i, tree[i]rt) withcolor black;
 	fi;
-)
 enddef;
-
 vardef img.bintree(suffix tree) :=
 image(
+	prepare.bintree(tree)(tree.root, 0, 0);
+
 	if not tree.isfull:
 		draw (0, tree.yunit)--(0, 0);
 	fi;
 	% check if root is nullptr
-	draw subimg.bintree(tree)(tree.isfull, tree.root, tree.xunit, tree.yunit, tree.gsize);
+	subdraw.bintree(tree)(tree.root);
 )
 enddef;

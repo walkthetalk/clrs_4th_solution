@@ -48,90 +48,87 @@ vardef associate.rbtree(suffix tree)(expr parent, child, idx) :=
 	fi;
 enddef;
 
-vardef drawcomments.rbtree(suffix tree)(expr gsize, cmt) :=
-	drawcomments.bintree(tree)(gsize, cmt);
-enddef;
-
-vardef subimg.rbtree(suffix tree)(expr isfull, drawnil, i, xunit, yunit, gsize) :=
-image(
-	save fr;
-	path fr;
-	fr := fullcircle scaled gsize;
-
-	if i = nullptr:
-		if drawnil:
-			fill fr withcolor black;
-			label("N", (0,0)) withcolor white;
-		fi;
+vardef prepare.rbtree(suffix tree)(expr idx, xx, yy) :=
+	% generate colors
+	if (not tree.isfull) and (isleaf.rbtree(tree)(idx)):
+		tree[idx]lblcolor := black;
 	else:
-		save fillcolor, lblcolor, outlinecolor;
-		color fillcolor;
-		color outlinecolor;
-		color lblcolor;
-		if tree[i]ncolor = "B":
-			fillcolor := black;
-			outlinecolor := black;
-		elseif tree[i]ncolor = "R":
-			fillcolor := 0.75red;
-			outlinecolor := (148/255.0,31/255.0,40/255.0);
-		elseif tree[i]ncolor = "U":
-			fillcolor := (192/255.0,139/255.0,117/255.0);
-			outlinecolor := (144/255.0,75/255.0,78/255.0);
+		tree[idx]lblcolor := white;
+		if tree[idx]ncolor = "B":
+			tree[idx]fillcolor := black;
+			tree[idx]frcolor := black;
+		elseif tree[idx]ncolor = "R":
+			tree[idx]fillcolor := 0.75red;
+			tree[idx]frcolor := (148/255.0,31/255.0,40/255.0);
+		elseif tree[idx]ncolor = "U":
+			tree[idx]fillcolor := (192/255.0,139/255.0,117/255.0);
+			tree[idx]frcolor := (144/255.0,75/255.0,78/255.0);
 		else:
-			fillcolor := scantokens(tree[i]ncolor);
-		fi;
-
-		if (not isfull) and (isleaf.rbtree(tree)(i)):
-			lblcolor := black;
-		else:
-			lblcolor := white;
-			fill fr withcolor fillcolor;
-			draw fr withcolor outlinecolor;
-		fi;
-
-		label(TEX("$" & tree[i]key & "$"), (0,0)) withcolor lblcolor;
-
-		% draw comment
-		if tree[i]comment <> "":
-			drawcomments.rbtree(tree)(gsize, tree[i]comment);
-		fi;
-
-		if (tree[i]lft <> nullptr) or drawnil:
-			save subpic;
-			picture subpic;
-			subpic := subimg.rbtree(tree)(isfull, drawnil, tree[i]lft, xunit, yunit, gsize);
-
-			save subroot;
-			pair subroot;
-			subroot := (-xpart(urcorner subpic) - (xunit-gsize)/2, -yunit);
-
-			drawarrow (fr intersectionpoint ((0,0) -- subroot))
-				..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-			draw subpic shifted subroot;
-		fi;
-
-		if (tree[i]rt <> nullptr) or drawnil:
-			save subpic;
-			picture subpic;
-			subpic := subimg.rbtree(tree)(isfull, drawnil, tree[i]rt, xunit, yunit, gsize);
-
-			save subroot;
-			pair subroot;
-			subroot := (-xpart(ulcorner subpic) + (xunit-gsize)/2, -yunit);
-
-			drawarrow (fr intersectionpoint ((0,0) -- subroot))
-				..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-			draw subpic shifted subroot;
+			tree[idx]fillcolor := scantokens(tree[i]ncolor);
+			tree[idx]frcolor := tree[idx]fillcolor;
 		fi;
 	fi;
-)
+
+	tree[idx]lvl := l;
+	tree[idx]x   := xx;
+	tree[idx]y   := yy;
+	if tree[idx]lft <> nullptr:
+		prepare.rbtree(tree)(tree[idx]lft, xx - rtNof(tree)(tree[idx]lft), yy-1);
+	fi;
+	if tree[idx]rt <> nullptr:
+		prepare.rbtree(tree)(tree[idx]rt, xx + lftNof(tree)(tree[idx]rt), yy-1);
+	fi;
+enddef;
+
+vardef drawcomments.rbtree(suffix tree)(expr idx):=
+	drawcommentsOf(positionOf(tree)(idx), tree.gsize/2 + tree.commentdist, tree[idx]comment);
+	if (tree[idx]lft <> nullptr):
+		drawcomments.rbtree(tree)(tree[idx]lft);
+	fi;
+	if (tree[idx]rt <> nullptr):
+		drawcomments.rbtree(tree)(tree[idx]rt);
+	fi;
+enddef;
+
+vardef subdraw.rbtree(suffix tree)(expr i) :=
+	if known tree[i]fillcolor:
+		fill (tree.fr shifted positionOf(tree)(i)) withcolor tree[i]fillcolor;
+	fi;
+	if known tree[i]frcolor:
+		draw (tree.fr shifted positionOf(tree)(i)) withcolor tree[i]frcolor;
+	fi;
+	label(TEX("$" & tree[i]key & "$"), positionOf(tree)(i)) withcolor tree[i]lblcolor;
+
+	if isleaf.rbtree(tree)(i) and tree.drawnil:
+		save nilposition;
+		pair nilposition;
+		nilposition := positionOf(tree)(i) + (0, -tree.xunit * 2);
+		fill (tree.fr shifted nilposition) withcolor black;
+		label(TEX"$N$", nilposition) withcolor white;
+
+		drawarrow linkof(tree.fr, positionOf(tree)(i), nilposition) withcolor black;
+	fi;
+
+	if (tree[i]lft <> nullptr):
+		subdraw.rbtree(tree)(tree[i]lft);
+		drawarrow linkOf.bintree(tree)(i, tree[i]lft) withcolor black;
+	fi;
+
+	if (tree[i]rt <> nullptr):
+		subdraw.rbtree(tree)(tree[i]rt);
+		drawarrow linkOf.bintree(tree)(i, tree[i]rt) withcolor black;
+	fi;
 enddef;
 
 vardef img.rbtree(suffix tree) :=
 image(
+	prepare.rbtree(tree)(tree.root, 0,0);
+
 	if not tree.isfull:
 		draw (0, tree.yunit)--(0, 0);
 	fi;
-	draw subimg.rbtree(tree)(tree.isfull, tree.drawnil, tree.root, tree.xunit, tree.yunit, tree.gsize);
+	% check if root is nullptr
+	subdraw.rbtree(tree)(tree.root);
+	drawcomments.rbtree(tree)(tree.root);
 )
 enddef;

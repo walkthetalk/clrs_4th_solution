@@ -111,11 +111,12 @@ beginfig(4);
 			& "(\alpha,B;bot.$1+c$)"
 			& "(\beta,B;bot.$1+c$))"
 		& "((D,R;rt.$w$)"
-			& "((C,U;rt.$c'$)(\gamma,B;bot.$1+c+c'$)(\delta,B;bot.$1+c+c'$))"
+			& "((C,U;rt.$c'$)(\gamma,B;bot.$1{+}c{+}c'$)(\delta,B;bot.$1{+}c{+}c'$))"
 			& "((E,R)(\epsilon,B;bot.$1+c$)(\zeta,B;bot.$1+c$)))";
 
 	RRR.isfull := false;
 	RRR.drawnil := false;
+	RRR.xunit := RRR.xunit + 0.1cm;
 	save imgRRR;
 	picture imgRRR;
 	imgRRR := img.rbtree(RRR);
@@ -124,13 +125,14 @@ beginfig(4);
 	build.rbtree(SSS) "(D,U;rt.$c$)"
 		& "((B,B)"
 			& "((A,B)(\alpha,B;bot.$2+c$)(\beta,B;bot.$2+c$))"
-			& "((C,U;rt.$c'$)(\gamma,B;bot.$1+c+c'$)(\delta,B;bot.$1+c+c'$)))"
+			& "((C,U;rt.$c'$)(\gamma,B;bot.$1{+}c{+}c'$)(\delta,B;bot.$1{+}c{+}c'$)))"
 		& "((E,B)"
 			& "(\epsilon,B;bot.$1+c$)"
 			& "(\zeta,B;bot.$1+c$))";
 
 	SSS.isfull := false;
 	SSS.drawnil := false;
+	SSS.xunit := SSS.xunit + 0.1cm;
 	save imgSSS;
 	picture imgSSS;
 	imgSSS := img.rbtree(SSS);

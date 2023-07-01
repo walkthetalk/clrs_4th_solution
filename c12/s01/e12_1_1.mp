@@ -1,334 +1,105 @@
-bboxmargin := 0;
-
-% for any def, use expr/primary, don't use suffix
-vardef lchild primary $ =
-	($ * 2)
-enddef;
-
-vardef rchild primary $ =
-	($ * 2 + 1)
-enddef;
-
-vardef parent primary $ =
-	(floor($ / 2))
-enddef;
-
-vardef validate(suffix A)(expr i) :=
-	if known(A[i]):
-		i
-	else:
-		0
-	fi;
-enddef;
-
-vardef img_sub_bin_search_fine_tree(suffix A)(expr i, xunit, yunit, gsize) :=
-image(
-	save fr;
-	path fr;
-	fr := fullcircle scaled gsize;
-
-
-
-	fill fr withcolor .8white;
-	label(decimal(A[i]), (0,0)) withcolor black;
-
-	if known(A[lchild(i)]):
-		save subpic;
-		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(lchild(i), xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-xpart(urcorner subpic) - (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
-	fi;
-
-	if known(A[rchild(i)]):
-		save subpic;
-		picture subpic;
-		subpic := img_sub_bin_search_fine_tree(A)(rchild(i), xunit, yunit, gsize);
-
-		save subroot;
-		pair subroot;
-		subroot := (-xpart(ulcorner subpic) + (xunit-gsize)/2, -yunit);
-
-		drawarrow (fr intersectionpoint ((0,0) -- subroot))
-			..((fr shifted subroot) intersectionpoint ((0,0) -- subroot)) withcolor black;
-		draw subpic shifted subroot;
-	fi;
-)
-enddef;
+input clrs_bintree;
 
 % @order: 0 preorder; 1 inorder; 2 postorder;
-vardef preorder_tree_walk(suffix A)(expr i, xunit, yunit) :=
-image(
+vardef preorder.bintree(suffix tree)(expr idx) :=
+	save ret;
+	string ret;
+	ret := tree[idx]key;
+
+	if tree[idx]lft <> nullptr:
+		ret := ret & "," & preorder.bintree(tree)(tree[idx]lft);
+	fi;
+	if tree[idx]rt <> nullptr:
+		ret := ret & "," & preorder.bintree(tree)(tree[idx]rt);
+	fi;
+	ret
+enddef;
+vardef inorder.bintree(suffix tree)(expr idx) :=
+	save ret;
+	string ret;
+	ret := tree[idx]key;
+
+	if tree[idx]lft <> nullptr:
+		ret := inorder.bintree(tree)(tree[idx]lft) & "," & ret;
+	fi;
+	if tree[idx]rt <> nullptr:
+		ret := ret & "," & inorder.bintree(tree)(tree[idx]rt);
+	fi;
+	ret
+enddef;
+vardef postorder.bintree(suffix tree)(expr idx) :=
+	save ret;
+	string ret;
+	ret := tree[idx]key;
+	if tree[idx]rt <> nullptr:
+		ret := postorder.bintree(tree)(tree[idx]rt) & "," & ret;
+	fi;
+	if tree[idx]lft <> nullptr:
+		ret := postorder.bintree(tree)(tree[idx]lft) & "," & ret;
+	fi;
+	ret
+enddef;
+
+vardef customdrawbintree(suffix tree) :=
+	save ppp, pos, aux;
+
+	picture ppp;
+	ppp := img.bintree(tree);
+	draw ppp;
+
 	pair pos;
-	pos := (7 * xunit,yunit);
+	pos := urcorner ppp;
 
-	label.lft("pre-order:", pos);
-	pos := (xpart(pos) + .5xunit, ypart(pos));
+	picture aux;
+	aux := thelabel.urt("post:", (0,0));
+	picture pre;
 
-	numeric prev, node;
-	numeric li, ri, pi;
+	pos := pos + (xpart lrcorner aux, -ypart urcorner aux);
+	label.llft("pre:", pos);
+	pre := thelabel.lrt(TEX("$" & preorder.bintree(tree)(tree.root) & "$"), pos);
+	draw pre;
 
-	prev := 0;
-	node := i;
-	forever:
-		exitif node = 0;
-		li := lchild(node);
-		if unknown(A[li]):
-			li := 0;
-		fi;
-		ri := rchild(node);
-		if unknown(A[ri]):
-			ri := 0;
-		fi;
-		pi := parent(node);
-		if unknown(A[pi]):
-			pi := 0;
-		fi;
+	pos := pos - (0, ypart urcorner aux);
+	label.llft("in:", pos);
+	pre := thelabel.lrt(TEX("$" & inorder.bintree(tree)(tree.root) & "$"), pos);
+	draw pre;
 
-		if prev = pi:
-			label(decimal(A[node]), pos);
-			pos := (xpart(pos) + xunit, ypart(pos));
-			if not(li = 0): % left leap
-				prev := node;
-				node := li;
-			elseif not(ri = 0):
-				prev := node;
-				node := ri;
-			else:
-				prev := node;
-				node := pi;
-			fi;
-		elseif prev = li:
-			if not(ri = 0):
-				prev := node;
-				node := ri;
-			else:
-				prev := node;
-				node := pi;
-			fi;
-		elseif prev = ri:
-			prev := node;
-			node := pi;
-		fi;
-	endfor;
-)
-enddef;
-vardef inorder_tree_walk(suffix A)(expr i, xunit, yunit) :=
-image(
-	pair pos;
-	pos := (7 * xunit,yunit);
-
-	label.lft("in-order:", pos);
-	pos := (xpart(pos) + .5xunit, ypart(pos));
-
-	numeric prev, node;
-	numeric li, ri, pi;
-
-	prev := 0;
-	node := i;
-	forever:
-		exitif node = 0;
-		li := lchild(node);
-		if unknown(A[li]):
-			li := 0;
-		fi;
-		ri := rchild(node);
-		if unknown(A[ri]):
-			ri := 0;
-		fi;
-		pi := parent(node);
-		if unknown(A[pi]):
-			pi := 0;
-		fi;
-
-		if prev = pi:
-			if not(li = 0): % left leap
-				prev := node;
-				node := li;
-			else:
-				label(decimal(A[node]), pos);
-				pos := (xpart(pos) + xunit, ypart(pos));
-				if not(ri = 0):
-					prev := node;
-					node := ri;
-				else:
-					prev := node;
-					node := pi;
-				fi;
-			fi;
-		elseif prev = li:
-			label(decimal(A[node]), pos);
-			pos := (xpart(pos) + xunit, ypart(pos));
-			if not(ri = 0):
-				prev := node;
-				node := ri;
-			else:
-				prev := node;
-				node := pi;
-			fi;
-		elseif prev = ri:
-			prev := node;
-			node := pi;
-		fi;
-	endfor;
-)
-enddef;
-vardef postorder_tree_walk(suffix A)(expr i, xunit, yunit) :=
-image(
-	pair pos;
-	pos := (7 * xunit,yunit);
-
-	label.lft("post-order:", pos);
-	pos := (xpart(pos) + .5xunit, ypart(pos));
-
-	numeric prev, node;
-	numeric li, ri, pi;
-
-	prev := 0;
-	node := i;
-	forever:
-		exitif node = 0;
-		li := lchild(node);
-		if unknown(A[li]):
-			li := 0;
-		fi;
-		ri := rchild(node);
-		if unknown(A[ri]):
-			ri := 0;
-		fi;
-		pi := parent(node);
-		if unknown(A[pi]):
-			pi := 0;
-		fi;
-
-		if prev = pi:
-			if not(li = 0): % left leap
-				prev := node;
-				node := li;
-			elseif not(ri = 0):
-				prev := node;
-				node := ri;
-			else:
-				label(decimal(A[node]), pos);
-				pos := (xpart(pos) + xunit, ypart(pos));
-				prev := node;
-				node := pi;
-			fi;
-		elseif prev = li:
-			if not(ri = 0):
-				prev := node;
-				node := ri;
-			else:
-				label(decimal(A[node]), pos);
-				pos := (xpart(pos) + xunit, ypart(pos));
-				prev := node;
-				node := pi;
-			fi;
-		elseif prev = ri:
-			label(decimal(A[node]), pos);
-			pos := (xpart(pos) + xunit, ypart(pos));
-			prev := node;
-			node := pi;
-		fi;
-	endfor;
-)
-enddef;
-
-vardef img_bin_search_tree(suffix A)(expr gsize, xunit, yunit) :=
-image(
-	draw img_sub_bin_search_fine_tree(A)(1, xunit, yunit, gsize);
-)
-enddef;
-
-vardef draw_bin_search_tree(suffix A) :=
-	save m;
-	picture m;
-	m := img_bin_search_tree(A)(0.5cm, 0.8cm,0.8cm);
-	draw m shifted (-xpart (llcorner m), 0);
-	draw preorder_tree_walk(A)(1, 0.5cm, 0cm) shifted (2cm,0);
-	draw inorder_tree_walk(A)(1, 0.5cm, -0.5cm) shifted (2cm,0);
-	draw postorder_tree_walk(A)(1, 0.5cm, -1.0cm) shifted (2cm,0);
+	pos := pos - (0, ypart urcorner aux);
+	label.llft("post:", pos);
+	pre := thelabel.lrt(TEX("$" & postorder.bintree(tree)(tree.root) & "$"), pos);
+	draw pre;
 enddef;
 
 beginfig(1);
-	numeric data[];
-	numeric data.len;
-	data[1] := 10;
-	data[2] :=  4;
-	data[3] := 17;
-	data[4] :=  1;
-	data[5] :=  5;
-	data[6] := 16;
-	data[7] := 21;
-	data.len := 7;
+	declare.bintree(RRR);
+	build.bintree(RRR) "(10)((4)(1)(5))((17)(16)(21))";
 
-	draw_bin_search_tree(data);
+	customdrawbintree(RRR);
 endfig;
 
 beginfig(2);
-	numeric data[];
-	numeric data.len;
-	data[1] := 10;
-	data[2] :=  4;
-	data[3] := 16;
-	data[4] :=  1;
-	data[5] :=  5;
-	data[7] := 17;
-	data[15] := 21;
-	data.len := 15;
-
-	draw_bin_search_tree(data);
+	declare.bintree(RRR);
+	build.bintree(RRR) "(10)((4)(1)(5))((16)()((17)()(21)))";
+	customdrawbintree(RRR);
 endfig;
 
 beginfig(3);
-	numeric data[];
-	numeric data.len;
-	data[1] := 5;
-	data[2] :=  4;
-	data[3] := 10;
-	data[4] :=  1;
-	data[7] := 16;
-	data[15] := 17;
-	data[31] := 21;
-	data.len := 31;
-
-	draw_bin_search_tree(data);
+	declare.bintree(RRR);
+	build.bintree(RRR) "(5)((4)(1)())((10)()((16)()((17)()(21))))";
+	customdrawbintree(RRR);
 endfig;
 
 beginfig(4);
-	numeric data[];
-	numeric data.len;
-	data[1] := 4;
-	data[2] := 1;
-	data[3] := 5;
-	data[7] := 10;
-	data[15] := 16;
-	data[31] := 17;
-	data[63] := 21;
-	data.len := 63;
-
-	draw_bin_search_tree(data);
+	declare.bintree(RRR);
+	build.bintree(RRR) "(4)(1)((5)()((10)()((16)()((17)()(21)))))";
+	customdrawbintree(RRR);
 endfig;
 
 beginfig(5);
-	numeric data[];
-	numeric data.len;
-	data[1] := 1;
-	data[3] := 4;
-	data[7] := 5;
-	data[15] := 10;
-	data[31] := 16;
-	data[63] := 17;
-	data[127] := 21;
-	data.len := 127;
+	declare.bintree(RRR);
+	build.bintree(RRR) "(1)()((4)()((5)()((10)()((16)()((17)()(21))))))";
 
-	draw_bin_search_tree(data);
+	customdrawbintree(RRR);
 endfig;
 
 end;
