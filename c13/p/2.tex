@@ -1,0 +1,103 @@
+\startPROBLEM
+（Join operation on red-black trees）
+\emph{連接（join）}運算：取兩個動態集合 $S_1$、 $S_2$ 和一個元素 $x$，
+使得對於任何 $x_1\in S_1$ 和 $x_2\in S_2$，
+均滿足 $x_{1}.key \le x.key \le x_{2}.key$。
+該運算返回集合 $S=S_1 \cup \{x\} \cup S_2$。
+在這個問題中，討論如何在紅黑樹上實現連接運算。
+\startigBase[a]\startitem%a
+紅黑樹 $T$ 中，新屬性 $T.bh$ 中存儲其黑高。證明：
+在樹中節點不增加額外存儲空間，
+同時不增加漸進運行時間的前提下，
+ \ALGO{RB-INSERT} 和 \ALGO{RB-DELETE} 可以維護這個屬性。
+當沿 $T$ 下降時，如何確定所訪問節點的黑高？
+要求每個節點所用時間爲 $O(1)$。
+\stopitem\stopigBase
+\startANSWER
+對於空的紅黑樹，將其 bh 初始化爲 0。
+插入只會增加黑高，刪除只會減小黑高。
+插入過程中，如果 \ALGO{BALANCING} 到達了根節點，
+將根節點由紅色改成了黑色，則 bh 會增 1。
+這是往樹中添加黑色節點唯一的地方。
+刪除過程中，如果額外的黑節點到達了根節點，則將 bh 減 1；
+這是往樹中刪除黑色節點唯一的地方。
+因此每次操作過程中， bh 的開銷爲 $O(1)$。
+樹中每個節點的黑高，都可以由根節點的 bh 開始，每過一個黑色節點就減 1；
+其開銷也爲 $O(1)$。
+\stopANSWER
+
+$T_1$ 和 $T_2$ 是兩棵紅黑樹，
+有關鍵字 $x$，在 $T_1$ 中任取節點 $x_1$，
+在 $T_2$ 中任取節點 $x_2$，
+均滿足 $x_1.key\le x.key\le x_2.key$。
+要求實現運算 \ALGO{RB-JOIN(T_1, x, T_2)}，
+用以銷燬 $T_1$ 和 $T_2$ 並返回一棵紅黑樹 $T=T_1\cup \{x\} \cup T_2$。
+ $T_1$ 和 $T_2$ 中的節點總數爲 $n$。
+
+\startigBase[a,continue]\startitem%b
+假設 $T_{1}.bh\ge T_{2}.bh$。
+試給出一個 $O(\lg n)$ 時間的算法，
+使之能在 $T_1$ 中所有從黑高爲 $T_{2}.bh$ 的節點中，
+選出具有最大關鍵字的黑色節點 $y$。
+\stopitem\stopigBase
+
+\startANSWER
+我們只需要遍歷樹的最右路徑，即，
+如果有右孩子，我們就可以一直往右走，否則就往左走。
+在此過程中，每過一個黑色節點，就將黑高減 1。
+直到所到達黑色節點的黑高等於 $T_2.bh$，
+我們就找到了黑高爲 $T_2.bh$ 的最大關鍵字。
+由於紅黑樹的高度爲 $O(\lg n)$，此運算需要時間爲 $O(\lg n)$。
+\stopANSWER
+
+\startigBase[a,continue]\startitem%c
+令 $T_y$ 爲以 $y$ 爲根節點的子樹。
+試說明如何在不破壞二叉搜索樹性質的前提下，
+在 $O(1)$ 時間內用 $T_y\cup \{x\} \cup T_2$ 來取代 $T_y$。
+\stopitem\stopigBase
+
+\startANSWER
+在 $T_1$ 中 $y$ 所在位置插入 $x$。
+令 $y$ 爲左孩子， $T_2$ 爲右孩子。
+假定連接運算滿足 $x_1.key\le x.key\le x_2.key$，
+則會保持二叉搜索樹的性質，所需時間爲 $O(1)$。
+\stopANSWER
+
+\startigBase[a,continue]\startitem%d
+要保持紅黑性質 1、 3 和 5，應將 $x$ 着成什麼顏色？
+試說明如何在 $O(\lg n)$ 時間內維護性質 2 和 4。
+\stopitem\stopigBase
+
+\startANSWER
+將 $x$ 着爲紅色。
+
+我們可以執行 \ALGO{RB-INSERT-FIXUP(T_1, x)} 來維持性質 2、 4。
+ $T_2$ 的黑高等於 $T_y$，
+因此 \ALGO{RB-INSERT-FIXUP} 可以工作。
+運行時間爲 $O(\lg n)$。
+\stopANSWER
+
+\startigBase[a,continue]\startitem%e
+論證使用（b）部分的假設是不失一般性的，
+並描述當 $T_1.bh\le T_2.bh$ 時所出現的對稱情況。
+\stopitem\stopigBase
+
+\startANSWER
+如果 $T_1.bh < T_2.bh$，
+我們會掃描 $T_2$ 最左側的路徑，找到黑高爲 $T_1.bh$ 的最小的黑色節點。
+\stopANSWER
+
+\startigBase[a,continue]\startitem%f
+證明： \ALGO{RB-JOIN} 的運行時間是 $O(\lg n)$。
+\stopitem\stopigBase
+
+\startANSWER
+由之前幾部分來實現 \ALGO{RB-JOIN}：
+可以在 $O(1)$ 時間內計算維護黑高。
+可以在 $O(\lg n)$ 時間內找到所需黑色節點 $y$。
+在 $O(1)$ 時間內完成連接，
+最後花 $O(\lg n)$ 時間來保持紅黑樹的性質。
+總共需要時間爲 $O(\lg n)$。
+\stopANSWER
+
+\stopPROBLEM
