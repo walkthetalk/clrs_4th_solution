@@ -1,0 +1,89 @@
+\startEXERCISE\DIFFICULT
+考慮一下 \ALGO{RB-ENUMERATE(T,r,a,b)}，
+假設紅黑樹 $T$ 中有 $n$ 個節點，
+此算法會在以 $r$ 爲根節點的子樹中找到所有滿足 $a\le k\le b$ 的節點，
+並輸出這些節點的關鍵字。
+要想時間複雜度達到 $\Theta(m+\lg n)$，
+其中 $m$ 是說輸出關鍵字的數目，
+我們該如何實現 \ALGO{RB-ENUMERATE}？
+假設 $T$ 中的關鍵字沒有重複，且肯定有 $a$ 和 $b$。
+如果 $T$ 中沒有 $a$ 和 $b$，
+需要如何修改算法？
+\stopEXERCISE
+
+\startANSWER
+我們先通過 \ALGO{RB-SEARCH(T,T.root,a)} 找到 $a$，
+然後調用 $m-1$ 次 $\ALGO{RB-SUCCESSOR}$ 到達 $b$，
+依次輸出這 $m-1$ 個節點的關鍵字。
+
+\CLRSH{RB-SEARCH(T,x,k)}
+\startCLRSCODE
+if x == T.nil or k == x.key
+	return x
+if x < x.key
+	return \ALGO{RB-SEARCH(T,x.left,k)}
+else
+	return \ALGO{RB-SEARCH(T,x.right,k)}
+\stopCLRSCODE
+
+\CLRSH{RB-MINIMUM(T,x)}
+\startCLRSCODE
+while x.left \ne T.nil
+	x = x.left
+return x
+\stopCLRSCODE
+
+\CLRSH{RB-SUCCESSOR(T,x)}
+\startCLRSCODE
+if x.right \ne T.nil
+	return \ALGO{RB-MINIMUM(T,x.right)}
+else
+	y = x.p
+	while y \ne T.nil and x == y.right
+		x = y
+		y = y.p
+	return y
+\stopCLRSCODE
+
+當然也可以先找到節點 $b$，
+然後調用 $m-1$ 次 \ALGO{RB-PREDECESSOR} 後到達 $a$，
+並依次輸出這 $m$ 個節點的關鍵字。
+以 \ALGO{TREE-PREDECESSOR} 爲基礎進行修改：
+
+\CLRSH{RB-MAXIMUM(T,x)}
+\startCLRSCODE
+while x.right \ne T.nil
+	x = x.right
+return x
+\stopCLRSCODE
+
+\CLRSH{RB-PREDECESSOR(T,x)}
+\startCLRSCODE
+if x.left \ne T.nil
+	return \ALGO{RB-MAXIMUM(T,x.left)}
+else
+	y = x.p
+	while y \ne T.nil and x == y.left
+		x = y
+		y = y.p
+	return y
+\stopCLRSCODE
+
+紅黑樹的查找與二叉搜索樹一致，
+紅黑樹高度 $h=\Theta(\lg n)$，
+運行時間爲 $\Theta(h) + m \times \Theta(1) = \Theta(m + \lg n)$。
+
+如果紅黑樹中沒有 $a$ 或 $b$，
+則在開始時找到最接近 $a$ 或 $b$ 的節點即可。
+由於未要求按順序輸出，也可以用遞迴的方式處理：
+
+\CLRSH{RB-ENUMERATE(x,a,b)}
+\startCLRSCODE
+if a\le x.key \le b
+	print x.key
+if a \le x.key and x.left \ne T.nil
+	\ALGO{RB-ENUMERATE(x.left,a,b)}
+if x.key \le b and x.right \ne T.nil
+	\ALGO{RB-ENUMERATE(x.right,a,b)}
+\stopCLRSCODE
+\stopANSWER

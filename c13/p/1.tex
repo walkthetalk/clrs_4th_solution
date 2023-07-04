@@ -1,0 +1,121 @@
+\startPROBLEM
+（Persistent dynamic sets）
+在執行算法過程中，有時我們會發現更新動態集合時需要維護其歷史版本。
+我們稱這樣的集合爲\emph{持久的（persistent）}。
+要達到這個目的，一種方式是每次修改時都復制一份，
+但這樣會降低程序的執行速度，且佔用空間過多。
+有時我們可以做得更好。
+
+現有持久集合 $S$，支持 \ALGO{INSERT}、 \ALGO{DELETE} 和 \ALGO{SEARCH}，
+用二叉搜索樹實現，如圖 13-8（a）所示。
+對集合的每一個版本都維護一個獨立的根節點。
+爲了將關鍵字 $5$ 插入其中，先創建一個關鍵字爲 $5$ 的新節點。
+該節點會成爲關鍵字 $7$ 的左孩子，
+由於我們不能修改關鍵字 $7$ 所在節點，
+因此我們需要一個關鍵字爲 $7$ 的新節點。
+以此類推，關鍵字 $8$ 和 $4$ 都需要一個新節點。
+新節點 $4$ 是新的根結點。
+也就是說我們可以只復制一部分，就能構造一顆新樹，與原樹共享部分節點，
+如圖 13-8（b）所示。
+
+假設樹中每個節點都有屬性 key、 left 和 right，但沒有屬性 parent。
+（參見\inexercise[13.3-6]）
+\startigBase[a]
+\startitem%a
+對於一棵持久二叉搜索樹（不是紅黑樹，只是一棵二叉搜索樹），
+爲插入一個關鍵字或刪除一個節點，哪些節點會發生變化。
+\stopitem
+
+\startANSWER
+從根結點開始，一直到要插入或刪除的節點，
+整條路徑上的所有節點都需要改變。
+
+也就是說，對於所要插入或刪除的節點，他的所有祖先節點都需要改變。
+\stopANSWER
+
+\startitem%b
+請寫出過程 \ALGO{PERSISTENT-TREE-INSERT}，
+其輸入是持久樹 $T$ 和要插入的關鍵字 $k$，
+返回的是將 $k$ 插入 $T$ 後所得新的持久樹 $T'$。
+\stopitem
+
+\startANSWER
+\CLRSH{PERSISTENT-TREE-INSERT(T, k)}
+\startCLRSCODE
+if T.root == T.nil
+	return \ALGO{NEW-NODE(k)}
+
+r = \ALGO{COPY-NODE(T.root)}
+x = r
+while true
+	y = x
+	if k < x.key
+		if x.left == T.nil
+			x.left = \ALGO{NEW-NODE(k)}
+			break
+		x = \ALGO{COPY-NODE(x.left)}
+		y.left = x
+	else
+		if x.right == T.nil
+			x.right = \ALGO{NEW-NODE(k)}
+			break
+		x = \ALGO{COPY-NODE(x.right)}
+		y.right = x
+	y = x
+return r
+\stopCLRSCODE
+\stopANSWER
+
+\startitem%c
+如果持久二叉搜索樹 $T$ 的高度爲 $h$，
+ \ALGO{PERSISTENT-TREE-INSERT} 的時間和空間需求分別是多少？
+（空間需求與新分配的節點數成正比）
+\stopitem
+
+\startANSWER
+時間和空間都是 $O(h)$。
+\stopANSWER
+
+\startitem%d
+假設在每個節點中增加一個屬性，指向其父節點。
+這種情況下， \ALGO{PERSISTENT-TREE-INSERT} 需要做一些額外的復制工作。
+證明： \ALGO{PERSISTENT-TREE-INSERT} 的時間需求和空間需求爲 $\Omega(n)$，
+其中 $n$ 爲樹中的節點個數。
+\stopitem
+
+\startANSWER
+父節點屬性的存在使得新樹和舊樹無法共享節點，
+因此每個節點都需要複製一份，
+插入操作會創建 $\Omega(n)$ 個新節點，所需時間爲 $\Omega(n)$。
+\stopANSWER
+
+\startitem%e
+如果可以利用紅黑樹，
+如何保證在每次插入或刪除時，
+最壞情況運行時間和空間均爲 $O(\lg{n})$。
+可以假設沒有重複的關鍵字。
+\stopitem
+
+\startANSWER
+由（a）和（c）可知，高爲 $h$ 的持久二叉搜索樹與普通二叉搜索樹相同，
+插入操作的最壞情況時間都是 $O(h)$。
+紅黑樹的高度 $h=O(\lg n)$，
+因此普通紅黑樹的插入操作需要的時間爲 $O(\lg n)$。
+如果紅黑樹是持久的，要想在時間 $O(\lg n)$ 內完成，
+需要證明兩點：
+
+1）如何在沒有屬性存儲父節點的情況下在 $O(1)$ 時間內找到父節點；
+
+2）在旋轉和着色過程中，需要改變的節點不會超過 $O(\lg n)$。
+
+對於第一點，除了 \ALGO{RB-INSERT}，
+我們還需要一個棧來保存從根節點到插入節點位置整條路徑上的節點，
+然後將棧傳給 \ALGO{RB-INSERT-FIXUP}，
+從而在 $O(1)$ 時間內找到父節點。
+第二點的證明略。
+
+類似的，我們也可以證明刪除操作最壞運行時間依然是 $O(h)$。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM

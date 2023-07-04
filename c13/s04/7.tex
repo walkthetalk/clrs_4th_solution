@@ -6,5 +6,11 @@ Skelton 和 Baron 教授擔心在 \ALGO{RB-DELETE-FIXUP} 的 case 1 開始時，
 \stopEXERCISE
 
 \startANSWER
-//
+可以利用反證法：
+
+如果 case 1 中 $x.p$ 是紅色的，又因爲 $x$ 的兄弟節點 $w$ 也是紅色的，
+就出現了父子均爲紅色的情況，
+違背了紅黑樹的性質 4，出現了矛盾。
+因此 \ALGO{RB-DELETE-UP} 的 case 1 開始時，
+ $x.p$ 肯定是黑色的。
 \stopANSWER

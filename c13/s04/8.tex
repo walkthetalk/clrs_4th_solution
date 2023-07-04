@@ -1,11 +1,15 @@
 \startEXERCISE
-假設用 \ALGO{RB-INSERT} 將一個節點 $x$ 插入一棵紅黑樹，
-緊接着又用 \ALGO{RB-DELETE} 將他從樹中刪除。
-所得紅黑樹與原來的紅黑樹是否相同？
+假設用 \ALGO{RB-INSERT} 將節點 $x$ 插入一棵紅黑樹，
+緊接着又用 \ALGO{RB-DELETE} 將其從樹中刪除。
+所得紅黑樹與原來的紅黑樹是否相同？並證明。
 \stopEXERCISE
 
 \startANSWER
 可能不同。
 新加入節點可能會導致某些旋轉操作，刪除後不會旋轉回來。
 即使樹的結構不變，節點的顏色也可能發生變化。
+
+\externalfigure[e13_4_8-1]
+
+\externalfigure[e13_4_8-2]
 \stopANSWER
