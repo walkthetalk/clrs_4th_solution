@@ -20,11 +20,10 @@
 
 假設樹中每個節點都有屬性 key、 left 和 right，但沒有屬性 parent。
 （參見\inexercise[13.3-6]）
-\startigBase[a]
-\startitem%a
+\startigBase[a]\startitem%a
 對於一棵持久二叉搜索樹（不是紅黑樹，只是一棵二叉搜索樹），
 爲插入一個關鍵字或刪除一個節點，哪些節點會發生變化。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 從根結點開始，一直到要插入或刪除的節點，
@@ -33,11 +32,11 @@
 也就是說，對於所要插入或刪除的節點，他的所有祖先節點都需要改變。
 \stopANSWER
 
-\startitem%b
+\startigBase[continue]\startitem%b
 請寫出過程 \ALGO{PERSISTENT-TREE-INSERT}，
 其輸入是持久樹 $T$ 和要插入的關鍵字 $k$，
 返回的是將 $k$ 插入 $T$ 後所得新的持久樹 $T'$。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 \CLRSH{PERSISTENT-TREE-INSERT(T, k)}
@@ -66,22 +65,22 @@ return r
 \stopCLRSCODE
 \stopANSWER
 
-\startitem%c
+\startigBase[continue]\startitem%c
 如果持久二叉搜索樹 $T$ 的高度爲 $h$，
  \ALGO{PERSISTENT-TREE-INSERT} 的時間和空間需求分別是多少？
 （空間需求與新分配的節點數成正比）
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 時間和空間都是 $O(h)$。
 \stopANSWER
 
-\startitem%d
+\startigBase[continue]\startitem%d
 假設在每個節點中增加一個屬性，指向其父節點。
 這種情況下， \ALGO{PERSISTENT-TREE-INSERT} 需要做一些額外的復制工作。
 證明： \ALGO{PERSISTENT-TREE-INSERT} 的時間需求和空間需求爲 $\Omega(n)$，
 其中 $n$ 爲樹中的節點個數。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 父節點屬性的存在使得新樹和舊樹無法共享節點，
@@ -89,12 +88,12 @@ return r
 插入操作會創建 $\Omega(n)$ 個新節點，所需時間爲 $\Omega(n)$。
 \stopANSWER
 
-\startitem%e
+\startigBase[continue]\startitem%e
 如果可以利用紅黑樹，
 如何保證在每次插入或刪除時，
 最壞情況運行時間和空間均爲 $O(\lg{n})$。
 可以假設沒有重複的關鍵字。
-\stopitem
+\stopitem\stopigBase
 
 \startANSWER
 由（a）和（c）可知，高爲 $h$ 的持久二叉搜索樹與普通二叉搜索樹相同，
@@ -117,5 +116,4 @@ return r
 類似的，我們也可以證明刪除操作最壞運行時間依然是 $O(h)$。
 \stopANSWER
 
-\stopigBase
 \stopPROBLEM

@@ -1,0 +1,109 @@
+
+\startPROBLEM
+（AVL 樹）
+ AVL 樹是一種\emph{高度平衡的（height balanced）}二叉搜索樹：
+對任一節點 $x$，其左子樹和右子樹的高度最多差 1。
+要實現 AVL 樹，
+需要在每個節點內維護一個額外的屬性： $x.h$，即節點 $x$ 的高度。
+另外如同其他二叉搜索樹 $T$，
+令 $T.root$ 指向根節點。
+\startigBase[a]\startitem%a
+證明：一棵有 $n$ 個節點的 AVL 樹高度爲 $O(\lg n)$。
+（\hint 證明高度爲 $h$ 的 AVL 樹至少有 $F_h$ 個節點，
+其中 $F_h$ 是 Fibonacci 數列的第 $h$ 個數）
+\stopitem\stopigBase
+
+\startANSWER
+對於一棵高度爲 $h$ 的 AVL 樹，令 $T(h)$ 爲節點數目的最小值。
+現在來歸納。
+
+對於基準情況， $T(1)\ge T(0)\ge 1$，
+因此 $T(1)\ge F_1$ 且 $T(0)\ge F_0$。
+
+現在假設對於所有 $h'<h$，都有 $T(h')\ge F_{h'}$。
+高度爲 $h$ 的 AVL 樹中的根節點有兩個孩子：
+一個孩子高度爲 $h-1$，而另一個孩子高度至少爲 $h-2$。
+高度爲 $h$ 的 AVL 樹中節點數用 $T(h-1)$ 和 $T(h-2)$ 表示爲 $T(h)\ge T(h-1)+T(h-2)$。
+
+由歸納假設，這意味着 $T(h)\ge F_{h-1} + F_{h-2} = F_h$。
+所以 $F_h\ge 1.6^h$，因此 $n\ge 1.6^h$，即 $h=O(\lg n)$。
+\stopANSWER
+
+\startigBase[continue]\startitem%b
+要在 AVL 樹中插入一個節點，
+首先以二叉搜索樹的順序把該節點放在適當的位置上。
+此時，這棵樹的高度可能不再平衡。
+也就是說，某些節點的左子樹和右子樹高度差可能變成 2。
+請描述一個過程 \ALGO{BALANCE(x)}，
+輸入是一棵以 $x$ 爲根的子樹，
+其左子樹與右子樹是高度平衡的，且高度差最多是 2，
+即 $|x.right.h - x.left.h|\le 2$，
+將這棵子樹轉換成高度平衡的，
+並返回這棵子樹的新的根節點。
+（\hint 使用旋轉）
+\stopitem\stopigBase
+
+\startANSWER
+\CLRSH{BALANCE(x)}
+\startCLRSCODE
+if \ALGO{ABS(x.left.h - x.right.h)} \le 1
+	return x
+
+if x.left.h < x.right.h
+	y = x.right
+	if y.left.h > y.right.h
+		\ALGO{RIGHT-ROTATE(y)}
+	return \ALGO{LEFT-ROTATE(x)}
+else
+	y = x.right
+	if y.right.h > y.left.h
+		\ALGO{LEFT-ROTATE(y)}
+	return \ALGO{RIGHT-ROTATE(x)}
+\stopCLRSCODE
+\stopANSWER
+
+\startigBase[continue]\startitem%c
+利用（b）實現過程 \ALGO{AVL-INSERT(x, z)}，
+輸入 $x$ 爲 AVL 樹中的節點， $z$ 是一個新節點（其關鍵字已經填好），
+然後將 $z$ 添加到以 $x$ 爲根的子樹中，
+並保持 $x$ 是一棵 AVL 樹的根節點。
+和 12.3 節中的 \ALGO{TREE-INSERT} 一樣，
+假設 $z.key$ 已經填好，且 $z.left=NIL$， $z.right=NIL$；
+再假設 $z.h=0$。
+也就是說要把節點 $z$ 插入到 AVL 樹 $T$ 中，
+調用 \ALGO{AVL-INSERT(T.root, z)} 即可。
+\stopitem\stopigBase
+
+\startANSWER
+\CLRSH{AVL-INSERT(x, z)}
+\startCLRSCODE
+if x == NIL
+	z.h = 0
+	return z
+
+if z.key \le x.key
+	y = \ALGO{AVL-INSERT(x.left, z)}
+	x.left = y
+else
+	y = \ALGO{AVL-INSERT(x.right, z)}
+	x.right = y
+
+y.parent = x
+x.h = y.h + 1
+x = \ALGO{BALANCE(x)}
+return x
+\stopCLRSCODE
+\stopANSWER
+
+\startigBase[continue]\startitem%d
+證明：在節點數爲 $n$ 的 AVL 樹上運行時，
+ \ALGO{AVL-INSERT} 所花時間爲 $O(\lg n)$，
+旋轉次數也是 $O(\lg n)$。
+\stopitem\stopigBase
+
+\startANSWER
+樹的高度爲 $O(\lg n)$，遞歸調用的次數最多爲 $O(\lg n)$，
+所以時間和旋轉次數均爲 $O(\lg n)$。
+\stopANSWER
+
+\stopPROBLEM
