@@ -1,0 +1,51 @@
+\startEXERCISE
+對於矩陣規模序列 $\langle 5,10,3,12,5,50,6\rangle$，
+求其矩陣鏈相乘最優括號化方案。
+\stopEXERCISE
+
+\startANSWER
+\bTABLE[align=center,frame=off,offset=.2cm]
+\setupTABLE[r][1][bottomframe=on]
+\setupTABLE[c][1][rightframe=on]
+\bTR \bTD 矩陣   \eTD
+  \bTD $A_1$ \eTD
+  \bTD $A_2$ \eTD
+  \bTD $A_3$ \eTD
+  \bTD $A_4$ \eTD
+  \bTD $A_5$ \eTD
+  \bTD $A_6$ \eTD
+\eTR
+\bTR \bTD 規模 \eTD
+  \bTD $5\times10$ \eTD
+  \bTD $10\times3$ \eTD
+  \bTD $3\times12$ \eTD
+  \bTD $12\times5$ \eTD
+  \bTD $5\times50$ \eTD
+  \bTD $50\times6$ \eTD
+\eTR
+\eTABLE
+
+解決此問題，可以直接用 \ALGO{MATRIX-CHAIN-ORDER(p)}，
+其中：
+
+\startformula
+p = \langle 5,10,3,12,5,50,6\rangle
+\stopformula
+
+最優化方案爲：$(A_{5\times10}A_{10\times3})
+\left((A_{3\times12}A_{12\times5})
+      (A_{5\times50}A_{50\times6})
+\right)$，即 $(A_1 A_2)\left((A_3 A_4)(A_5 A_6)\right)$。
+也可以使用下列公式：
+
+\startformula
+m[i,j]=\startmathcases
+\NC 0 \NC \text{如果 $i = j$，} \NR
+\NC \min_{i\le k < j}\left\{m[i,k]+m[k+1,j] + p_{i-1} p_k p_j\right\} \NC \text{如果 $i<j$。} \NR
+\stopmathcases
+\stopformula
+其中對於所有 $i$，都有 $m[i,i] = 0$，
+可用以計算 $m[i,i+1]$。
+\blank[.5cm]
+\externalfigure[e14_2_1-1]
+\stopANSWER

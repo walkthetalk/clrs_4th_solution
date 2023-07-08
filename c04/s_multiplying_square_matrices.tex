@@ -6,7 +6,7 @@
 \startEXERCISE
 \ALGO{MATRIX-MULTIPLY-RECURSIVE} 用於計算兩個大小均爲 $n\times n$ 的矩陣的乘積，
 將其進行推廣，使得 $n$ 不必是 $2$ 的冪。
-用遞歸的方式給出其運行時間。
+用遞迴的方式給出其運行時間。
 並分析最壞運行時間爲 $\Theta(n^3)$。
 \stopEXERCISE
 
@@ -64,7 +64,7 @@ T(n) = 8T(n/2) + \Theta(1)
 要計算兩個矩陣 $A$ 和 $B$ 之和，
 其大小均爲 $n\times n$，
 可以將其都劃分爲四個 $n/2\times n/2$ 子陣，
-然後遞歸對相對應的子陣求和，
+然後遞迴對相應的子陣求和，
 試寫出矩陣求和分治算法 \ALGO{MATRIX-ADD-RECURSIVE} 的僞碼。
 假設劃分子陣、計算索引所用時間爲 $\Theta(1)$。
 寫出其最壞運行時間的遞迴式，並求解。

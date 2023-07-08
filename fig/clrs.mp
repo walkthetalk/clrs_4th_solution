@@ -1,6 +1,6 @@
 % fill color 0
 color clrsCfA;
-clrsCfA := (0.95,0.9,0.74);
+clrsCfA := (1.0,0.9,0.67);
 % fill color 1
 color clrsCfB;
 clrsCfB := (0.7,0.9,1.0);
