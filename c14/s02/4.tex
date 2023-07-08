@@ -1,0 +1,34 @@
+\startEXERCISE
+對於長度爲 $n$ 的矩陣鏈乘法問題，
+描述一下子問題圖是什麼樣子的。
+他包含多少個頂點？包含多少條邊？這些邊分別鏈接哪些頂點？
+\stopEXERCISE
+
+\startANSWER
+令矩陣鏈爲 $\langle A_1,A_2,\cdots,A_n\rangle$，
+其乘積爲 $A_1 A_2 \cdots A_n$，
+設 $A_{i:j}$ 在子問題圖中對應的是頂點 $v_{i:j}$，
+其中 $i\le j$。
+
+如果 $i=j$，那麼只有一個頂點，沒有邊。
+
+如果 $i<j$，假設 $k$ 一定，則將其劃分爲兩個頂點： $v_{i:k}$ 和 $v_{k+1:j}$ 和一條邊，
+其中 $i\le k < j$。 $k$ 的值有 $j-i$ 種。
+
+頂點數量：
+\startformula
+\sum_{i=1}^{n}\sum_{j=i}^{n} 1 = \frac{n(n+1)}{2} = \frac{n^2+n}{2}。
+\stopformula
+
+邊的數量：
+\startformula\startmathalignment
+\NC \sum_{i=1}^{n}\sum_{j=i}^{n}(j-i)
+   \NC = \sum_{i=1}^{n}\sum_{t=0}^{n-i}t \mathcomment{$(t=j-i)$} \NR
+\NC\NC = \sum_{i=1}^{n}\frac{(n-i)(n-i+1)}{2} \NR
+\NC\NC = \frac{1}{2}\sum_{r=0}^{n-1}r^2 + r \mathcomment{$(r=n-i)$} \NR
+\NC\NC = \frac{1}{2}(\sum_{r=0}^{n-1}r^2 + \sum_{r=0}^{n-1}r) \NR
+\NC\NC = \frac{1}{2}\left(\frac{(n-1)n(2n-1)}{6} + \frac{n(n-1)}{2}\right)\NR
+\NC\NC = \frac{(n-1)n(n+1)}{6}\NR
+\NC\NC = \frac{(n^3-n)}{6} \NR
+\stopmathalignment\stopformula
+\stopANSWER
