@@ -1,0 +1,36 @@
+\startEXERCISE
+Fibonacci 數列可以用遞迴式（3.31）定義。
+設計一個運行時間爲 $O(n)$ 的動態規劃算法計算第 $n$ 個 Fibonacci 數。
+畫出子問題圖。圖中有多少頂點和邊？
+附遞迴式（3.31）：
+
+\startformula
+F_i = \startmathcases
+\NC 0 \NC \text{如果 $i=0$，} \NR
+\NC 1 \NC \text{如果 $i=1$，} \NR
+\NC F_{i-1} + F_{i-2} \NC \text{如果 $i\ge 2$。} \NR
+\stopmathcases
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{Fibonacci(n)}
+\startCLRSCODE
+F = \ALGO{NEW-ARRAY(0,n)}
+F[0] = 1
+F[1] = 1
+for i = 2 to n
+	F[i] = F[i - 1] + F[i - 2]
+return F[n]
+\stopCLRSCODE
+
+圖中有 n 個節點，數列中的每個元素是一個節點。
+所有邊都是由稍大的子問題指向稍小的子問題：
+如由 $F_2$ 起始的兩條邊分別指向 $F_1$ 和 $F_0$。
+除了 $0$ 和 $1$ 兩個節點外，
+其他節點均會發出兩條邊指向前置節點，
+即總邊數爲 $2\times(n-1)=2n-2$。
+節點數爲 $n+1$。
+
+\externalfigure[e14_1_6-1]
+\stopANSWER

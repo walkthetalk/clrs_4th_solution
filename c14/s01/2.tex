@@ -1,0 +1,48 @@
+\startEXERCISE
+下面描述的“貪心”策略，可以用來解決鋼條切割問題，
+但並不能保證結果是最優的，請給出反例。
+
+令鋼條的長度為 $i$，定義\emph{密度}為 $p_i / i$，即每英寸的價值。
+貪心策略就是先將長度為 $n$ 的鋼條切下一段，長度爲 $i$，
+其中 $1\le i \le n$，使其密度最高。
+剩下的長度爲 $n-i$，用此策略繼續切割。
+\stopEXERCISE
+
+\startANSWER
+\bTABLE[align=center]
+\bTR \bTD 長度 $i$   \eTD \bTD 1 \eTD \bTD 2 \eTD \bTD 3 \eTD \bTD 4 \eTD\eTR
+\bTR \bTD 價格 $p_i$ \eTD \bTD 1 \eTD \bTD 20\eTD \bTD 33\eTD \bTD 36\eTD\eTR
+\bTR \bTD 密度 $p_i/i$ \eTD \bTD 1\eTD \bTD 10\eTD \bTD 11\eTD \bTD 9\eTD\eTR
+\eTABLE
+
+假設給定鋼條長度爲 $4$，
+按貪心策略先切下長度爲 $3$ 的一段，價格爲 $33$，
+剩下一段價格爲 $1$，總價爲 $34$。
+但最優解是長度均爲 $20$ 的兩段，總價爲 $40$。
+
+更一般的：
+
+\bTABLE[align=center]
+\bTR \bTD 長度 $i$   \eTD \bTD $l_0$ \eTD \bTD $l_1$ \eTD \bTD $l_2$ \eTD \eTR
+\bTR \bTD 價格 $p_i$ \eTD \bTD $p_0$ \eTD \bTD $p_1$\eTD \bTD $p_2$\eTD \eTR
+\bTR \bTD 密度 $p_i/i$ \eTD \bTD $d_0$\eTD \bTD $d_1$\eTD \bTD $d_2$\eTD\eTR
+\eTABLE
+
+令 $l_0 < l_1 < l_2$， $d_0<d_1<d_2$，且 $l_0 + l_2 = 2 l_1$。
+則對於長度爲 $2l_1$ 的鋼條，貪心策略會將其截成長度爲 $l_2$ 和 $l_0$ 的兩段，
+總價爲 $l_0 d_0 + l_2 d_2$。
+當然也可以截成長度均爲 $l_1$ 的兩段，則總價會變爲 $2 l_1 d_1$。
+若貪心策略所得不是最優解，則 $l_0 d_0 + l_2 d_2 < 2 l_1 d_1$。
+即：
+
+\startsplitformula\startmathalignment
+\NC l_0 d_0 + l_2 d_2 \NC < 2 l_1 d_1 \NR
+\NC l_0 d_0 + l_2 d_2 \NC < (l_0 + l_2) d_1 \NR
+\NC l_0 d_0 + l_2 d_2 \NC < l_0 d_1 + l_2 d_1 \NR
+\NC l_2 (d_2 - d_1)   \NC < l_0 (d_1 - d_0) \NR
+\stopmathalignment\stopsplitformula
+
+只要滿足如上不等式，貪心策略所得就不是最優解。
+例如， $l_0=1,l_1=2,l_2=3$， $d_0=1,d_1=5,d_2=6$，
+對於長度爲 $4$ 的鋼條，按貪心策略所得就不是最優解。
+\stopANSWER

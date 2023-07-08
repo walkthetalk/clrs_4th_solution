@@ -1,0 +1,30 @@
+\startEXERCISE
+修改 \ALGO{MEMOIZED-CUR-ROD}，使之不僅返回最優收益值，還返回切割方案。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MEMOIZED-CUT-ROD'(p, n)}
+\startCLRSCODE
+// 創建兩個新數組 $r[0..n]$ 和 $s[0..n]$
+for i = 0 to n
+	r[i] = -\infty
+return \ALGO{MEMOIZED-CUT-ROD-AUX'(p, n, r, s)} and s
+\stopCLRSCODE
+
+\CLRSH{MEMOIZED-CUT-ROD-AUX'(p, n, r, s)}
+\startCLRSCODE
+if r[n] \ge 0	// 已有長度爲 $n$ 的解
+	return r[n]
+if n == 0
+	q = 0
+else
+	q = -\infty
+	for i = 1 to n	// $i$ 是第一次截的位置
+		tmp = p[i] + \ALGO{MEMOIZED-CUT-ROD-AUX'(p, n-i, r, s)}
+		if q < tmp
+			q = tmp
+			s[n] = i	// 記錄長度爲 $n$ 時第一次截的位置
+r[n] = q	// 記錄長度爲 $n$ 的解
+return q
+\stopCLRSCODE
+\stopANSWER

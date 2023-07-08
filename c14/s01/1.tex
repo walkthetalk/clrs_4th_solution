@@ -1,0 +1,25 @@
+\startEXERCISE
+由公式 14.3 和初始條件 $T(0)=1$，證明公式 14.4 成立。
+
+附公式 14.3：
+\startformula
+T(n) = 1 + \sum_{j=0}^{n-1} T(j)
+\stopformula
+
+附公式 14.4：
+\startformula
+T(n) = 2^n
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+$n=0$ 時顯然成立。
+
+如果 $n\le i$ 時成立，則 $n=i+1$ 時有：
+\startsplitformula\startmathalignment
+\NC T(i+1) \NC = 1 + \sum_{j=0}^{i} T(j) \NR
+\NC        \NC = 1 + \sum_{j=0}^{i} 2^j \NR
+\NC        \NC = 1 + 2^{i+1} - 1 \NR
+\NC        \NC = 2^{i+1} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

@@ -1,0 +1,68 @@
+\startEXERCISE
+修改 \ALGO{CUT-ROD} 和 \ALGO{MEMOIZED-CUR-ROD-AUX}，
+使得 \CLRSCODE{for} 循環執行次數最多爲 $\lfloor n/2\rfloor$，
+而不是 $n$。
+除此之外還需要修改什麼？對運行時間有什麼影響？附：
+
+\CLRSH{MEMOIZED-CUT-ROD(p, n)}
+\startCLRSCODE
+r = \ALGO{NEW-ARRAY(0,n)}	// 用於記錄解
+for i = 0 to n
+	r[i] = -\infty
+return \ALGO{MEMOIZED-CUT-ROD-AUX(p, n, r)}
+\stopCLRSCODE
+
+\CLRSH{MEMOIZED-CUT-ROD-AUX(p, n, r)}
+\startCLRSCODE
+if r[n] \ge 0	// 長度爲 $n$ 時已有解？
+	return r[n]
+if n == 0
+	q = 0
+else
+	q = -\infty
+	for i = 1 to n	// $i$ 是第一次截的位置
+ 		q = \max \{q, p[i] + \ALGO{MEMOIZED-CUT-ROD-AUX(p, n - i, r)}\}
+
+r[n] = q	// 記錄長度爲 $n$ 的解
+return q
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+除了直接修改 \CLRSCODE{for} 循環的次數外，
+還需要修改比較條件，另外還需要修改 $q$ 的初始化。
+關於最後一點，有兩個原因：首先循環可能根本就不執行，如果不想修改 $q$ 的初始化，
+也可以在初始化 $r$ 時進行處理 $r[1] = p[1]$；
+其次 循環中遞迴調用時 $n$ 最多爲 $n-1$，即 $1+(n-1)$ 的情況，
+不會處理 $0+n$ 的情況，也就是說會漏掉 $n$ 的情況，
+因此需要將 $q$ 初始化爲 $p[n]$ 參與比較。
+爲簡化代碼，以下程序做了一定優化：
+
+\CLRSH{MEMOIZED-CUT-ROD'(p, n)}
+\startCLRSCODE
+if n \le 0
+	return 0
+
+r = \ALGO{NEW-ARRAY(1,n)}	// 用於記錄解
+for i = 1 to n
+	r[i] = -\infty
+return \ALGO{MEMOIZED-CUT-ROD-AUX'(p, n, r)}
+\stopCLRSCODE
+
+\CLRSH{MEMOIZED-CUT-ROD-AUX'(p, n, r)}
+\startCLRSCODE
+// $n$ 肯定大於 $0$
+if r[n] \ge 0	// 長度爲 $n$ 時已有解？
+	return r[n]
+
+q = p[n]	\hfill // 修改點 1
+for i = 1 to \lfloor n/2 \rfloor \hfill // 修改點 2
+	q = \max \{q,
+		\ALGO{MEMOIZED-CUT-ROD-AUX'(p, i, r)} \hfill // 修改點 3
+		+ \ALGO{MEMOIZED-CUT-ROD-AUX'(p, n - i, r)}\}
+
+r[n] = q
+return q
+\stopCLRSCODE
+
+\stopANSWER

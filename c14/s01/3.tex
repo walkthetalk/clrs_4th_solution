@@ -1,0 +1,23 @@
+\startEXERCISE
+我們來修改一下鋼條切割問題，
+除了鋼條段具有不同價格 $p_i$，
+每次切割還要付出固定成本 $c$。
+這樣，總收益就等於鋼條段價格之和減去切割成本。
+設計一個動態規劃算法解決修改後的鋼條切割問題。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{EXTENDED2-BOTTOM-UP-CUT-ROD(p, n)}
+\startCLRSCODE
+// 創建兩個新數組 $r[0..n]$ 和 $s[0..n]$
+r[0] = 0
+for j = 1 to n
+	q = -\infty
+	for i = 1 to j
+		if q < p[i] + r[j - i] - c
+			q = p[i] + r[j - i] - c
+			s[j] = i
+	r[j] = q
+return r and s
+\stopCLRSCODE
+\stopANSWER
