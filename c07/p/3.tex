@@ -98,10 +98,10 @@ E[T(n)] = \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n)
 \startsplitformula\startmathalignment
 \NC E[T(n)]
    \NC=   \frac{2}{n}\sum_{q=2}^{n-1}E[T(q)] + \Theta(n) \NR
-\NC\NC\le \frac{2}{n}\sum_{q=2}^{n-1}aq\lg{q} + \Theta(n) \qquad \text{（根據猜測）} \NR
+\NC\NC\le \frac{2}{n}\sum_{q=2}^{n-1}aq\lg{q} + \Theta(n) \mathcomment{（根據猜測）} \NR
 \NC\NC\le \frac{2a}{n}\left(\frac{1}{2}n^2\lg{n} - \frac{1}{8}n^2\right)
-                 + \Theta(n) \qquad \text{（\informula[7_4]）} \NR
-\NC\NC=   an\lg{n} - \frac{a}{4}n + \Theta(n) \qquad \text{（根據 $\Theta$ 記號的定義）} \NR
+                 + \Theta(n) \mathcomment{（\informula[7_4]）} \NR
+\NC\NC=   an\lg{n} - \frac{a}{4}n + \Theta(n) \mathcomment{（根據 $\Theta$ 記號的定義）} \NR
 \NC\NC\le an\lg{n} \NR
 \stopmathalignment\stopsplitformula
 \stopANSWER

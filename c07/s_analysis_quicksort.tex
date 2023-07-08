@@ -18,7 +18,7 @@ T(n) = \max\{T(q) + T(n-q-1): 0 \le q \le n-1\} + \Theta(n)
 \NC      \NC\ge \max_{0 \le q \le n-1} (cq^2 - 2q + c(n-q-1)^2 - 2n - 2q -1) + \Theta(n) \NR
 \NC      \NC\ge c\max_{0 \le q \le n-1} (q^2 + (n-q-1)^2 - (2n + 4q + 1)/c) + \Theta(n) \NR
 \NC      \NC\ge cn^2 - c(2n-1) + \Theta(n) \NR
-\NC      \NC\ge cn^2 - 2cn + 2c \qquad (c \le 1) \NR
+\NC      \NC\ge cn^2 - 2cn + 2c \mathcomment{$(c \le 1)$} \NR
 \NC      \NC\ge cn^2 - 2n \NR
 \stopmathalignment\stopsplitformula
 \stopANSWER
@@ -65,7 +65,7 @@ $f'(q)$ 是連續的。
 與比較次數期望值的推理類似，只是方向不同：
 \startsplitformula\startmathalignment
 \NC E[X] \NC=   \sum_{i=1}^{n-1} \sum_{j=i+1}^n \frac{2}{j-i+1} \NR
-\NC      \NC=   \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k + 1} \qquad (k \ge 1) \NR
+\NC      \NC=   \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k + 1} \mathcomment{$(k \ge 1)$} \NR
 \NC      \NC\ge \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{2k} \NR
 \NC      \NC\ge \sum_{i=1}^{n-1} \Omega(\lg{n}) \NR
 \NC      \NC=   \Omega(n\lg{n}) \NR

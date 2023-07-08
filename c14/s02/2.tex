@@ -1,0 +1,20 @@
+\startEXERCISE
+設計遞迴算法 \ALGO{MATRIX-CHAIN-MULTIPLY(A, s, i, j)}，
+實現矩陣鏈乘法最優化的計算過程，
+輸入參數包括矩陣序列 $\langle A_1, A_2, \cdots, A_n \rangle$，
+由 \ALGO{MATRIX-CHAIN-ORDER} 得到的表 $s$，以及下標 $i$ 和 $j$。
+（初始調用應爲 \ALGO{MATRIX-CHAIN-MULTIPLY(A, s, 1, n)}。）
+假設 \ALGO{RECTANGULAR-MATRIX-MULTIPLY(A,B)} 返回的是 $A$ 和 $B$ 的乘積。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MATRIX-CHAIN-MULTIPLY(A, s, i, j)}
+\startCLRSCODE
+if i == j
+	return A[i]
+
+X = MATRIX-CHAIN-MULTIPLY(A, s, i, s[i,j])
+Y = MATRIX-CHAIN-MULTIPLY(A, s, s[i,j] + 1, j)
+return MATRIX-MULTIPLY(X, Y)
+\stopCLRSCODE
+\stopANSWER

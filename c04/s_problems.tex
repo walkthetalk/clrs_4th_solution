@@ -248,8 +248,8 @@ $\Theta(n^2\sqrt{n}) = \Theta(n^{2.5})$ \hfill（主定理 \m{\log_2{4} = 2 < 2.
 \startANSWER
 猜測 $T(n)=\Theta(n)$：
 \startsplitformula\startmathalignment
-\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \le (7/8)cn + n \le cn = O(n) \quad (c \ge 8) \NR
-\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \ge (7/8)cn + n \ge cn = \Omega(n) \quad (c \le 8) \NR
+\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \le (7/8)cn + n \le cn = O(n) \mathcomment{$(c \ge 8)$} \NR
+\NC T(n) \NC = cn/2 + cn/4 + cn/8 + n \ge (7/8)cn + n \ge cn = \Omega(n) \mathcomment{$(c \le 8)$} \NR
 \stopmathalignment\stopsplitformula
 \stopANSWER
 
@@ -277,7 +277,7 @@ $\Theta(n^2\sqrt{n}) = \Theta(n^{2.5})$ \hfill（主定理 \m{\log_2{4} = 2 < 2.
 \NC      \NC= \sum_{i=0}^{n-1}\lg(n - i) \NR
 \NC      \NC= \sum_{i=1}^{n}\lg{i} \NR
 \NC      \NC= \lg(n!) \NR
-\NC      \NC= \Theta(n\lg{n}) \qquad \text{$n^{n/2}\le n! \le n^n$} \NR
+\NC      \NC= \Theta(n\lg{n}) \mathcomment{$n^{n/2}\le n! \le n^n$} \NR
 \stopmathalignment\stopsplitformula
 \stopANSWER
 
@@ -327,7 +327,7 @@ $\Theta(n^2\sqrt{n}) = \Theta(n^{2.5})$ \hfill（主定理 \m{\log_2{4} = 2 < 2.
 \startsplitformula\startmathalignment
 \NC F_0 \NC = 0 \NR
 \NC F_1 \NC = 1 \NR
-\NC F_i \NC = F_{i-1} + F_{i-2} \qquad \text{若 \m{i \ge 2}} \NR
+\NC F_i \NC = F_{i-1} + F_{i-2} \mathcomment{若 $i \ge 2$} \NR
 \stopmathalignment\stopsplitformula
 
 \startigBase[a]
@@ -573,8 +573,8 @@ A[i,j] + A[i+1,j+1] \le A[i,j+1] + A[i+1,j]
 第一步， \m{k=i+1}，由已知條件顯然成立。
 歸納時，我們假設對於 $k$ 成立，我們需要證明對於 $k+1$ 仍然成立。
 \startsplitformula\startmathalignment[n=1]
-\NC A[i, j] + A[k, j+1] \le A[i, j+1] + A[k, j] \quad (assumption) \NR
-\NC A[k, j] + A[k+1, j+1] \le A[k, j+1] + A[k+1, j] \quad (given) \NR
+\NC A[i, j] + A[k, j+1] \le A[i, j+1] + A[k, j] \mathcomment{(assumption)} \NR
+\NC A[k, j] + A[k+1, j+1] \le A[k, j+1] + A[k+1, j] \mathcomment{(given)} \NR
 \NC \Downarrow \NR
 \NC A[i, j] + A[k, j+1] + A[k, j] + A[k+1, j+1] \le A[i, j+1] + A[k, j] + A[k, j+1] + A[k+1, j] \NR
 \NC \Downarrow \NR
@@ -622,9 +622,10 @@ f(1)\le f(2)\le\cdots\le f(m)
 \startformula
 A[j, a] + A[i, b] \le A[i, a] + A[j, b]
 \stopformula
-但是\startsplitformula\startmathalignment
-\NC A[j, a] \ge A[i, a] \NC \quad (A[i,a] \text{ 最小}) \NR
-\NC A[i, b] \ge A[j, b] \NC \quad (A[j,b] \text{ 最小}) \NR
+但是
+\startsplitformula\startmathalignment
+\NC A[j, a] \ge A[i, a] \NC \mathcomment{($A[i,a]$ 最小)} \NR
+\NC A[i, b] \ge A[j, b] \NC \mathcomment{($A[j,b]$ 最小)} \NR
 \stopmathalignment\stopsplitformula
 隱含\startsplitformula\startmathalignment[n=1]
 \NC A[j, a] + A[i, b] \ge A[i, a] + A[j, b] \NR

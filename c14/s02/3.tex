@@ -1,0 +1,22 @@
+\startEXERCISE
+用代入法證明遞迴公式（14.6）的結果爲 $\Omega(2^n)$。附公式（14.6）：
+\startformula
+P(n) = \startmathcases
+\NC 1 \NC \text{如果 $n = 1$，} \NR
+\NC \sum_{k=1}^{n-1} P(k) P(n-k) \NC \text{如果 $n\ge 2$。} \NR
+\stopmathcases
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+猜測 $P(k) \ge c 2^k$，則：
+\startsplitformula\startmathalignment
+\NC P(n+1)
+    \NC \ge \sum_{k=1}^{n} c 2^k \cdot c 2^{n-k} \NR
+\NC \NC = \sum_{k=1}^{n-1} c^2 2^n \NR
+\NC \NC = c^2 (n-1) 2^n \NR
+\NC \NC \ge c^2 2^n \mathcomment{$(n\ge 2)$}\NR
+\NC \NC \ge c 2^n \mathcomment{$(c\ge 1)$}\NR
+\NC \NC = \Omega(2^n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
