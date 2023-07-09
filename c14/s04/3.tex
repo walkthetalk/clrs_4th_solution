@@ -1,0 +1,30 @@
+\startEXERCISE
+設計 \ALGO{LCS-LENGTH} 帶備忘的版本，運行時間爲 $O(mn)$。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MEMORIZED-LCS-LENGTH(X, Y, c, i, j)}
+\startCLRSCODE
+if c[i, j] >= 0
+	return c[i, j]
+if i == 0 or j == 0
+	c[i, j] = 0
+	return 0
+if X[i] == Y[j]
+	c[i, j] = \ALGO{MEMORIZED-LCS-LENGTH(X, Y, c, i-1, j-1) + 1}
+else
+	c[i, j] = \max(\ALGO{MEMORIZED-LCS-LENGTH(X, Y, c, i-1, j)},
+			\ALGO{MEMORIZED-LCS-LENGTH(X, Y, c, i, j-1)})
+return c[i, j]
+\stopCLRSCODE
+
+\CLRSH{LCS-LENGTH(X, Y, m, n)}
+\startCLRSCODE
+\ALGO{NEW-ARRAY(c[0:m, 0:n])}
+for i = 0 to m
+for j = 0 to n
+	c[i, j] = -1
+\ALGO{MEMOIZED-LCS-LENGTH(c, X, Y, m, n)}
+return c
+\stopCLRSCODE
+\stopANSWER

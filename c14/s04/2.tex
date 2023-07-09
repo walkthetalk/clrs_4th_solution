@@ -1,0 +1,23 @@
+\startEXERCISE
+設計僞碼，利用完整的表 $c$ 及
+原始序列 $X=\langle x_1, x_2, \ldots, x_m \rangle$
+和 $Y=\langle y_1, y_2, \ldots, y_n\rangle$ 來重構 LCS，
+要求運行時間爲 $O(m+n)$，不能使用表 $b$。
+\stopEXERCISE
+
+\startANSWER
+算法如下，調用 \ALGO{PRINT-LCS(c, X, Y, m, n)} 即可。
+
+\CLRSH{PRINT-LCS(c, X, Y, i, j)}
+\startCLRSCODE
+if i == 0 or j == 0
+	return
+if X[i] == Y[j]
+	\ALGO{PRINT-LCS(c, X, Y, i-1, j-1)}
+	printf X[i]
+elseif c[i-1, j] >= c[i, j-1]
+	\ALGO{PRINT-LCS(c, X, Y, i-1, j)}
+else
+	\ALGO{PRINT-LCS(c, X, Y, i, j-1)}
+\stopCLRSCODE
+\stopANSWER

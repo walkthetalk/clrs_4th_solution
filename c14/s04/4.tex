@@ -1,0 +1,15 @@
+\startEXERCISE
+說明如何只使用表 c 中 $2 \times \min\{m,n\}$ 個表項
+及 $O(1)$ 的額外空間來計算 LCS 的長度。
+然後說明如何只用 $\min\{m,n\}$ 個表項
+及 $O(1)$ 的額外空間完成相同的工作。
+\stopEXERCISE
+
+\startANSWER
+選取元素個數少的序列作爲 Y。
+計算 c 中某一行的值時，僅需要上一行的值。
+
+進一步優化後，計算 $c[i,j]$ 時，僅需保留
+$c[i, k], 1\le k < j-1$、
+$c[i-1, k], k \ge j-1$ 即可。
+\stopANSWER

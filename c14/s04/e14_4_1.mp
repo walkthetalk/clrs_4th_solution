@@ -1,4 +1,5 @@
 input TEX;
+input clrs;
 
 bboxmargin := 0;
 
@@ -13,12 +14,12 @@ image(
 	i := X.len;
 	j := Y.len;
 	forever:
-		fill fr shifted (j * gsize, -i * gsize) withcolor .8 white;
+		fill fr shifted (j * gsize, -i * gsize) withcolor clrsCfB;
 		exitif ((i = 0) or (j = 0));
 
 		if b[i][j] = "lu":
-			fill shadow shifted (j * gsize, 1 * gsize) withcolor .8 white;
-			fill shadow shifted (-1 * gsize, -i * gsize) withcolor .8 white;
+			fill shadow shifted (j * gsize, 1 * gsize) withcolor clrsCfB;
+			fill shadow shifted (-1 * gsize, -i * gsize) withcolor clrsCfB;
 
 			i := i - 1;
 			j := j - 1;
