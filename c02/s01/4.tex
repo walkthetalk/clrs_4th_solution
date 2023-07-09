@@ -1,0 +1,21 @@
+\startEXERCISE[exercise:linear_earch]
+線性查找問題：
+
+輸入： 数值 $x$ 以及数列 $A[1:n]$，
+数列 $A$ 中的 $n$ 個數分别为 $\langle a_1, a_2, ..., a_n \rangle$。
+
+輸出：索引 $i$ （滿足 $x = A[i]$），
+或者 $\NIL$（如果 $A$ 中沒有 $x$）。
+
+請給出在數列中搜索 $x$ 的綫性查找算法的僞碼。
+用循環不變性證明算法的正確性，確保滿足循環不變性三個必需的性質。
+\stopEXERCISE
+
+\startANSWER
+\startCLRSCODE
+for j = 1 to A.length
+	if A[i] == v
+		return i
+return NIL
+\stopCLRSCODE
+\stopANSWER

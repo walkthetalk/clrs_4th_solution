@@ -1,0 +1,30 @@
+\startEXERCISE[exercise:bin_search]
+回顧\inexercise[linear_earch] 中的搜索問題，我們發現：
+如果待搜索的子數列已經排好序，
+則搜索算法可以檢查子數列的中間數值，而不是檢查 $v$，
+在下一步搜索時可以直接跳過子數列中的一半數據。
+二分查找算法就是重複這個過程，
+每次都可以使得帶搜索的子數列減半。
+試寫出二分查找算法的僞碼，遍歷、遞迴均可。
+並證明在最壞情況下，此算法的運行時間為 $\Theta(\lg n)$。
+\stopEXERCISE
+\startANSWER
+\CLRSH{BINARY-SEARCH(A, v)}
+\startCLRSCODE
+low = 1
+high = A.length
+while low \le high
+	m = (low + high) / 2
+	if A[m] == v
+		return m
+	if A[m] < v
+		low = m + 1
+	else
+		high = m - 1
+return NIL
+\stopCLRSCODE
+
+\startformula
+T(n) = T(n/2) + c = \Theta(\lg n)
+\stopformula
+\stopANSWER

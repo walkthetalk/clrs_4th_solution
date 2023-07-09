@@ -1,0 +1,91 @@
+\startPROBLEM
+在歸並排序中對小數列使用插入排序。
+
+雖然最壞情況下，歸并排序運行時間為 $\Theta(n\lg n)$，
+而插入排序為 $\Theta(n^2)$，
+但在許多機器上對於小規模問題，
+由於插入排序的常係數很小，
+反而比歸并排序還要快一些。
+因此在歸并排序中，儅子問題規模足夠小時，
+可以改用插入排序來處理。
+嘗試改進歸并排序，
+對於 $n/k$ 個子數列分別進行插入排序，
+然後再用標準的歸并算法進行合并。
+其中 $k$ 待定。
+\startigBase[a]
+
+\item 證明對 $n/k$ 個長度爲 $k$ 的子列進行插入排序，所需時間最長為 $\Theta(nk)$。
+
+\startANSWER
+設對長度爲 $k$ 的數列進行插入排序所用時間爲 \m{a k^2 + b k + c}，則總時間爲：
+\startformula
+\frac{n}{k}(a k^2 + b k + c) = a n k + b n + \frac{c n}{k} = \Theta(nk)
+\stopformula
+\stopANSWER
+
+\item 證明歸並這些子列所需時間最多為 $\Theta(n \lg(n/k))$。
+
+\startANSWER
+對 $a$ 個長度爲 $k$ 的子列進行歸並排序所需時間爲：
+\startformula
+T(a) = \startcases
+\NC 0	\NC \text{若 $a = 1$，} \NR
+\NC 2 T(a/2) + a k \NC \text{若 $a = 2^p$， $p > 0$。} \NR
+\stopcases
+\stopformula
+
+設 $G(a) = \frac{T(a)}{a}$，則：
+\startsplitformula\startalign
+\NC G(a)	\NC = \frac{T(a)}{a} \NR
+\NC 		\NC = \frac{2 T(a/2) + a k}{a} \NR
+\NC		\NC = \frac{T(a/2)}{a/2} + k \NR
+\NC		\NC = G(a/2) + k \NR
+\stopalign\stopsplitformula
+即
+\startformula
+G(a) = \startcases
+\NC 0	\NC \text{若 $a = 1$，}\NR
+\NC G(a/2) + k \NC \text{若 $a = 2^p$， $p > 0$。} \NR
+\stopcases
+\stopformula
+
+設 $H(p) = G(2^p)$，則：
+\startsplitformula\startalign
+\NC H(p)	\NC = G(2^p) \NR
+\NC		\NC = G(2^p/2) + k \NR
+\NC		\NC = G(2^{p-1}) + k \NR
+\NC		\NC = H(p-1) + k \NR
+\stopalign\stopsplitformula
+即
+\startformula
+H(p) = \startcases
+\NC 0	\NC \text{若 $p = 0$，} \NR
+\NC H(p-1) + k \NC \text{若 $p > 0$。} \NR
+\stopcases
+\stopformula
+
+\startsplitformula\startalign
+\NC H(p) \NC = k p \NR
+\NC G(2^p) \NC = kp \NR
+\NC G(a) \NC = k \lg(a) \NR
+\NC \frac{T(a)}{a} \NC = k \lg(a) \NR
+\NC T(a) \NC = k a \lg(a) \NR
+\NC T(\frac{n}{k}) \NC = k \frac{n}{k} \lg(\frac{n}{k}) \NR
+\NC		\NC = n \lg(\frac{n}{k}) \NR
+\NC     \NC \Theta(n \lg(n/k)) \NR
+\stopalign\stopsplitformula
+\stopANSWER
+
+\item 假定修改後的算法運行時間爲 $\Theta(nk+n \lg(n/k))$，
+$k$ 最大爲多少時（作爲 $n$ 的函式），新算法與原歸並排序算法所用時間相同？
+
+\startANSWER
+\startsplitformula\startalign
+\NC k \NC = \lg(n) \NR
+\NC \Theta(nk + n \lg(n/k)) \NC = \Theta(n \lg(n) + n \lg(\frac{n}{\lg(n)}) \NR
+\NC			\NC = \Theta(n \lg(n)) \NR
+\stopalign\stopsplitformula
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM

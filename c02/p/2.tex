@@ -1,0 +1,68 @@
+\startPROBLEM
+冒泡排序的正確性
+
+冒泡排序通俗易懂，但效率不高。
+他通過重複交換兩個（次序顛倒的）相鄰元素的方式進行排序。
+例程 \ALGO{BUBLLE-SORT} 對數列 $A[1:n]$ 進行排序。
+
+\CLRSH{BUBBLE-SORT(A, n)}
+\startCLRSCODE
+for i = 1 to n - 1
+	for j = n downto i + 1
+		if A[j] < A[j - 1]
+			\ALGO{SWAP(A[j],A[j - 1])}
+\stopCLRSCODE
+
+\startigBase[a]
+\item 在數列 $A$ 上執行 \ALGO{BUBBLE-SORT(A,n)} 後變爲數列 $A'$，
+要證明算法的正確性，
+除了要證明
+\startformula
+A'[1]\le A'[2]\le \cdots \le A'[n]
+\stopformula
+之外，還需要證明什麼？
+\stopigBase
+
+\startANSWER
+還需要證明排序完成後，新數列包含舊數列中的所有元素。
+\stopANSWER
+
+\startigBase[continue]
+\item 分析並證明內層 \CLRSCODE{for} 循環的循環不變性。
+要求使用本章所展示的證明方式。
+\stopigBase
+
+\startANSWER
+\TODO{略。}
+\stopANSWER
+
+\startigBase[continue]
+\item 利用上一問所證明的循環不變性的終止條件，
+分析外層循環的循環不變性，並以此證明不等式（2.5）。
+要求使用本章所展示的證明方式。
+\stopigBase
+
+\startANSWER
+\TODO{略。}
+\stopANSWER
+
+\startigBase[continue]
+\item 冒泡排序在最差情況下運行時間怎樣？
+與插入排序相比如何？
+\stopigBase
+
+\startANSWER
+冒泡排序的比較次數最多爲：$\sum_{i=1}^{n-1}{n-i} = \frac{n(n - 1)}{2}$，
+相應的交換次數也一樣，所以最壞情況下所用時間爲 $\Theta(n^2)$，
+與插入排序所用時間相同。
+
+通常，兩種算法最好情況下時間均爲 $\Theta(n)$，
+但是此處的實現卻爲 $\Theta(n^2)$。
+要想在最好情況下達到 $\Theta(n)$，
+在外部循環中，如果沒有發生任何交換就直接返回。
+
+另外，冒泡排序會比插入排序慢很多，
+因爲交換所引入的賦值操作太多了。
+\stopANSWER
+
+\stopPROBLEM

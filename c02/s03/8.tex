@@ -1,0 +1,28 @@
+\startEXERCISE
+在\insection[insersion_sort] 的例程 \ALGO{INSERTION-SORT} 中，
+第 5-7 行的 \CLRSCODE{while} 循環以綫性搜索的方式，
+後向掃描已排好序的子數列 $A[1:j-1]$。
+如果用二分查找（\inexercise[bin_search]）代替綫性查找，該怎麽做？
+這能將最壞情況的運行時間提升到 $\Theta(n\lg n)$ 嗎？
+\stopEXERCISE
+\startANSWER
+不行，二分查找只可能減少比較的次數，而無法減少數據搬移的次數。
+\stopANSWER
+
+\startEXERCISE
+設計一個最壞運行時間爲 $\Theta(n\lg n)$ 的算法，
+用來在集合 $S$ 中查找是否有兩個數的和正好是 $x$。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{PAIR-EXISTS(S, x)}
+\startCLRSCODE
+A = \ALGO{MERGE-SORT(S)}
+
+for i=S.length downto 1
+	if \ALGO{BINARY-SEARCH(A[1:i-1], x - S[i])} \ne NIL
+		return true
+
+return false
+\stopCLRSCODE
+\stopANSWER

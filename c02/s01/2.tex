@@ -1,0 +1,21 @@
+\startEXERCISE
+\ALGO{SUM-ARRAY} 用於計算數列 $A[1:n]$ 中 $n$ 個數的和。
+試對其循環不變性的初始化、保持、終止進行分析，
+並據此説明此算法是如何得到 $A[1:n]$ 的和的。
+
+\CLRSH{SUM-ARRAY(A, n)}
+\startCLRSCODE
+sum = 0
+for i = 1 to n
+	sum = sum + A[i]
+return sum
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+\startigBase
+\item 初始化：第一次迭代前， \m{sum} 是 \m{A[1..i-1]} 中元素的和；
+\item 保持：每次迭代后， \m{sum} 是 \m{A[1..i]} 中元素的和；
+\item 終止：迭代終止后， \m{sum} 是 \m{A[1..n]} 中元素的和。
+\stopigBase
+\stopANSWER
