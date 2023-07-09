@@ -3,11 +3,65 @@
 判斷條件改爲 $n\ge n_0$，
 其中 $n_0$ 是一個常數；
 令 $g$ 爲 $(\lfloor r-p+1)/5\rfloor$，
-則 $A[5g:n]$ 中的元素不屬於任何一組。
+則 $A[5g+1:n]$ 中的元素不屬於任何一組。
 證明：遞迴的運行時間可能會變得比較複雜，
 但仍然是 $\Theta(n)$。
 \stopEXERCISE
 
 \startANSWER
-略。
+分組後剩餘 $A[5g+1:n]$ 的元素個數爲 $0\le(n\mod 5)\le 4$。
+
+先分析除遞迴調用外運行時間的上界，
+跳過第 1～10 行，每次迭代開始時，
+第 12～13 行 $5$ 個元素一組排序的運行時間爲 $\Theta(n)$。
+第 17 行 \ALGO{PARTITION-AROUND} 運行時間也是 $\Theta(n)$。
+剩餘的記錄操作運行時間爲 $\Theta(1)$。
+所以遞迴調用外的操作運行時間爲
+ $\Theta(n)+\Theta(n)+\Theta(1)=\Theta(n)$。
+
+再分析遞迴調用的時間。
+因爲 $g\le n/5$，
+所以第 16 行選擇樞軸的遞迴調用運行時間 $T(g)\le T(n/5)$。
+第 23、 24 行的遞迴調用指揮執行一個，
+無論執行哪一個，遞迴調用的數據規模最多爲 $7n/10$，
+因此第 23、 24 行的運行時間最多爲 $T(7n/10)$。
+現在我們來證明樞軸的選擇方法保持了這一特性。
+（爲每組找中位數並選擇所有中位數的中位數 $x$ 爲樞軸。）
+
+圖 9.3 中的有向圖，右箭頭表示有向邊，
+每條有向邊的起點元素小於或等於其終點元素，
+黃色區域的元素大於或等於 $x$，
+藍色區域的元素小於或等於 $x$。
+
+黃色區域有 $3(\lfloor g/2\rfloor +1)\ge 3g/2$ 個元素，
+藍色區域有 $3(\lceil g/2\rceil)\ge 3g/2$ 個元素，
+黃色區域的元素不會落在小於或等於樞軸的一側，
+藍色區域的元素不會落在大於或等於樞軸的一側，
+所以排除其中一個顏色區域，剩餘元素最多爲：
+\startformula
+5g-3g/2+(n\mod 5)
+  =7g/2+(n\mod 5)
+  =7\lfloor n/5\rfloor / 2 + (n\mod 5)
+  \le 7n/10 + 4
+\stopformula
+最壞情況下 \ALGO{SELECT} 運行時間的遞迴式：
+\startformula
+T(n)\le T(n/5) + T(7n/10+4) + \Theta(n)
+\stopformula
+由代入法，猜測 $T(n)=O(n)$，
+即 $\exists c>0: \forall n>0$，當 $n\ge 5$ 時：
+\startformula\startmathalignment
+\NC T(n)
+   \NC \le c(n/5) + c(7n/10+4) + \Theta(n) \NR
+\NC\NC = cn - cn/10 + 4c + \Theta(n) \NR
+\NC\NC \le cn \NR
+\stopmathalignment\stopformula
+
+當 $c$ 足夠大時，使得 $-cn/10+4c+\Theta(n)\le 0$，
+ $T(n)\le cn$ 成立。
+
+當 $n\le 4$ 時，爲基本情況，當 $c$ 足夠大時， $T(n)\le cn$ 成立。
+
+因此 $T(n)=O(n)$，又第 13 行運行時間爲 $\Theta(n)$，
+所以 \ALGO{SELECT} 運行時間爲 $\Theta(n)$。
 \stopANSWER

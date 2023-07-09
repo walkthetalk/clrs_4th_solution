@@ -1,0 +1,55 @@
+\startEXERCISE
+對於矩陣鏈乘法問題，要確定最優代價，下面哪種方法效率更高？
+第一種是窮舉所有可能的括號化方案，
+對每種方案計算乘法運算次數，
+第二種是運行 \ALGO{RECURSIVE-MATRIX-CHAIN}。
+證明你的結論。
+附：
+
+\CLRSH{RECURSIVE-MATRIX-CHAIN(p,i,j)}
+\startCLRSCODE
+if i == j
+	return 0
+m[i,j] = \infty
+for k = i to j-1
+	q = \ALGO{RECURSIVE-MATRIX-CHAIN(p,i,k)}
+		+ \ALGO{RECURSIVE-MATRIX-CHAIN(p,k+1,j)}
+		+ p_{i-1}p_k p_j
+	if q < m[i,j]
+		m[i,j] = q
+return m[i,j]
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+第二種方法效率更高。
+
+考慮兩種方法都是如何對待子問題的。
+
+在第一種窮舉法中，對於用於分割矩陣鏈的每個位置，
+需要找出左、右兩部分各自的所有括號化方案，
+然後觀察左右兩側所有可能的組合。
+組合的數目是左右各自括號化方案數目的乘積。
+
+而第二種方法會找到左右兩側各自的最優括號化方案，
+然後將這兩種方案組合起來。
+組合的數目是 $O(1)$。
+
+實際運行時間：
+ 14.2 已經證明了窮舉法運行時間爲 $O(4^n / n^{3/2})$，
+下面來證明第二種方法的運行時間爲 $O(n3^{n-1})$。
+
+假設算法的第 1~2 行以及 6~7 行運行時間爲常數 $c$。
+遞迴式如下：
+\startformula
+T(n) \le \startmathcases
+\NC c \NC \text{n=1} \NR
+\NC c = \sum_{k=1}^{n-1}(T(k) + T(n-k) + c) \NC \text{n>1} \NR
+\stopmathcases
+\stopformula
+在 $n>1$ 時，將不等式改寫爲：
+\startformula
+T(n)\le 2\sum_{i=1}^{n-1}T(i) + cn
+\stopformula
+用代入法可以證明 $T(n)=O(n 3^{n-1})$。
+\stopANSWER

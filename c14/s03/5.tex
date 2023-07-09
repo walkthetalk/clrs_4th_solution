@@ -1,0 +1,37 @@
+\startEXERCISE
+對於節 14.1 中的鋼條切割問題加入限制條件：
+假定對於每種鋼條長度 $i$，
+最多允許切割出 $l_i$ 段長度爲 $i$ 的鋼條，
+其中 $i=1,2,\cdots,n-1$。
+證明：節 14.1 所描述的最優子結構性質不再成立。
+\stopEXERCISE
+
+\startANSWER
+由於限制了總數，所以子結構之間實際是相互影響的，
+不具備最優子結構的性質。
+例如：
+
+\bTABLE[align=center]
+\bTR \bTD 長度 $i$   \eTD \bTD 1 \eTD \bTD 2 \eTD \bTD 3 \eTD \bTD 4 \eTD\eTR
+\bTR \bTD 價格 $p_i$ \eTD \bTD 15 \eTD \bTD 20\eTD \bTD 33\eTD \bTD 36\eTD\eTR
+\bTR \bTD 限制 $l_i$ \eTD \bTD 2\eTD \bTD 1\eTD \bTD 1\eTD \bTD 1\eTD\eTR
+\eTABLE
+
+如果鋼條長度爲 4，切割方案及其總價對應關係如下：
+
+\bTABLE[align=center]
+\bTR \bTD 方案   \eTD \bTD 總價 \eTD\eTR
+\bTR \bTD 4 \eTD \bTD 36 \eTD\eTR
+\bTR \bTD 1,3 \eTD \bTD 48\eTD\eTR
+\bTR \bTD 1,1,2 \eTD \bTD 50\eTD\eTR
+\eTABLE
+
+可以觀察一下長度爲 2 的子問題，
+有兩種解：$2(20)$ 和 $1,1(30)$。
+因此長度爲 2 時最優解爲 $1,1$。
+但我們不能在原始問題中使用這個方案，
+如果使用這個方案，則會截出 4 個長度爲 1 的鋼條，
+顯然不符合要求，違反了題目給的限制。
+
+所以此問題不具備最優子結構性質。
+\stopANSWER
