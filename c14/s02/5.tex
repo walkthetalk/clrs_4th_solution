@@ -1,0 +1,32 @@
+\startEXERCISE
+在調用 \ALGO{MATRIX-CHAIN-ORDER} 的過程中，
+將計算其他表項時需要訪問表項 $m[i,j]$ 的次數記爲  $R(i,j)$。
+證明：
+\startformula
+\sum_{i=1}^{n}\sum_{j=i}^{n} R(i,j) = \frac{n^3 - n}{3}
+\stopformula
+
+\emph{提示：}證明中可用到公式（A.4）。附公式 A.4：
+\startformula
+\sum_{k=0}^{n}k^2 = \frac{n(n+1)(2n+1)}{6}
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+此題是要求訪問 $m$ 中所有表項的次數，
+根據 \ALGO{MATRIX-CHAIN-ORDER}，
+每輪 $l$ 循環中， $i$ 循環會執行 $n-l+1$ 輪，
+每輪 $i$ 循環中， $k$ 循環會執行 $j-i=l-1$ 輪，
+每輪 $k$ 循環中，需要訪問 $m$ 中兩個表項 $m[i,k]$ 和 $m[k+1,j]$。
+因此：
+\startsplitformula\startmathalignment
+\NC \sum_{i=1}^{n}\sum_{j=i}^{n} R(i,j)
+    \NC = \sum_{l=2}^{n} \sum_{i=1}^{n-l+1} \sum_{k=i}^{i+l-2} 2 \NR
+\NC \NC = \sum_{l=2}^{n} \sum_{i=1}^{n-l+1} 2(l-1) \NR
+\NC \NC = \sum_{l=2}^{n} 2(n-l+1)(l-1) \NR
+\NC \NC = 2\sum_{l=1}^{n-1} (n-l) l \NR
+\NC \NC = 2n\sum_{l=1}^{n-1} l - 2\sum_{l=1}^{n-1}l^2 \NR
+\NC \NC = \frac{2n(n-1)n}{2} - \frac{2(n-1)n(2n-1)}{6} \NR
+\NC \NC = \frac{n^3 - n}{3} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
