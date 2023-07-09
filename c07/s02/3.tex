@@ -1,0 +1,12 @@
+\startEXERCISE
+證明：當數列 $A$ 包含的元素不同，
+且按降序排列時， \ALGO{QUICKSORT} 的時間復雜度爲 $\Theta(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+\ALGO{PARTITION} 總是返回 $p$，即總有一邊是空。
+
+遞迴式仍爲 $T(n)=T(n-1)+\Theta(n)$。
+（即使 \emph{if} 塊內執行不到， \emph{for} 循環的執行次數不變，
+仍是 $\Theta(n)$。）
+\stopANSWER

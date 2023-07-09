@@ -1,0 +1,12 @@
+\startEXERCISE
+假設快速排序的每一層所做的劃分比例都是 $\alpha : \beta$，
+其中 $\alpha+\beta=1$，且 $0<\alpha\le \beta < 1$ 且均爲常數。
+證明：在相應的遞迴樹中，葉子節點的最小深度大約是 $\log_{1/\alpha}{n}$，
+最大深度大約是 $\log_{1/\beta}{n}$（無需考慮整數舍入問題）。
+\stopEXERCISE
+
+\startANSWER
+令樹的最小深度是 $x$，則 $n\alpha^x\approx 1$，解得 $x\approx\log_{1/\alpha}{n}$。
+
+類似，令最大深度爲 $y$，則 $n\beta^y\approx 1$，解得 $y\approx\log_{1/\beta}{n}$。
+\stopANSWER

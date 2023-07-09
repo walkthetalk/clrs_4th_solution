@@ -1,0 +1,19 @@
+\startEXERCISE
+證明遞迴式：
+\startformula
+T(n) = \max\{T(q) + T(n-q-1): 0 \le q \le n-1\} + \Theta(n)
+\stopformula
+的下界爲 $T(n)=\Omega(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+猜測 $T(n)\ge cn^2-2n$：
+\startsplitformula\startmathalignment
+\NC T(n) \NC=   \max_{0 \le q \le n-1} (T(q) + T(n-q-1)) + \Theta(n) \NR
+\NC      \NC\ge \max_{0 \le q \le n-1} (cq^2 - 2q + c(n-q-1)^2 - 2n - 2q -1) + \Theta(n) \NR
+\NC      \NC\ge c\max_{0 \le q \le n-1} (q^2 + (n-q-1)^2 - (2n + 4q + 1)/c) + \Theta(n) \NR
+\NC      \NC\ge cn^2 - c(2n-1) + \Theta(n) \NR
+\NC      \NC\ge cn^2 - 2cn + 2c \mathcomment{$(c \le 1)$} \NR
+\NC      \NC\ge cn^2 - 2n \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

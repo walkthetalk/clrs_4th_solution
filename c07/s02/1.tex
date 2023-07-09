@@ -1,0 +1,13 @@
+\startEXERCISE
+用代入法證明：遞迴式 $T(n)=T(n-1)+\Theta(n)$ 的解爲 $T(n)=\Theta(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+令 $\Theta(n)$ 爲 $c_2 n$，猜測 $T(n)\le c_1 n^2$：
+\startsplitformula\startmathalignment
+\NC T(n) \NC=   T(n-1) + c_2n \NR
+\NC      \NC\le c_1(n-1)^2 + c_2n \NR
+\NC      \NC=   c_1n^2 - 2c_1n + c_1 + c_2n \mathcomment{$(2c_1 > c_2, n \ge c_1/(2c_1 - c_2))$}\NR
+\NC      \NC\le c_1n^2 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

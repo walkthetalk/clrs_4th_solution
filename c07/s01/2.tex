@@ -1,0 +1,25 @@
+\startEXERCISE[exercise:same_partition]
+當數列 $A[p..r]$ 中的元素都相同時， \ALGO{PARTITION} 返回的 $q$ 值是多少？
+修改 \ALGO{PARTITION}，使得當數列 $A[p..r]$ 中所有元素的值都相同時，
+ $q=\lfloor (p+r)/2\rfloor$。
+\stopEXERCISE
+
+\startANSWER
+元素都相同時返回的值爲 $r$。
+
+\CLRSH{PARTITION'(A, p, r)}
+\startCLRSCODE
+x = A[r]
+i = p - 1
+for j = p to r - 1
+	if A[j] <= x
+		i = i + 1
+		\ALGO{SWAP(A[i],A[j])}
+i = i + 1
+\ALGO{SWAP(A[i],A[r])}
+
+if i = r
+	return ⌊(p + r) / 2⌋
+return i
+\stopCLRSCODE
+\stopANSWER

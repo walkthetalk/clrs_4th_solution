@@ -1,0 +1,24 @@
+\startEXERCISE[exercise:random_three_median]\DIFFICULT
+考慮修改 \ALGO{PARTITION}：
+從子數列 $A[p:r]$ 中隨機選出三個元素，
+並用這三個元素的中位數（即這三個元素按大小排在中間的值）對數列進行劃分。
+求劃分比例比 $\alpha:(1-\alpha)$ 更差的近似概率，
+其中 $0<\alpha<1/2$。
+\stopEXERCISE
+
+\startANSWER
+簡單起見，假定可以重復選擇同一元素。
+
+將元素按大小分成三部分，最小的 $\alpha n$ 個元素，最大的 $\alpha n$ 個元素，
+還有大小處於中間的 $1-2\alpha n$ 個元素。
+任選一元素位於最小那部分中的概率爲 $\alpha n/n = \alpha$。
+
+如果恰好有兩個元素在最小的那部分中，其概率爲 $\alpha^2(1-\alpha)$。
+如果三個元素均在最小的那部分中，其概率爲 $\alpha^3$。
+前者共有三種可能（三個元素中任一元素不在最小那部分中），後者只有一種可能，
+總的概率爲 $3\alpha^2(1-\alpha)+\alpha^3 = 3\alpha^2-2\alpha^3$。
+
+最小那部分與最大那部分類似，將前面所列情況中最大、最小互換，其概率不變。
+這樣這些情況總的概率爲 $(3\alpha^2-2\alpha^3) \times 2 = 6\alpha^2-4\alpha^3$。
+這些情況所得劃分均比 $\alpha:(1-\alpha)$ 要糟糕。
+\stopANSWER

@@ -1,0 +1,37 @@
+\startEXERCISE
+當輸入數據已經“幾乎有序”時，插入排序速度很快。
+在實際應用中，我們可以利用這一特點提升快速排序的速度。
+當子數列規模小於 $k$ 時，改用插入排序，而不是遞迴調用快速排序。
+證明：這一排序算法的期望時間復雜度爲 $O(nk+n\lg(n/k))$。
+分別從理論和實踐的角度說明應如何選擇 $k$。
+\stopEXERCISE
+
+\startANSWER
+在所推薦的算法中，遞迴在 $\lg(n/k)$ 層處終止，
+期望運行時間爲 $O(n\lg(n/k))$。
+但是還有 $n/k$ 個（最大）長度爲 $k$，且沒有排序的子數列。
+由插入排序的性質可知，他會將一個個子數列按順序排序。
+即所有子數列的時間復雜度是相同的： $\frac{n}{k}O(k^2)=O(nk)$。
+
+理論上，求解 $k$ 時我們可以忽略常數因子：
+\startsplitformula\startmathalignment[n=1]
+\NC n\lg{n} \ge nk + n\lg{n/k} \NR
+\NC \Downarrow \NR
+\NC \lg{n} \ge k + \lg{n} - \lg{k} \NR
+\NC \Downarrow \NR
+\NC \lg{k} \ge k \NR
+\stopmathalignment\stopsplitformula
+但這是不可能的。
+
+而如果加上常數因子，則：
+\startsplitformula\startmathalignment[n=1]
+\NC c_qn\lg{n} \ge c_ink + c_qn\lg(n/k) \NR
+\NC \Downarrow \NR
+\NC c_q\lg{n} \ge c_ik + c_q\lg{n} - c_q\lg{k} \NR
+\NC \Downarrow \NR
+\NC \lg{k} \ge \frac{c_i}{c_q}k \NR
+\stopmathalignment\stopsplitformula
+這意味着有解。進一步，可能還要考慮低階項。
+
+在實踐中，應當通過實驗來確定 $k$。
+\stopANSWER

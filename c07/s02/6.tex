@@ -1,0 +1,12 @@
+\startEXERCISE[exercise:const_part_probability]
+證明：有一隨機輸入數列，其元素各不相同，
+對於任何常數 $0<\alpha\le 1/2$，
+ \ALGO{PARTITION} 產生比 $1-\alpha : \alpha$ 更平衡的劃分的概率約爲 $1-2\alpha$。
+\stopEXERCISE
+
+\startANSWER
+將元素劃分成三部分，最小的 $\alpha n$ 個元素、最大的 $\alpha n$ 個元素，
+還有 $(1-2\alpha)n$ 個中間值元素。
+只有當 \ALGO{PARTITION} 所選的主元處於最後一個集合中時，所的劃分才比 $1-\alpha : \alpha$ 更平衡。
+其概率爲 $(1-2\alpha)n / n = (1-2\alpha)$。
+\stopANSWER

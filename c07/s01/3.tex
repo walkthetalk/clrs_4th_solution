@@ -1,0 +1,10 @@
+\startEXERCISE
+證明：在規模爲 $n$ 的子數列上， \ALGO{PARTITION} 的時間復雜度爲 $\Theta(n)$。
+\stopEXERCISE
+
+\startANSWER
+\emph{for} 循環的次數爲 $r - 1 - p = \Theta(n)$。
+最壞情況下，每次循環都會執行 \emph{if} 塊，
+需要常數時間；循環外的語句也需要常數隨時間。
+因此時間復雜度爲 $\Theta(n)$。
+\stopANSWER

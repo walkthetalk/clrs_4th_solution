@@ -1,0 +1,18 @@
+\startEXERCISE
+證明：在 $q=0, 1, \ldots, n-1$ 區間內，當 $q=0$ 或 $q=n-1$ 時，
+ $q^2+(n-q-1)^2$ 取得最大值。
+\stopEXERCISE
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC f(q)  \NC= q^2 + (n - q - 1)^2 \NR
+\NC f'(q) \NC= 2q - 2(n - q - 1) = 4q - 2n + 2 \NR
+\NC f''(q)\NC= 4 \NR
+\stopmathalignment\stopsplitformula
+當 $q=\frac{1}{2}n-\frac{1}{4}$ 時， $f'(q)=0$。
+$f'(q)$ 是連續的。
+由於 $\forall q : f''(q) > 0$，所以在 $f'(q) =0$ 的左邊 $f'(q)<0$，
+在 $f'(q) =0$ 的右邊 $f'(q)>0$。
+即 $f(q)$ 在 $f'(q)=0$ 時取得最小值，左邊遞減，右邊遞增。
+所以 $q$ 取兩端的值時， $f(q)$ 取得最大值。
+\stopANSWER

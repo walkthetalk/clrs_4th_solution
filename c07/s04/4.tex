@@ -1,0 +1,14 @@
+\startEXERCISE
+證明： \ALGO{RANDOMIZED-QUICKSORT} 期望運行時間時 $\Omega(n\lg{n})$。
+\stopEXERCISE
+
+\startANSWER
+與比較次數期望值的推理類似，只是方向不同：
+\startsplitformula\startmathalignment
+\NC E[X] \NC=   \sum_{i=1}^{n-1} \sum_{j=i+1}^n \frac{2}{j-i+1} \NR
+\NC      \NC=   \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{k + 1} \mathcomment{$(k \ge 1)$} \NR
+\NC      \NC\ge \sum_{i=1}^{n-1} \sum_{k=1}^{n-i} \frac{2}{2k} \NR
+\NC      \NC\ge \sum_{i=1}^{n-1} \Omega(\lg{n}) \NR
+\NC      \NC=   \Omega(n\lg{n}) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
