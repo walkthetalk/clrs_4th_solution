@@ -1,0 +1,36 @@
+\startPROBLEM
+（多項式的漸近行爲）
+令 $p(n) = \sum_{i = 0}^{d} {a_i n^i}$ 是 $n$ 的 $d$ 次多項式，
+其中 $a_d > 0$， $k$是一個常量。
+用漸進記號的定義證明下列性質。
+\startigBase[a]
+\item 如果 $k \ge d$，那麼 $p(n) = O(n^k)$。
+\item 如果 $k \le d$，那麼$p(n) = \Omega(n^k)$。
+\item 如果 $k = d$，那麼 $p(n) = \Theta(n^k)$。
+\item 如果 $k > d$，那麼 $p(n) = o(n^k)$。
+\item 如果 $k < d$，那麼 $p(n) = \omega(n^k)$。
+\stopigBase
+\stopPROBLEM
+
+\startANSWER
+取 $c = a_d + b$，滿足下列不等式：
+\startformula
+p(n) = \sum_{i = 0}^{d}a_i n^i = a_d n^d + a_{d-1}n^{d-1} + \ldots + a_1 n + a_0 \leq cn^d
+\stopformula
+兩邊同除以 $n^d$，有：
+\startformula
+c = a_d + b \geq a_d + \frac{a_{d-1}}n + \frac{a_{d-2}}{n^2} + \ldots + \frac{a_0}{n^d}
+\stopformula
+即
+\startformula
+b \geq \frac{a_{d-1}}n + \frac{a_{d-2}}{n^2} + \ldots + \frac{a_0}{n^d}
+\stopformula
+如果使 $b = 1$，則選取 $n_0$，使得：
+\startformula
+n_0 = \max(da_{d-1}, d\sqrt{a_{d-2}}, \ldots, d\sqrt[d]{a_0})
+\stopformula
+對於所有 $n\ge n_0$，有 $p(n) \le c n^d$，即 $O(n^d)$；
+如果選 $b = -1$，則可得 $\Omega(n^d)$；
+綜合可得 $\Theta(n^d)$。
+另外兩個的證明類似。
+\stopANSWER

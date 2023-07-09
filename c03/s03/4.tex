@@ -1,0 +1,88 @@
+\startEXERCISE[exercise:lg_n_fac]
+證明：
+\startigBase[a]
+%item a
+\startitem
+$a^{\log_b^c} = c^{\log_b^a}$ \hfill (3.21)
+\stopitem
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC a^{\log_b^c} \NC = b^{\log_b^{a^{\log_b^c}}} \NR
+\NC \NC = b^{\log_b^c \cdot \log_b^a} \NR
+\NC \NC = c^{\log_b^a} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+%item b
+\startitem
+$n!=o(n^n)$ \hfill (3.26)
+\stopitem
+
+\startANSWER
+$f(n)=n!$， $g(n)=n^n$，
+對於任意 $c>0$，
+令 $n \ge n_0 = \max(\lceil 1/c\rceil, 2)$，
+則 $c\cdot n > 1$，有：
+\startsplitformula\startmathalignment
+\NC 0\le f(n) \NC
+< 1 \cdot \underbrace{n \cdot n \cdot \cdots \cdot n}_{\text{$n-1$ 個}} \NR
+\NC \NC < (c\cdot n) \cdot \underbrace{n \cdot n \cdot \cdots \cdot n}_{\text{$n-1$ 個}} \NR
+\NC \NC < c \cdot \underbrace{n \cdot n \cdot \cdots \cdot n}_{\text{n 個}} \NR
+\NC \NC = c n^n \NR
+\NC \NC = c g(n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startitem
+$n!=\omega(2^n)$ \hfill (3.27)
+\stopitem
+
+\startANSWER
+$f(n)=n!$， $g(n)=2^n$，
+對於任意 $c>0$，
+令 $n \ge n_0 = \max(\lceil 2c \rceil, 2)$，
+則：
+\startsplitformula\startmathalignment
+\NC 0 \le c g(n) \NC
+= (2c) \cdot \underbrace{2 \cdot 2 \cdot \cdots \cdot 2}_{\text{$n-1$ 個}} \NR
+\NC \NC < n 2^{n-1} \NR
+\NC \NC < 2 \cdot 2^{n-1} \NR
+\NC \NC = 2^n \NR
+\NC \NC = f(n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\startitem
+$\lg(n!)=\Theta(n\lg n)$ \hfill (3.28)
+\stopitem
+
+\startANSWER
+根據（3.27）我們已知 $\lg(n!)=O(n\lg n)$，
+接下來我們只須證明 $\lg(n!)=\Omega(n\lg n)$ 即可。
+\startsplitformula\startmathalignment
+\NC \lg n! \NC = \sum_{i=1}^{n}\lg i \NR
+\NC \NC \ge \sum_{i = \lceil n/2 \rceil}^{n}\lg i \NR
+\NC \NC \ge \sum_{i = \lceil n/2 \rceil}^{n} \lg \frac{2}{n} \NR
+\NC \NC \ge \frac{n}{2}\lg \frac{n}{2} \NR
+\NC \NC = \frac{n}{2}(\lg n - 1) \NR
+\NC \NC = \Omega(n\lg n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+\stopitem
+
+%item c
+\startitem
+$\lg(\Theta(n)) = \Theta(\lg n)$。
+\stopitem
+
+\startANSWER
+\startsplitformula\startmathalignment[n=3,align={right,middle,left}]
+\NC c_1 n \le \NC \Theta(n) \NC \le c_2 n \NR
+\NC \lg(c_1 n) \le \NC \lg(\Theta(n)) \NC \le \lg(c_2 n) \NR
+\NC \lg c_1 + \lg n \le \NC \lg(\Theta(n)) \NC \le \lg c_2 + \lg n \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+
+\stopigBase
+\stopEXERCISE

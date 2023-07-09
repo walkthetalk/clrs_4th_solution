@@ -1,0 +1,23 @@
+\startEXERCISE
+證明 $k\lg k = \Theta(n)$ 蘊含着 $k = \Theta(n/\lg n)$。
+\stopEXERCISE
+\startANSWER
+由 $\Theta$ 的對稱性可知：
+\startformula
+k\lg{k} = \Theta(n) \Rightarrow n = \Theta(k\lg{k})
+\stopformula
+則：
+\startsplitformula\startmathalignment
+\NC \lg{n}
+    \NC = \Theta(\lg(k\lg{k})) \NR
+\NC \NC = \Theta(\lg{k} + \lg\lg{k}) \NR
+\NC \NC = \Theta(\lg{k}) \NR
+\stopmathalignment\stopsplitformula
+兩式相除：
+\startsplitformula\startmathalignment
+\NC \NC \frac{n}{\lg{n}} \NR
+\NC = \NC \frac{\Theta(k\lg{k})}{\Theta(\lg{k})} \NR
+\NC = \NC \Theta(\frac{k\lg{k}}{\lg{k}}) \NR
+\NC = \NC \Theta(k) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

@@ -1,0 +1,20 @@
+\startEXERCISE
+證明當且僅當算法的最壞情況運行時間爲 \m{O(g(n))}，且最好情況運行時間爲 \m{\Omega(g(n))} 時，
+其運行時間才是 \m{\Theta(g(n))}。
+\stopEXERCISE
+\startANSWER
+如果最壞情況運行時間爲 \m{O(g(n))}，且最好情況運行時間爲 \m{\Omega(g(n))}，
+設最壞情況運行時間爲 \m{T_w}，最好情況運行時間爲 \m{T_b}，則：
+\startsplitformula\startmathalignment
+\NC 0 \leq c_1g(n) \leq T_b(n) \NC \quad \text{若} n > n_b \NR
+\NC 0 \leq T_w(n) \leq c_2g(n) \NC \quad \text{若} n > n_w \NR
+\stopmathalignment\stopsplitformula
+結合兩式，有：
+\startformula
+0 \leq c_1g(n) \leq T_b(n) \leq T_w(n) \leq c_2g(n)
+   \quad \text{若} n > \max(n_b, n_w)
+\stopformula
+因此，運行時間爲 $\Theta(g(n))$。
+
+反之，證明略。
+\stopANSWER

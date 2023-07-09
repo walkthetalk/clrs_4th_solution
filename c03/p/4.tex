@@ -1,0 +1,93 @@
+\startPROBLEM
+（漸進記號的性質）
+令 $f(n)$ 和 $g(n)$ 是漸進正函數，證明或反駁下面的猜測。
+\startigBase[a]
+\item $f(n) = O(g(n))$ 蘊含 $g(n) = O(f(n))$。
+
+\startANSWER
+錯誤。 $n = O(n^2)$，但是 $n^2 \ne O(n)$。
+\stopANSWER
+
+\item $f(n) + g(n) = \Theta(\min(f(n), g(n)))$。
+
+\startANSWER
+錯誤。 $n^2 + n \ne \Theta(min(n^2, n)) = \Theta(n)$。
+\stopANSWER
+
+\item 如果對於所有足夠大的 $n$，
+有 $\lg(g(n))\ge 1$ 且 $f(n)\ge 1$，
+那麼 $f(n) = O(g(n))$ 蘊含 $\lg(f(n)) = O(lg(g(n)))$。
+
+\startANSWER
+正確。 因爲對於給定 $n \ge n_0$， $f(n) \ge 1$：
+\startformula
+\exists c, n_0 : \forall n \ge n_0 : 0 \le f(n) \le cg(n)
+\stopformula
+\startformula
+   \Downarrow
+\stopformula
+\startformula
+   0 \le \lg{f(n)} \le \lg(cg(n)) = \lg{c} + \lg{g(n)}
+\stopformula
+需要證明：
+\startformula
+\lg{f(n)} \le d\lg{g(n)}
+\stopformula
+很容易找到 $d$：
+\startsplitformula\startmathalignment
+\NC d \NC = \frac{\lg{c} + \lg{g(n)}}{\lg{g(n)}} \NR
+\NC \NC = \frac{\lg{c}}{\lg{g(n)}} + 1 \NR
+\NC \NC \le \lg{c} + 1 \NR
+\stopmathalignment\stopsplitformula
+最後一步顯然成立，因爲 \m{\lg{g(n)} \geq 1}。
+\stopANSWER
+
+\item \m{f(n) = O(g(n))} 蘊含 \m{2^{f(n)} = O(2^{g(n)})}。
+
+\startANSWER
+錯誤。 $2n = O(n)$，但是 $2^{2n} = 4^n \ne O(2^n)$。
+\stopANSWER
+
+\item $f(n) = O((f(n))^2)$。
+
+\startANSWER
+正確。只要 $f(n) \ge 1$， $0 \le f(n) \le c(f(n))^2$ 是很自然的。
+當然如果對於所有 $n$， $f(n) < 1$，則錯誤，但我們通常不考慮這種函數。
+\stopANSWER
+
+\item $f(n) = O(g(n))$ 蘊含 $g(n) = \Omega(f(n))$。
+
+\startANSWER
+正確。如果 $f(n) = O(g(n))$，
+則 $0 \le f(n) \le cg(n)$，我們只需證明：
+\startformula
+0 \le d f(n) \le g(n)
+\stopformula
+對於 $d = 1/c$，上式顯然成立。
+\stopANSWER
+
+\item $f(n) = \Theta(f(n/2))$。
+
+\startANSWER
+錯誤。取 \m{f(n) = 2^n}，我們需要證明：
+\startformula
+\exists c_1, c_2, n: \forall n \geq n_0 : 0 \leq c_1 \cdot 2^{n/2} \leq 2^n
+   \leq c_2 \cdot 2^{n/2}
+\stopformula
+顯然不成立。
+\stopANSWER
+
+\item \m{f(n) + o(f(n)) = \Theta(f(n))}。
+
+\startANSWER
+正確。令 $g(n) = o(f(n))$，
+我們需要證明 $c_1 f(n) \le f(n) + g(n) \le c_2 f(n)$，
+我們知道：
+\startformula
+\forall c \exists n_0 \forall n \geq n_0 : cg(n) < f(n)
+\stopformula
+因此，只需 $c_1 = 1$， $c_2 = 2$ 即可。
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM

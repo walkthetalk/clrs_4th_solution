@@ -1,0 +1,69 @@
+\startPROBLEM
+（多重函數）我們可以把用於函數 $\lg^{\ast}$ 中的
+重復算符 $\ast$ 應用於實數集上的任意單調遞增函數 $f(n)$。
+對給定的常數 $c \in R$，
+我們將多重函數 \m{f_c^{\ast}} 定義爲：
+\startformula
+f_c^{\ast}(n) = \min \lbrace i \geq 0 : f^{(i)}(n) \leq c \rbrace
+\stopformula
+該函數在某些情況下可能不是良定義的。
+換句話說， 爲了將 $n$ 縮小至 $c$ 或更小，
+需要將函數 $f$ 重復應用的次數。
+對如下每個函數 $f(n)$ 和常數 $c$，
+給出 $f_c^{\ast}(n)$ 的一個盡量緊確的界。
+如果無法使得 $f^{(i)}(n)\le c$，
+則填入“未定義”。
+
+\bTABLE[align=center]
+\bTABLEhead
+\bTR
+	\bTH \m{f(n)} \eTH
+	\bTH \m{c} \eTH
+	\bTH \m{f_c^{\ast}(n)} \eTH
+\eTR
+\eTABLEhead
+\bTABLEbody
+\bTR
+	\bTD \m{n - 1} \eTD
+	\bTD \m{0} \eTD
+	\bTD\startANSWER \m{\Theta(n)} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{\lg{n}} \eTD
+	\bTD \m{1} \eTD
+	\bTD\startANSWER \m{\Theta(\lg^{\ast}n)} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{n/2} \eTD
+	\bTD \m{1} \eTD
+	\bTD\startANSWER \m{\Theta(\lg{n})} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{n/2} \eTD
+	\bTD \m{2} \eTD
+	\bTD\startANSWER \m{\Theta(\lg{n})} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{\sqrt{n}} \eTD
+	\bTD \m{2} \eTD
+	\bTD\startANSWER \m{\Theta(\lg\lg{n})} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{\sqrt{n}} \eTD
+	\bTD \m{1} \eTD
+	\bTD\startANSWER 無法收斂 \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{n^{1/3}} \eTD
+	\bTD \m{2} \eTD
+	\bTD\startANSWER \m{\Theta(\log_3\lg{n})} \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD \m{n/\lg{n}} \eTD
+	\bTD \m{2} \eTD
+	\bTD\startANSWER \m{\omega(\lg\lg{n}), o(\lg{n})} \stopANSWER\eTD
+\eTR
+\eTABLEbody
+\eTABLE
+
+\stopPROBLEM

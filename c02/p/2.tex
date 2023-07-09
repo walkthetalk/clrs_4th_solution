@@ -27,23 +27,40 @@ A'[1]\le A'[2]\le \cdots \le A'[n]
 還需要證明排序完成後，新數列包含舊數列中的所有元素。
 \stopANSWER
 
+% b
 \startigBase[continue]
-\item 分析並證明內層 \CLRSCODE{for} 循環的循環不變性。
+\item 分析並證明內層 \CLRSCODE{for} 循環的循環不變式。
 要求使用本章所展示的證明方式。
 \stopigBase
 
 \startANSWER
-\TODO{略。}
+這段冒泡排序的作用是將數列從小到大排序。
+
+循環不變式： $A[j:n]$ 爲待排序元素集合。
+
+初始化： $j=n$。
+
+保持：比較 $A[j-1]$ 與 $A[j]$ 的大小，小的放到前面。
+
+終止： $j==i$ 時 $A[i]$ 位置的元素爲原 $A[i:n]$ 中最小的元素。
 \stopANSWER
 
 \startigBase[continue]
-\item 利用上一問所證明的循環不變性的終止條件，
-分析外層循環的循環不變性，並以此證明不等式（2.5）。
+\item 利用上一項所證明的循環不變式的終止條件，
+分析外層循環的循環不變式，並以此證明不等式（2.5）。
 要求使用本章所展示的證明方式。
 \stopigBase
 
 \startANSWER
-\TODO{略。}
+循環不變式： $A[1:i-1]$ 爲已排序元素集合。
+
+初始化： $i=1$。
+
+保持： $A[i]$ 位置的元素爲 $A[i:n]$ 中最小元素即 $A'[i]$，
+即 $A'[1]\le A'[2]\le \cdots \le A'[i]$。
+
+終止： $i==n$ 時 $A'[1]\le A'[2]\le \cdots \le A'[n]$，
+原數列排序結束。
 \stopANSWER
 
 \startigBase[continue]

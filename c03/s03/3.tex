@@ -1,0 +1,16 @@
+\startEXERCISE[exercise:floorceil_theta]
+利用式（3.14）或其他方式證明，對於任意實數 $k$，下式成立：
+\startformula
+(n+o(n))^k = \Theta(n^k)
+\stopformula
+同時證明 $\lceil n\rceil^k = \Theta(n^k)$ 和 $\lfloor n\rfloor^k = \Theta(n^k)$。
+\stopEXERCISE
+
+\startANSWER
+提示：
+\startsplitformula\startmathalignment
+\NC (n+o(n))^k \NC = (n(1+\frac{o(n)}{n}))^k \NR
+\NC \NC = n^k (1+\frac{o(n)}{n})^k \NR
+\NC \NC \ge n^k (1 + c)^k \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

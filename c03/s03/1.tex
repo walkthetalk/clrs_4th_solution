@@ -1,0 +1,29 @@
+\startEXERCISE
+如果 \m{f(n)} 和 \m{g(n)} 均單調遞增，證明函式 \m{f(n) + g(n)} 和 \m{f(g(n))} 也都單調遞增。
+另外，如果 \m{f(n)} 和 \m{g(n)} 均非負，則 \m{f(n)\cdot g(n)} 也單調遞增。
+\stopEXERCISE
+\startANSWER
+\m{f(n)} 和 \m{g(n)} 均單調遞增，則：
+\startsplitformula\startmathalignment
+ \NC f(m) \leq f(n) \NC \quad \text{若 } m \leq n \NR
+ \NC g(m) \leq f(n) \NC \quad \text{若 } m \leq n \NR
+\stopmathalignment\stopsplitformula
+兩式相加得：
+\startformula
+f(m) + g(m) \leq f(n) + g(n)
+\stopformula
+即 \m{f(n) + g(n)} 單調遞增。
+
+而
+\startsplitformula\startmathalignment
+ \NC m \NC \leq n \NR
+\NC g(m) \NC \leq g(n) \NR
+\NC f(g(m)) \NC \leq f(g(n)) \NR
+\stopmathalignment\stopsplitformula
+，所以 \m{f(g(n))} 也單調遞增。
+
+由於 \m{f(n)} 和 \m{g(n)} 均非負，兩式直接相乘：
+\startformula
+f(m) \cdot g(m) \leq f(n) \cdot g(n)
+\stopformula
+\stopANSWER

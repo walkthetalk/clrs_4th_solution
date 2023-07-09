@@ -1,6 +1,6 @@
 \startEXERCISE
-分析例程 \ALGO{MERGE} 中第 12-18 行 \CLRSCODE{while} 循环中的循環不變性。
-根據這個性質，與 \CLRSCODE{while} 循環中第 20-23 行和 24-27 行一起，
+分析例程 \ALGO{MERGE} 中第一個 \CLRSCODE{while} 循环中的循環不變式。
+根據這個性質，與尾部兩個 \CLRSCODE{while} 循環一起，
 證明例程 \ALGO{MERGE} 的正確性。
 附：
 
@@ -8,5 +8,11 @@
 \stopEXERCISE
 
 \startANSWER
-\TODO{略。}
+第一個 \CLRSCODE{while} 循環，
+每次執行前 $A[p:k-1]$ 都已排好序。
+
+每次插入的元素都是剩餘元素中最小的，
+且循環結束時， $i=n_L$ 且 $j=n_R$，
+即所有元素均已歸併到數列 $A$ 中。
+命題得證。
 \stopANSWER

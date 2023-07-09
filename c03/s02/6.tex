@@ -1,0 +1,16 @@
+\startEXERCISE
+證明集合 \m{o(g(n)) \cap \omega(g(n))} 爲空。
+\stopEXERCISE
+\startANSWER
+對於常量 \m{c > 0}：
+\startsplitformula\startalign
+\NC \exists n_1 > 0 : \NC 0 \leq f(n) < cg(n) \NR
+\NC \exists n_2 > 0 : \NC 0 \leq cg(n) < f(n) \NR
+\stopalign\stopsplitformula
+
+令 $n_0 = \max(n_1,n_2)$，若 $n>n_0$，則：
+\startformula
+f(n) < cg(n) < f(n)
+\stopformula
+顯然不成立，不存在這樣的函式 $f(n)$。命題得證。
+\stopANSWER

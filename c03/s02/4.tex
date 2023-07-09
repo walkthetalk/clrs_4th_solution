@@ -1,0 +1,26 @@
+\startEXERCISE
+證明定理 3.1。
+
+當且僅當 \m{f(n) = O(g(n))} 並且 \m{f(n) = \Omega(g(n))} 時，才有 \m{f(n) = \Theta(g(n))}。
+\stopEXERCISE
+\startANSWER
+如果 $f(n) = \Theta(g(n))$，則：
+\startformula
+0 \le c_1g(n) \le f(n) \le c_2g(n) \quad \text{若} n > n_0
+\stopformula
+將兩個常數 $c_1$ 和 $c_2$ 代入 $O$ 和 $\Omega$ 的定義中即得：
+\startsplitformula\startalign
+\NC f(n) \NC = O(g(n)) \NR
+\NC f(n) \NC = \Omega(g(n)) \NR
+\stopalign\stopsplitformula
+
+反之，如果 $f(n) = O(g(n))$ 並且 $f(n) = \Omega(g(n))$，則：
+\startsplitformula\startalign
+\NC 0 \le c_3 g(n) \le f(n) \NC \quad \text{若} n \ge n_1 \NR
+\NC 0 \le f(n) \le c_4 g(n) \NC \quad \text{若} n \ge n_2 \NR
+\stopalign\stopsplitformula
+設 \m{n_3=\max(n_1,n_2)}，合並兩個不等式，得：
+\startformula
+0 \leq c_3g(n) \leq f(n) \leq c_4g(n) \quad \text{若} n > n_3
+\stopformula
+\stopANSWER

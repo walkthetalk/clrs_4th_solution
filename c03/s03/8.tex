@@ -1,0 +1,24 @@
+\startEXERCISE
+證明第 \m{i} 個 Fibonacci 數滿足方程：
+\startformula
+F_i = \frac{\phi^{i} - \hat{\phi^{i}}}{\sqrt 5}
+\stopformula
+其中 $\phi$ 是黃金比例，而 $\hat \phi$ 是其共軛
+\stopEXERCISE
+\startANSWER
+初始：
+\startsplitformula\startmathalignment
+\NC \frac{\phi^0 - \hat\phi^0}{\sqrt{5}}
+    \NC = \frac{1 - 1}{\sqrt{5}} = 0 = F_0 \NR
+\NC \frac{\phi - \hat{\phi}}{\sqrt{5}}
+    \NC = \frac{1 + \sqrt{5} - 1 + \sqrt{5}}{2\sqrt{5}} = 1 = F_1 \NR
+\stopmathalignment\stopsplitformula
+歸納：
+\startsplitformula\startmathalignment
+ \NC F_{n + 2} \NC = F_{n + 1} + F_n \NR
+ \NC \NC = \frac{\phi^{n+1} - {\hat\phi}^{n+1}}{\sqrt{5}} + \frac{\phi^n - {\hat\phi}^n}{\sqrt{5}} \NR
+ \NC \NC = \frac{\phi^n(\phi + 1) - {\hat\phi}^n(\hat\phi + 1)}{\sqrt{5}} \NR
+ \NC \NC = \frac{\phi^n\phi^2 - {\hat\phi}^n{\hat\phi}^2}{\sqrt{5}} \NR
+ \NC \NC = \frac{\phi^{n+2} - {\hat\phi}^{n+2}}{\sqrt{5}} \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

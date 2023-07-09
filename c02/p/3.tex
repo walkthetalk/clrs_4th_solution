@@ -40,13 +40,13 @@ for i = 0 to n
 所用時間爲 $\Theta(n^2)$。
 \stopANSWER
 
-\item 分析 \ALGO{HORNER} 的循環不變性。
+\item 分析 \ALGO{HORNER} 的循環不變式。
 每次迭代前：
 \startformula
 y = \sum_{k=0}^{n-(i+1)} A_{k+i+1}\cdot x^k
 \stopformula
 將空多項式求和結果定義爲 0。
-以本章循環不變性的證明方式，
+以本章循環不變式的證明方式，
 證明最終結果爲：
 \startformula
 y = \sum_{k=0}^n a_kx^k

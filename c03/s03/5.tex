@@ -1,0 +1,40 @@
+\startEXERCISE\DIFFICULT
+函式 \m{\lceil \lg{n} \rceil!} 多項式有界嗎？
+函式 \m{\lceil \lg{\lg{n}} \rceil!} 多項式有界嗎？
+\stopEXERCISE
+\startANSWER
+多項式有界的定義：
+\startformula
+ f(n) \leq c n^k
+\stopformula
+兩邊同時取對數：
+\startformula
+ \lg f(n) \leq c_1 k \lg n
+\stopformula
+即如果 \m{\lg f(n) = \Theta(\lg n)}，則函式 \m{f(n)} 多項式有界。
+
+令 \m{f(n) = \lceil \lg{n} \rceil!}， \m{m = \lceil \lg{n} \rceil}，由上個練習可得：
+\startsplitformula\startmathalignment
+ \NC \lg f(n) \NC = \lg \lceil\lg{n}\rceil ! \NR
+ \NC          \NC = \lg m! \NR
+ \NC          \NC = \Theta(m\lg m) \NR
+ \NC          \NC = \Theta(\lceil\lg n\rceil \lg \lceil \lg n\rceil) \NR
+ \NC          \NC \neq \Theta(\lg n) \NR
+\stopmathalignment\stopsplitformula
+所以 \m{\lceil \lg{n} \rceil!} \emph{不是}多項式有界的。
+
+對於另外一個，
+設 \m{f(n) = \lceil \lg{\lg{n}} \rceil!}， \m{p = \lceil \lg{\lg{n}} \rceil}，
+由上個練習可得：
+\startsplitformula\startmathalignment
+ \NC \lg f(n) \NC = \lg \lceil\lg{\lg{n}}\rceil ! \NR
+ \NC          \NC = \lg p! \NR
+ \NC          \NC = \Theta(p\lg p) \NR
+ \NC          \NC = \Theta(\lceil\lg\lg n\rceil \lg \lceil \lg\lg n\rceil) \NR
+ \NC          \NC = \Theta(\lg\lg n \cdot \lg\lg\lg n) \NR
+ \NC          \NC = o(\lg\lg n \cdot \lg\lg n) \NR
+ \NC          \NC = o(\lg^2\lg n) \NR
+ \NC          \NC = o(\lg n) \NR
+\stopmathalignment\stopsplitformula
+所以 \m{\lceil \lg\lg{n} \rceil!} \emph{是}多項式有界的。
+\stopANSWER

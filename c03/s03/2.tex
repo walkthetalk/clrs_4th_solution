@@ -1,0 +1,23 @@
+\startEXERCISE
+證明：
+對於任意整數 $n$ 和實數 $\alpha$ （$0\le \alpha\le 1$），
+下式成立：
+\startformula
+\lfloor\alpha n\rfloor + \lceil(1-\alpha) n\rceil = n
+\stopformula
+\stopEXERCISE
+\startANSWER
+令 $\alpha n = i + r$，
+其中 $i = \lfloor\alpha n\rfloor$， $0\le r< 1$。
+則：
+\startsplitformula\startmathalignment
+\NC \lfloor \alpha n \rfloor \NC = i \NR
+\NC \lceil(1-\alpha) n\rceil \NC = \lceil n - (i+r)\rceil \NR
+\NC \NC = \lceil n - i - r \rceil \NR
+\NC \NC = n - i \NR
+\stopmathalignment\stopsplitformula
+因此：
+\startformula
+\lfloor\alpha n\rfloor + \lceil(1-\alpha) n\rceil = i + (n-i) = n
+\stopformula
+\stopANSWER

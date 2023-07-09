@@ -1,0 +1,76 @@
+\startPROBLEM
+(根據漸進增長率排序)
+\startigBase[a]
+\startitem
+根據增長的階爲下列函數排序，即求出滿足
+\m{g_1 = \Omega(g_2)}、\m{g_2 = \Omega(g_3)}、\m{\ldots}、\m{g_{29} = \Omega(g_{30})}
+的函數的一種排列 \m{g_1, g_2, \ldots, g_{30}}。
+並將這些函數劃分成等價類，當且僅當 \m{f(n) = \Theta(g(n))}時，\m{f(n)}和\m{g(n)}才再同一類中。
+
+\bTABLE[align=center]
+\bTR \bTD \m{\lg(\lg^{\ast}n)} \eTD \bTD \m{2^{\lg^{\ast}n}} \eTD \bTD \m{(\sqrt{2})^{\lg{n}}} \eTD \bTD \m{n^2} \eTD \bTD \m{n!} \eTD \bTD \m{(\lg{n})!} \eTD \eTR
+\bTR \bTD \m{(\frac{3}{2})^n} \eTD \bTD \m{n^3} \eTD \bTD \m{\lg^2{n}} \eTD \bTD \m{\lg(n!)} \eTD \bTD \m{2^{2^n}} \eTD \bTD \m{n^{1/\lg{n}}} \eTD \eTR
+\bTR \bTD \m{\ln{\ln{n}}} \eTD \bTD \m{\lg^{\ast}n} \eTD \bTD \m{n \cdot 2^n} \eTD \bTD \m{n^{\lg\lg{n}}} \eTD \bTD \m{\ln{n}} \eTD \bTD \m{1} \eTD \eTR
+\bTR \bTD \m{2^{\lg{n}}} \eTD \bTD \m{(\lg{n})^{\lg{n}}} \eTD \bTD \m{e^n} \eTD \bTD \m{4^{\lg{n}}} \eTD \bTD \m{(n + 1)!} \eTD \bTD \m{\sqrt{\lg{n}}} \eTD \eTR
+\bTR \bTD \m{\lg^{\ast}(\lg{n})} \eTD \bTD \m{2^{\sqrt{2\lg{n}}}} \eTD \bTD \m{n} \eTD \bTD \m{2^n} \eTD \bTD \m{n\lg{n}} \eTD \bTD \m{2^{2^{n + 1}}} \eTD \eTR
+\eTABLE
+\stopitem
+
+\startANSWER
+\startsplitformula\startalign
+\NC 2^{\lg{n}} \NC = \sqrt{n} \NR
+\NC \sqrt{2}^{\lg{n}} \NC = 2^{1/2\lg{n}} = 2^{\lg{\sqrt{n}}} = \sqrt{n} \NR
+\NC n! < n^n \NC = 2^{\lg{n^n}} = 2^{n\lg{n}} \NR
+\NC n^{1/\lg{n}} \NC = n^{\log_n{2}} = 2 \NR
+\NC n^{\lg{\lg{n}}} \NC = (2^{\lg{n}})^{\lg\lg{n}} = (2^{\lg\lg{n}})^{\lg{n}} = (\lg{n})^{\lg{n}} \NR
+\NC \lg^2{n} \NC = 2^{\lg{\lg^2{n}}} = o(2^{\sqrt{2\lg{n}}}) \NR
+\stopalign\stopsplitformula
+\startcolumns[n=3,blank=small,distance=2em,balance=yes]
+\startigBase[n]
+\item \m{2^{2^{n+1}}}
+\item \m{2^{2^n}}
+\item \m{(n + 1)!}
+\item \m{n!}
+\item \m{e^n}
+\item \m{n \cdot 2^n}
+\item \m{2^n}
+\item \m{(\frac{3}{2})^n}
+\item \m{n^{\lg\lg{n}} = (\lg{n})^{\lg{n}}}
+\item \m{(\lg n)!}
+\item \m{n^3}
+\item \m{n^2 = 4^{\lg{n}}}
+\item \m{n\lg{n} \simeq \lg(n!)}
+\item \m{n = 2^{\lg{n}}}
+\item \m{(\sqrt{2})^{\lg{n}}}
+\item \m{2^{\sqrt{2\lg{n}}}}
+\item \m{\lg^2{n}}
+\item \m{\ln{n}}
+\item \m{\sqrt{\lg{n}}}
+\item \m{\ln{\ln{n}}}
+\item \m{2^{\lg^{\ast}n}}
+\item \m{\lg^{\ast}n\simeq \lg^{\ast}{\lg{n}}}
+\item \m{\lg(\lg^{\ast}n)}
+\item \m{1 = n^{1/\lg n}}
+\stopigBase
+\stopcolumns
+\stopANSWER
+
+\startitem
+給出一個非負函數 $f(n)$，
+使得對於上一問中所有 $g_i(n)$，
+$f(n)$既不是 $O(g_i(n))$，
+也不是 $\Omega(g_i(n))$。
+\stopitem
+
+\startANSWER
+$2^{2^{(n + 1)\sin{n}}}$，或
+\startformula
+f(n) = \startmathcases
+\NC 2^{2^{n+2}} \NC \text{若 n 是偶數，}\NR
+\NC 0 \NC \text{若 n 是奇數。}\NR
+\stopmathcases
+\stopformula
+\stopANSWER
+
+\stopigBase
+\stopPROBLEM

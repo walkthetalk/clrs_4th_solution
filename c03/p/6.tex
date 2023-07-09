@@ -1,0 +1,149 @@
+\startPROBLEM
+（\m{O}與\m{\Omega}的一些變形）
+某些作者定義 $\Omega$ 的方式跟本書有點差異；
+我們使用 \m{\mathop{\Omega}\limits^{\infty}} 來表示這種定義。
+若存在正常數 $c$，
+使得存在無限個正整數 $n$，
+滿足 $f(n)\ge c g(n)\ge 0$，
+則稱 \m{f(n) = \mathop{\Omega}\limits^{\infty}(g(n))}。
+\startigBase[a]
+% a
+\startitem
+證明：對任意兩個漸進非負函式 $f(n)$ 和 $g(n)$，
+肯定滿足 $f(n) = O(g(n))$ 或 $f(n) = \mathop{\Omega}\limits^{\infty}(g(n))$ 中的一個，
+也可能二者均成立。
+然而，如果用 $\Omega$ 代替 $\mathop{\Omega}\limits^{\infty}$，
+那麼該命題卻不成立。
+
+\startANSWER
+我們需要比較 $cg(n) \le f(n)$；
+如果存在無限個正整數 $n$ 能使其成立，
+則有 \m{\mathop{\Omega}\limits^{\infty}}；
+反之，則令滿足此式的 $n$ 最大爲 $n_0$，有：
+\startformula
+\forall n > n_0: f(n) < cg(n)
+\stopformula
+足以說明 $f(n) = O(g(n))$。
+
+如果 $f(n) = g(n)$，顯然兩式均成立。
+
+但是對於 $\Omega$，卻不一定，
+如 $n = \mathop{\Omega}\limits^{\infty}(n^{\sin{n}})$，
+但 $n \ne \Omega(n^{\sin{n}})$。
+
+再如， $f(n)=n^2(n\mod 2)$， $g(n)=n$，
+對於所有偶數， $g(n)$ 更大，
+但對於所有奇數， $f(n)$ 增長的更快。
+\stopANSWER
+\stopitem
+
+% b
+\startitem
+是否存在兩個非負函式 $f(n)$ 和 $g(n)$，
+既不滿足 $f(n)=O(g(n))$ 也不滿足 $f(n)=\Omega(g(n))$？
+若有，請舉例。
+
+\startANSWER
+$f(n)=n^2(n\mod 2)$， $g(n)=n$，
+對於所有偶數， $g(n)$ 更大，
+但對於所有奇數， $f(n)$ 增長的更快。
+\stopANSWER
+\stopitem
+
+% c
+\startitem
+刻畫程序運行時間時，
+用 $\mathop{\Omega}\limits^{\infty}$ 代替 $\Omega$ 有
+哪些潛在優點和缺點。
+
+\startANSWER
+優點：你可以使用第一問中所描述的性質。
+
+劣勢：所得到的集合中雖然有無限個數，但其值可能很稀疏。
+而且對集合外的數沒有任何約束。
+\stopANSWER
+\stopitem
+
+\stopigBase
+
+某些作者定義 $O$ 的方式也跟本書有點差異；
+用 $O'$ 來表示這種定義。
+當且儘當 $|f(n)| = O(g(n))$ 時，我們稱 $f(n) = O'(g(n))$。
+
+\startigBase[a,continue]
+% d
+\startitem
+如果將 $O$ 改爲 $O'$，但 $\Omega$ 保持不變，
+定理 3.1 中的“當且儘當”兩個方向上各自會出現什麼情況？
+附定理 3.1：
+
+任意兩個函式 $f(n)$ 和 $g(n)$，
+當且僅當 $f(n)=O(g(n))$ 及 $f(n)=\Omega(g(n))$ 時，
+有 $f(N)=\Theta(g(n))$。
+
+\startANSWER
+定理 3.1 中的“當且儘當”要改爲“蘊含”，即 \m{\Theta \Rightarrow O'}，
+反向則不成立。
+例如：
+
+函數 $f(n) = n \cdot \sin{n}$，
+即爲 $O'(n)$，但卻不是 $O(n)$ 或 $\Theta(n)$。
+\stopANSWER
+\stopitem
+\stopigBase
+
+有些作者給 $O$ 添上對數因子後改爲 $\tilde{O}$：
+\startformula
+\tilde{O} = \lbrace f(n)
+ : \exists c > 0, k > 0, n_0 > 0
+\forall n \ge n_0
+ : 0 \le f(n) \le c g(n) \lg^k(n) \rbrace
+\stopformula
+\startigBase[a,continue]
+% e
+\startitem
+按類似的方式定義 $\tilde{\Omega}$ 和 $\tilde{\Theta}$，
+並證明：
+
+任意兩個函式 $f(n)$ 和 $g(n)$，
+當且僅當 $f(n)=\tilde{O}(g(n))$ 及 $f(n)=\tilde{\Omega}(g(n))$ 時，
+有 $f(N)=\tilde{\Theta}(g(n))$。
+
+\startANSWER
+\startsplitformula\startmathalignment
+\NC \tilde{\Omega} = \lbrace f(n): \NC
+  \exists c, k, n_0>0 \NR
+\NC \NC \forall n > n_0
+  : 0 \leq cg(n) \lg^{-k}(n) \leq f(n) \rbrace \NR
+
+\NC \tilde{\Theta} = \lbrace f(n): \NC
+ \exists c_1, c_2, k_1, k_2, n_0 > 0 \NR
+\NC \NC \forall n > n_0
+ : 0 \leq c_1g(n) \lg^{-k_1}(n) \leq f(n) \leq c_2g(n) \lg^{k_2}(n)\rbrace \NR
+\stopmathalignment\stopsplitformula
+
+$\tilde{\Theta}$ 顯然蘊含 $\tilde{O}$ 和 $\tilde{\Omega}$。
+反之，如果：
+\startsplitformula\startmathalignment
+\NC \tilde{\Omega} = \lbrace f(n): \NC
+  \exists c_1, k_1, n_1>0 \NR
+\NC \NC \forall n > n_1
+  : 0 \leq c_1 g(n) \lg^{-k_1}(n) \leq f(n) \rbrace \NR
+
+\NC \tilde{O} = \lbrace f(n): \NC
+ \exists c_2, k_2, n_2 > 0 \NR
+\NC \NC \forall n \ge n_2
+ : 0 \le f(n) \le c_2 g(n) \lg^{k_2}(n) \rbrace \NR
+\stopmathalignment\stopsplitformula
+那麼：
+\startsplitformula\startmathalignment
+\NC \tilde{\Theta} = \lbrace f(n): \NC
+ \exists c_1,c_2,k_1,k_2 > 0, n_0 > \max(n_1,n_2) \NR
+\NC \NC \forall n \ge n_0
+ : 0 \le c_1 g(n) \lg^{-k_1}(n) \le f(n) \le c_2 g(n) \lg^{k_2}(n) \rbrace \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
+\stopitem
+\stopigBase
+
+\stopPROBLEM

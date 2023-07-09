@@ -1,0 +1,76 @@
+\startPROBLEM
+（相對漸進增長）
+對於下表中每對算式 $(A, B)$，
+指明 $A$ 是否是 $B$ 的 $O$、 $o$、 $\Omega$、 $\omega$、 $\Theta$。
+假定 $k \ge 1$， $\epsilon > 0$ 且 $c > 1$，均爲常量。
+
+\bTABLE[align=center]
+\bTABLEhead
+\bTR
+	\bTH $A$ \eTH
+	\bTH $B$ \eTH
+	\bTH $O$ \eTH
+	\bTH $o$ \eTH
+	\bTH $\Omega$ \eTH
+	\bTH $\omega$ \eTH
+	\bTH $\Theta$ \eTH
+\eTR
+\eTABLEhead
+\bTABLEbody
+\bTR
+	\bTD $\lg^k n$ \eTD
+	\bTD $n^\epsilon$ \eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD $n^k$ \eTD
+	\bTD $c^n$ \eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD $\sqrt{n}$ \eTD
+	\bTD $n^{\sin n}$ \eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD $2^n$ \eTD
+	\bTD $2^{n/2}$ \eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD $n^{\lg c}$ \eTD
+	\bTD $c^{\lg n}$ \eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+\eTR
+\bTR
+	\bTD $\lg(n!)$ \eTD
+	\bTD $\lg(n^n)$ \eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+	\bTD\startANSWER no \stopANSWER\eTD
+	\bTD\startANSWER yes \stopANSWER\eTD
+\eTR
+\eTABLEbody
+\eTABLE
+\stopPROBLEM
