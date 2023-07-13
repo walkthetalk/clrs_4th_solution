@@ -1,0 +1,45 @@
+\startPROBLEM
+（用插入的方式建堆 Building a heap using insertion）
+我們可以通過反復調用 \ALGO{MAX-HEAP-INSERT} 不斷向堆中插入元素來構建一個堆。
+考慮 \ALGO{BUILD-MAX-HEAP} 如下實現方式
+（假設所插入對象就是堆元素）：
+
+\CLRSH{BUILD-MAX-HEAP'(A, n)}
+\startCLRSCODE
+A.size = 1
+for i = 2 to n
+	\ALGO{MAX-HEAP-INSERT(A, A[i], n)}
+\stopCLRSCODE
+
+% a
+\startigBase[a]\startitem
+當輸入數據相同時， \ALGO{BUILD-MAX-HEAP} 和 \ALGO{BUILD-MAX-HEAP'} 所生成的堆是否相同？
+如果是，請證明；否則請舉出反例。
+\stopitem\stopigBase
+
+\startANSWER
+不同。例如，輸入數據爲 $\langle 1, 2, 3, 4, 5, 6 \rangle$ 時，兩個堆分別如下：
+
+\startcombination[2*1]
+{\externalfigure[p6_1_a-1]}{}
+{\externalfigure[p6_1_a-2]}{}
+\stopcombination
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+證明：調用 \ALGO{BUILD-MAX-HEAP'} 建立包含 $n$ 個元素的堆，
+最壞情況下其時間復雜度爲 $\Theta(n\lg{n})$。
+\stopitem\stopigBase
+
+\startANSWER
+最壞情況下， \ALGO{MAX-HEAP-INSERT} 的運行時間爲 $\Theta(\lg{n})$，會被調用 $n-1$ 次。
+最壞情況下， \ALGO{MAX-HEAP-INSERT} 會將所有元素都移到堆的根節點上， 即需要 $\lg{k}$ 次交換，
+無論 $k$ 的值是多少。
+如果輸入數列已經是排好序的，則就是最壞情況。時間復雜度爲（參見\inexercise[lg_n_fac]）：
+\startformula
+\sum_{i=2}^{n}\lg{i} = \lg(n!) = \Theta(n\lg{n})
+\stopformula
+\stopANSWER
+
+\stopPROBLEM

@@ -1,0 +1,8 @@
+\startEXERCISE
+在 \ALGO{MAX-HEAP-INSERT} 的第 5 行，爲什麼要先把所插入對象的值設爲 $-\infty$，
+然後在第 8 行又將其設爲目標值？
+\stopEXERCISE
+
+\startANSWER
+是爲了能通過 \ALGO{HEAP-INCREASE-KEY} 中的校驗 $key < A[i]$。
+\stopANSWER

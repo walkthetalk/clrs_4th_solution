@@ -1,0 +1,24 @@
+\startEXERCISE
+參考 \ALGO{MAX-HEAPIFY}，寫出對應的 \ALGO{MIN-HEAPIFY(A, i)} 的僞碼，
+用以維護最小堆。
+並比較 \ALGO{MIN-HEAPIFY} 和 \ALGO{MAX-HEAPIFY} 的運行時間。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MIN-HEAPIFY(A, i)}
+\startCLRSCODE
+l = \ALGO{LEFT(i)}
+r = \ALGO{RIGHT(i)}
+if l ≤ A.size and A[l] < A[i]
+	smallest = l
+else
+	smallest = i
+if r ≤ A.size and A[r] < A[i]
+	smallest = r
+if smallest ≠ i
+	\ALGO{SWAP(A[i],A[smallest])}
+	\ALGO{MIN-HEAPIFY(A, smallest)}
+\stopCLRSCODE
+
+\ALGO{MIN-HEAPIFY} 和 \ALGO{MAX-HEAPIFY} 的運行時間相同。
+\stopANSWER

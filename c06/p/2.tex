@@ -1,0 +1,55 @@
+\startPROBLEM[problem:6-2]
+（d-叉堆的分析 Analysis of d-ary heaps）
+d-叉堆與二叉堆類似，只是每個非葉子節點有 $d$ 個子節點，而不是 2 個子節點。
+
+% a
+\startigBase[a]\startitem
+如何在一個數列中表示 $d$ 叉堆？
+\stopitem\stopigBase
+
+\startANSWER
+需要修改 \ALGO{LEFT}、 \ALGO{RIGHT} 和 \ALGO{PARENT} 的定義。
+第 $i$ 個元素的第 $k$ 個子節點的索引爲 $di + k - 1$，
+而父節點的索引爲 $\lfloor i/d \rfloor$。（索引從 $1$ 開始）
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+包含 $n$ 個元素的 $d$ 叉堆的高度是多少？用 $n$ 和 $d$ 表示。
+\stopitem\stopigBase
+
+\startANSWER
+$\log_d{n}$。
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+請給出 \ALGO{EXTRACT-MAX} 在 d-叉最大堆上的一個有效實現，
+並用 $d$ 和 $n$ 表示其時間復雜度。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{EXTRACT-MAX} 的時間復雜度爲 $O(d\log_d{n})$。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+請給出 \ALGO{INCREASE-KEY(A, i, k)} 在 d-叉最大堆上的一個有效實現。
+並用 $d$ 和 $n$ 表示其時間復雜度。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{INCREASE-KEY(A, i, k)} 的時間復雜度爲 $O(\log_d{n})$。
+\stopANSWER
+
+% e
+\startigBase[continue]\startitem
+請給出 \ALGO{INSERT} 在 d-叉最大堆上的一個有效實現，
+並用 $d$ 和 $n$ 表示其時間復雜度。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{INSERT} 的時間復雜度爲 $O(\log_d{n})$。
+\stopANSWER
+
+\stopPROBLEM

@@ -1,0 +1,34 @@
+\startEXERCISE
+寫出最大堆 \ALGO{MAX-HEAP-DECREASE-KEY(A,x,k)} 的僞碼。
+時間複雜度如何？
+\stopEXERCISE
+
+\startANSWER
+時間複雜度爲 $\Theta(\lg (n/x))$。
+\CLRSH{MAX-HEAP-DECREASE-KEY(A, x, k)}
+\startCLRSCODE
+if k > A[x]
+	error "new key is bigger than current key"
+A[x] = k
+do
+	l = \ALGO{LEFT(x)}
+	r = \ALGO{RIGHT(x)}
+	// $A[b]$ 爲 $A[x],A[l],A[r]$ 三個元素中最大的
+	b = x
+	if l \le A.size and A[b] < A[l]
+		b = l
+	if r \le A.size and A[b] < A[r]
+		b = r
+
+	// $A[x]$ 是最大的，則終止
+	if b = x
+		break
+
+	if b = l
+		\ALGO{SWAP(A[1],A[x])}
+	else if b = r
+		\ALGO{SWAP(A[r],A[x])}
+
+	x = b	// 更新 $x$，進行下次迭代
+\stopCLRSCODE
+\stopANSWER

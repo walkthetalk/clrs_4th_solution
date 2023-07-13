@@ -1,0 +1,14 @@
+\startEXERCISE
+證明：對於一個大小爲 $n$ 的堆， \ALGO{MAX-HEAPIFY} 的最壞情況運行時間爲 $\Omega(\lg{n})$。
+（\hint 對於有 $n$ 個節點的堆，可以通過對每個節點設定恰當的值，
+使得從根節點到葉節點路徑上的每個節點都會遞迴調用 \ALGO{MAX-HEAPIFY}。）
+\stopEXERCISE
+
+\startANSWER
+結論是顯然的。
+以最左邊的路徑爲例，如果堆中最大元素在此路徑上，且根節點是最小元素，
+那麼爲了將最小元素放到葉子節點上，
+對此路徑上的每一個節點都會調用一次 \ALGO{MAX-HEAPIFY}。
+由於堆的高度爲 $\lfloor \lg{n} \rfloor$ （參考\inexercise[heap_height]），
+最壞情況運行時間爲 $\Omega(\lg{n})$。
+\stopANSWER

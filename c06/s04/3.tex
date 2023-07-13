@@ -1,0 +1,19 @@
+\startEXERCISE[exercise:heapsort_time]
+如果數列 $A$ 含有 $n$ 個元素，
+且已經是升序排列， \ALGO{HEAPSORT} 的時間復雜度是多少？
+如果已經按降序排列呢？
+\stopEXERCISE
+
+\startANSWER
+兩者均爲 $\Theta(n\lg{n})$。
+
+如果已經按升序排列，將其轉換成堆需要 $O(n)$，
+然後需要調用 \ALGO{MAX-HEAPIFY} 共 $n-1$ 次，
+每次調用需要 $\lg{k}$ 次運算。因此：
+\startformula
+\sum_{i=1}^{n-1}\lg{k} = \lg((n-1)!) = \Theta(n\lg{n})
+\stopformula
+
+如果已經按降序排列，則 \ALGO{BUILD-MAX-HEAP} 會快一些（常量因子），
+但時間主要花在 \ALGO{HEAPSORT} 中的循環上，時間爲 $\Theta(n\lg{n})$。
+\stopANSWER

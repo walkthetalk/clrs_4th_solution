@@ -1,0 +1,14 @@
+\startEXERCISE[exercise:heap_leave]
+證明：用數列表示有 $n$ 個元素的堆時，
+葉子節點的索引爲 $\lfloor n/2 \rfloor + 1,\lfloor n/2 \rfloor + 2, \ldots, n$。
+\stopEXERCISE
+
+\startANSWER
+若索引爲 $i$ 的節點是葉子節點，則沒有子節點，等價於：
+\startsplitformula\startmathalignment[n=1]
+\NC \mfunction{LEFT}(i) = 2 i > n \NR
+\NC i > n/2 \NR
+\NC i \ge (\lfloor n/2 \rfloor + 1) \NR
+\stopmathalignment\stopsplitformula
+而顯然 $i\le n$，因此 $\lfloor n/2 \rfloor + 1 \le i\le n$。
+\stopANSWER

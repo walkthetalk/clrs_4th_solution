@@ -1,0 +1,31 @@
+\startEXERCISE
+試分析在使用下列循環不變式時， \ALGO{MAX-HEAP-INCREASE-KEY} 的正確性：
+
+在算法的第 5～7 行 \emph{while} 循環每次迭代開始時：
+\startigBase[a]
+\item 如果 \ALGO{PARENT(i)} 和 \ALGO{LEFT(i)} 均存在，
+則 $A[\ALGO{PARENT(i)}].key \ge A[\ALGO{LEFT(i)}].key$。
+
+\item 如果 \ALGO{PARENT(i)} 和 \ALGO{RIGHT(i)} 均存在，
+則 $A[\ALGO{PARENT(i)}].key \ge A[\ALGO{RIGHT(i)}].key$。
+
+\item 子數列 $A[1..A.size]$ 滿足最大堆的性質，只有一個例外：
+$A[i].key$ 可能大於 $A[\ALGO{PARENT(i)}].key$。
+\stopigBase
+可以假定調用 \ALGO{MAX-HEAP-INCREASE-KEY} 時，
+子數列 $A[1..A.size]$ 滿足最大堆性質。
+\stopEXERCISE
+
+\startANSWER
+\emph{初始化：} $A$ 是最大堆，除非 $A[i]$ 比他的父節點大，
+因此只有 $A[i]$ 被修改過。 $A[i]$ 比其子節點大，
+否則無法通過參數校驗，即不會進入循環（新值大於舊值，
+ 且舊值大於其父節點）；
+
+\emph{保持：} 調換 $A[i]$ 和其父節點時，仍然滿足最大堆的性質，
+只有 $A[PARENT(i)]$ 可能比其父節點大。
+ $i$ 變爲 \ALGO{PARENT(i)} 後此不變式仍然成立；
+
+\emph{終止：}當到達根節點，或者 $A[i]$ 和其父節點關系滿足最大堆的性質時，
+循環終止。循環終止後， $A$ 就是一個最大堆了。
+\stopANSWER

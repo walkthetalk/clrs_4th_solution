@@ -1,0 +1,18 @@
+\startEXERCISE
+對於 \ALGO{BUILD-MAX-HEAP} 中第 2 行的循環控制變量 $i$ 而言，
+爲什麼要求他從 $\lfloor n/2 \rfloor$ 到 $1$ 遞減，
+而不是從 $1$ 到 $\lfloor n/2 \rfloor$ 遞增？
+附：
+
+\CLRSH{BUILD-MAX-HEAP(A)}
+\startCLRSCODE
+for i = \lfloor A.size/2\rfloor downto 1
+  \ALGO{MAX-HEAPIFY(A, i)}
+\stopCLRSCODE
+\stopEXERCISE
+
+\startANSWER
+如果是遞增的話，就不能調用 \ALGO{MAX-HEAPIFY} 了，
+因爲無法保證子樹是最大堆。
+即如果從 $1$ 開始，無法保證 $A[2]$ 和 $A[3]$ 是最大堆的根節點。
+\stopANSWER

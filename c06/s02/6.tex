@@ -1,0 +1,24 @@
+\startEXERCISE
+就常量因子而言， \ALGO{MAX-HEAPIFY} 的執行效率很不錯，
+但第 $10$ 行可能是個例外，有的編譯器可能會產生低效的代碼。
+請用循環控制結構取代遞迴，重寫 \ALGO{MAX-HEAPIFY}。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MAX-HEAPIFY-LOOP(A, i)}
+\startCLRSCODE
+while true
+	l = \ALGO{LEFT(i)}
+	r = \ALGO{RIGHT(i)}
+	if l ≤ A.size and A[l] < A[i]
+		largest = l
+	else
+		largest = i
+	if r ≤ A.size and A[r] < A[i]
+		largest = r
+	if largest == i
+		return
+	\ALGO{SWAP(A[i],A[largest])}
+	i = largest
+\stopCLRSCODE
+\stopANSWER

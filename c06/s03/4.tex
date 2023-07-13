@@ -1,0 +1,23 @@
+\startEXERCISE
+證明：對於任一含有 $n$ 個元素的堆，
+高度爲 $h$ 的節點數目最多爲 $\lceil n/2^{h+1} \rceil$。
+\stopEXERCISE
+
+\startANSWER
+首先，堆中葉子節點的個數爲 $\lceil n/2 \rceil$ （參見\inexercise[heap_leave]）。
+下面歸納證明 $h$：
+
+\emph{初始化：} $h = 0$ 時，
+葉子節點數目 $\lceil n/2 \rceil = \left\lceil n/2^{0+1} \right\rceil$；
+
+\emph{保持：}假設對於 $h - 1$ 結論成立，
+移除所有葉子節點得到的新堆含有 $n-\lceil n/2 \rceil = \lfloor n/2 \rfloor$ 個元素，
+原堆中高度爲 $h$ 的節點在新樹中高度爲 $h-1$；
+令新樹中高度爲 $h-1$ 的節點個數爲 $T$，則由假設可知：
+\startsplitformula\startmathalignment
+\NC T \NC = \lceil \lfloor n/2 \rfloor / 2^{h-1+1} \rceil \NR
+\NC \NC < \lceil (n/2)/2^h \rceil \NR
+\NC \NC = \left\lceil \frac{n}{2^{h+1}} \right\rceil \NR
+\stopmathalignment\stopsplitformula
+即對於 $h$ 結論依舊成立。
+\stopANSWER

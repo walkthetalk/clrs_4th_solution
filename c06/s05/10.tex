@@ -1,0 +1,14 @@
+\startEXERCISE
+\ALGO{MAX-HEAP-DELETE(A, x)} 能將對象 $x$ 從堆 $A$ 中刪除。
+對於一個包含 $n$ 個元素的最大堆，
+請設計一個能在 $O(\lg{n})$ 時間內完成的 \ALGO{MAX-HEAP-DELETE} 算法。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MAX-HEAP-DELETE(A, x)}
+\startCLRSCODE
+A[x] = A[A.size]
+A.size = A.size - 1
+MAX-HEAPIFY(A, x)
+\stopCLRSCODE
+\stopANSWER

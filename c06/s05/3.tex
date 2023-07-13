@@ -1,0 +1,40 @@
+\startEXERCISE
+要求用最小堆實現最小優先隊列，請寫出\ALGO{HEAP-MINIMUM}、
+\ALGO{HEAP-EXTRACT-MIN}、\ALGO{HEAP-DECREASE-KEY} 和 \ALGO{MIN-HEAP-INSERT} 的僞碼。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{HEAP-MINIMUM(A)}
+\startCLRSCODE
+return A[1]
+\stopCLRSCODE
+
+\CLRSH{HEAP-EXTRAC-MIN(A)}
+\startCLRSCODE
+if A.size < 1
+	error "heap underflow"
+min = A[1]
+A[1] = A[A.size]
+A.size = A.size - 1
+\ALGO{MIN-HEAPIFY(A, 1)}
+\stopCLRSCODE
+
+\CLRSH{HEAP-DECREASE-KEY(A, i, key)}
+\startCLRSCODE
+if key > A[i]
+	error "new key is bigger than current key"
+A[i] = key
+j = \ALGO{PARENT(i)}
+while i > 1 and A[j] > A[i]
+	\ALGO{SWAP(A[i],A[j])}
+	i = j
+	j = \ALGO{PARENT(i)}
+\stopCLRSCODE
+
+\CLRSH{MIN-HEAP-INSERT(A, key)}
+\startCLRSCODE
+A.size = A.size + 1
+A[A.size] = +\infty
+\ALGO{HEAP-DECREASE-KEY(A, A.size, key)}
+\stopCLRSCODE
+\stopANSWER

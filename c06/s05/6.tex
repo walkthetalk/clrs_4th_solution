@@ -1,0 +1,11 @@
+\startEXERCISE
+Uriah 教授建議將 \ALGO{MAX-HEAP-INCREASE-KEY} 中第 5～7 行的 \emph{while} 循環
+改爲調用 \ALGO{MAX-HEAPIFY}。
+這樣做有沒有問題？
+\stopEXERCISE
+
+\startANSWER
+\emph{while} 循環是將數據上移，
+而 \ALGO{MAX-HEAPIFY} 是下移，
+如果改成調用 \ALGO{MAX-HEAPIFY} 會直接返回。
+\stopANSWER

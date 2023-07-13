@@ -1,0 +1,19 @@
+\startEXERCISE
+在 \ALGO{HEAP-INCREASE-KEY} 的第 6 行，
+一般要通過三次賦值才能完成交換操作
+（不算將對象映射到數列索引上）。
+想一想如何利用 \ALGO{INSERTION-SORT} 內循環部分的思想，
+只用一次賦值就完成這一交換操作？
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MAX-HEAP-INCREASE-KEY(A, i, key)}
+\startCLRSCODE
+if key < A[i]
+	error "new key is smaller than current key"
+while i > 1 and A[PARENT(i)] < key
+	A[i] = A[PARENT(i)]
+	i = PARENT(i)
+A[i] = key
+\stopCLRSCODE
+\stopANSWER
