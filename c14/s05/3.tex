@@ -1,0 +1,19 @@
+\startEXERCISE
+假設 \ALGO{OPTIMAL-BST} 不維護表 $\omega[i,j]$，
+而是在第 9 行利用公式（14.12）直接計算 $\omega(i,j)$，
+並在第 11 行使用。
+如此改動對漸進時間複雜度會有何影響？
+附公式（5-5）：
+\startformula
+\omega(i,j) = \sum_{l=i}^{j}p_l + \sum_{l=i-1}^{j}q_l
+\stopformula
+\stopEXERCISE
+
+\startANSWER
+此改動不會影響算法的漸進時間複雜度。
+就改動本身而言，時間由 $\Theta(1)$ 變爲 $\Theta(j-i)$。
+但是，後面的循環本來就是 $\Theta(j-i)$，
+所以再加一個 $\Theta(j-i)$，
+結果還是 $\Theta(j-i)$，從而對整個算法而言，
+時間複雜度沒什麼變化，還是 $\Theta(n^3)$。
+\stopANSWER
