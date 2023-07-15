@@ -1,0 +1,45 @@
+\startPROBLEM[problem:14-3]
+（Bitonic euclidean traveling-salesman problem）
+在\emph{歐幾裏德旅行商}問題中，
+給定平面上 $n$ 個點作爲輸入，
+希望求出連接所有 $n$ 個點的最短巡遊路線。
+圖 14-11(a) 給出了一個 7 點問題的解。
+此問題是 NP-hard 問題，
+因此大家認爲多項式時間內無法求解（參見第 34 章）。
+
+J.L. Bentley 建議將問題簡化，
+限制巡遊路線爲\emph{雙調巡遊}（bitonic tours），
+即從最左邊的點開始，嚴格向右前進，直至最右邊的點，
+然後掉頭嚴格向左前進，直至回到起始點。
+圖 14-11(b) 給出了這 7 個點的最短雙調巡遊路線。
+問題簡化後，多項式時間內就可以求解了。
+
+設計一個 $O(n^2)$ 時間的最優雙調巡遊路線算法。
+假設任何兩個點的 $x$ 坐標均不同，
+且所有實數運算都花費單位時間。
+（\hint 由左至右掃描，對巡遊路線的兩個部分分別維護可能的最優解。）
+\stopPROBLEM
+
+\startANSWER
+\startcombination[2*1]
+{\externalfigure[p14_3-1][width=.3\textwidth]}{a}
+{\externalfigure[p14_3-2][width=.3\textwidth]}{b}
+\stopcombination
+
+先對所有點按橫坐標進行排序，
+得到序列 $\langle p_1, p_2, \ldots, p_n\rangle$。
+最左端的點爲 $p_1$，最右端的點爲 $p_n$。
+定義最短雙調路徑爲 $B[i,j]$，
+包括 $p_1$ 到 $p_j$ 中所有點，
+其中 $1\le i \le j\le n$。
+此路徑包含兩部分：
+從 $p_i$ 到 $p_1$ 的向左子圖，
+以及從 $p_1$ 到 $p_j$ 的向右子圖。
+根據題意，需要計算 $b[n,n]$。
+
+\startformula\startmathalignment
+\NC B[1,2] \NC = |p_1 p_2| \NR
+\NC B[i,j+1] \NC = B[i, j] + |p_{j} p_{j+1}| \qquad \text{如果 \m{i < j}；} \NR
+\NC B[j, j+1] \NC = \min_{k=1}^{j-1}\{B[k,j+1] + |p_k p_{j}|\} \NR
+\stopmathalignment\stopformula
+\stopANSWER

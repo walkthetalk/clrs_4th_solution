@@ -1,0 +1,75 @@
+\startPROBLEM
+（Printing neatly）
+所謂整齊打印問題，
+就是用等寬字符打印一段文本。
+輸入文本是 $n$ 個單詞，
+單詞長度分別爲 $l_1,l_2,\ldots,l_n$ 個字符。
+我們希望將此段文本整齊打印爲多行，
+每行最多 $M$ 個字符。
+“整齊”的標準是這樣的：
+如果某行包含第 $i$ 到第 $j$ （$i\le j$）個單詞，
+且單詞間隔爲一個空格符，
+則行尾的額外空格數量爲 $M-j+i-\sum_{k=i}{j}l_k$，
+這個值不能是負數，否則一行內無法容納這些單詞。
+我們希望所有行（最後一行除外）的額外空格數的立方之和最小。
+設計一個動態規劃算法，
+整齊打印一段有 $n$ 個單詞的文本。
+分析算法的時間、空間復雜度。
+\stopPROBLEM
+
+\startANSWER
+如果某一行包含單詞 $i$ 到 $j$，
+令 $\EXTRAS[i,j] = M - j + i - \sum_{k=1}^{j}l_k$ 爲此行行尾空格數目。
+需要注意的是， $\EXTRAS$ 可能是負值。
+
+定義此行的代價爲 $\LINECOST[i,j]$，則：
+\startformula
+\LINECOST[i,j] = \startcases
+\NC \infty \NC \text{如果 $\EXTRAS[i,j] < 0$ （即單詞 $i,\ldots,j$ 不滿足要求）；} \NR
+\NC 0 \NC \text{如果 $j=n$ 且 $\EXTRAS\ge 0$ （最後一行代價爲 0）；} \NR
+\NC (\EXTRAS[i,j])^3 \NC \text{否則。} \NR
+\stopcases
+\stopformula
+
+目標就是使得所有 $\LINECOST$ 的和最小。
+
+令 $C(j)$ 爲前 $j$ 個單詞的最小代價，其中第 $j$ 個單詞位於一行的末尾，則：
+\startformula\startmathalignment
+\NC C(0) \NC = 0 \NR
+\NC C(j) \NC = \min_{i = 1}^{j}\{C(i-1) + \LINECOST(i, j)\} \NR
+\stopmathalignment\stopformula
+$C(n)$ 即爲最終結果。
+
+\CLRSH{PRINT_NEATLY(M, l, n)}
+\startCLRSCODE
+C[0] = 0
+for j = 1 to n
+	C[j] = ∞
+	for i = 1 to j
+		lc = linecost(i, j)
+		if lc == \infty
+			break;
+		tmp = C[i-1] + lc
+		if tmp < C[j]
+			C[j] = tmp
+			L[j] = i
+return L
+\stopCLRSCODE
+
+$L[n]$ 的值爲最後一行第一個單詞的序號，
+即，令 $k=L[n]$，則最後一行的單詞爲 $l_k,\ldots, l_n$。
+而 $L[k]$ 的值爲倒數第二行第一個單詞的序號。
+以此類推，我們可以找到每一行的第一個單詞，即可打印出所有單詞。
+
+$C$ 和 $L$ 的長度均爲 $n+1$，
+因此空間複雜度爲 $O(n)$。
+
+運行時間爲填充 $C$ 和 $L$ 的時間，
+加上遍歷 $L$ 打印所有單詞的時間。
+其中遍歷 $L$ 的時間爲 $O(n)$。
+填充 $C[j]$ 時，我們做了 $j$ 次比較，
+因此循環所需時間爲 $O(n^2)$。
+但是考慮到每一行的單詞數目肯定小於 $M/2$ （一旦打印長度超過了 $M$，
+即可提前退出循環），因此比較所用時間爲 $O(M)$。
+從而整體時間爲 $O(nM)$。
+\stopANSWER

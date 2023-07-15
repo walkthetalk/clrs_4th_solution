@@ -1,0 +1,21 @@
+\CLRSH{OPTIMAL-BST'(p,q,n)}
+\startCLRSCODE
+\ALGO{NEW-ARRAY(e[1:n+1,0:n])}
+\ALGO{NEW-ARRAY(w[1:n+1,0:n])}
+\ALGO{NEW-ARRAY(root[1:n,1:n])}
+
+for i = 1 to n+1
+	e[i,i-1] = q_{i-1}
+	w[i,i-1] = q_{i-1}
+for l = 1 to n
+	for i = 1 to n - l + 1
+		j = i + l - 1
+		e[i,j] = \infty
+		w[i,j] = w[i,j-1] + p_j + q_j
+		for r = root[i, j-1] to root[i+1, j]	// Knuth
+			t = e[i,r-1] + e[r+1,j] + w[i,j]
+			if t < e[i,j]
+				e[i,j] = t
+				root[i,j] = r
+return e and root
+\stopCLRSCODE

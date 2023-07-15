@@ -1,0 +1,41 @@
+\startPROBLEM
+（Longest palindrome subsequence）
+\emph{回文}（palindrome）是正序與逆序相同的非空字串。
+例如，所有長度爲 1 的字串、 civic、 racecar 以及 aibohphobia（害怕回文之意）都是回文。
+
+設計高效算法，求給定輸入字串的最長回文子序列。
+例如，給定輸入 character，算法應該返回 carac。
+算法的運行時間如何？
+\stopPROBLEM
+
+\startANSWER
+設 $m$ 爲最長回文子序列的長度，則：
+\startformula
+m[i,j] = \startcases
+\NC m[i+1,j-1] + 1 \NC \text{如果 $A[i] = A[j]$；} \NR
+\NC \max\{m[i,j-1], m[i+1,j]\} \NC \text{如果 $A[i] \ne A[j]$。} \NR
+\stopcases
+\stopformula
+
+\CLRSH{LPS-LENGTH(A)}
+\startCLRSCODE
+n = A.length
+for i = 1 to n
+	m[i,i] = 1
+for l = 2 to n
+	for i = 1 to n - l + 1
+		j = i + l - 1
+		if A[i] == A[j]
+			m[i,j] = m[i+1, j-1] + 1
+			s[i,j] = "↙"
+		else if m[i+1, j] >= m[i, j-1]
+			m[i, j] = m[i+1, j]
+			s[i, j] = "↓"
+		else
+			m[i ,j] = m[i, j-1]
+			s[i, j] = "←"
+return m and s
+\stopCLRSCODE
+
+時間複雜度爲 $\Theta(n^2)$。
+\stopANSWER

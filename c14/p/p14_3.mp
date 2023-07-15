@@ -1,5 +1,6 @@
 input TEX;
 input format;
+input clrs;
 
 bboxmargin := 0;
 
@@ -22,17 +23,17 @@ image(
 
 	for i := 0 upto maxx:
 		draw ((i, -0.5)--(i, (maxy + 0.5))) scaled gsize
-			dashed evenly;
+			dashed evenly withcolor clrsClC;
 	endfor;
 	for i := 0 upto maxy:
 		draw ((-0.5, i)--((maxx + 0.5), i)) scaled gsize
-			dashed evenly;
+			dashed evenly withcolor clrsClC;
 	endfor;
 
 	i := 0;
 	forever:
 		exitif unknown(DATA[i]);
-		fill fullcircle scaled .4gsize shifted (DATA[i] scaled gsize);
+		fill fullcircle scaled .4gsize shifted (DATA[i] scaled gsize) withcolor clrsCfB;
 		i := i + 1;
 	endfor;
 
@@ -46,7 +47,7 @@ image(
 	endfor;
 	tour := tour -- cycle;
 
-	draw tour scaled gsize withpen pencircle scaled .1gsize;
+	draw tour scaled gsize withpen pencircle scaled .1gsize withcolor clrsCfB;
 )
 enddef;
 

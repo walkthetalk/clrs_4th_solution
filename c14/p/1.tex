@@ -1,0 +1,49 @@
+\startPROBLEM
+（Longest simple path in a directed acyclic graph）
+在有向無環圖 $G=(V,E)$ 中，
+邊的權重爲實數， $s$ 和 $t$ 爲其中兩個頂點。
+設計動態規劃算法，求從 $s$ 到 $t$ 的最長加權簡單路徑。
+子問題圖是怎樣的？
+算法效率如何？
+\stopPROBLEM
+
+\startANSWER
+第一種方法，全量遍歷：
+
+\CLRSH{LSP-DAG-AUX(G, s, L)}
+\startCLRSCODE
+for \text{each edge $(s, w)$ in $E(G)$}
+	L[w] = \max(L[w], L[s] + \ALGO{WEIGHT(G, (v,w))})
+	\ALGO{LSP-DAG-AUX(G, w, L)}
+\stopCLRSCODE
+
+\CLRSH{LSP-DAG(G, s, t)}
+\startCLRSCODE
+for \text{each vertex $v$ in $G$}
+	L[v] = 0
+
+\ALGO{LSP-DAG-AUX(G, s, L)}
+
+return L[t]
+\stopCLRSCODE
+
+複雜度爲 $\Theta(|V|) + \Theta(|E|)$。
+
+第二種方法，部分遍歷：
+
+\CLRSH{LSP-DAG(G, s, t)}
+\startCLRSCODE
+for \text{each vertex $v$ in $V(G)$}
+	L[v] = 0
+
+for \text{vertex } v = s to t \text{ by \ALGO{TOP-ORDER(G)}}
+	for \text{each edge $(v, w)$ in $E(G)$}
+		L[w] = \max(L[w], L[v] + \ALGO{WEIGHT(G, (v, w))})
+
+return L[t]
+\stopCLRSCODE
+
+其中 \ALGO{TOP-ORDER} 爲關鍵所在，爲所有節點排序，
+保證任何一個有向邊的起始點在結束點的前面。
+時間複雜度依舊是 $\Theta(|V|) + \Theta(|E|)$。
+\stopANSWER

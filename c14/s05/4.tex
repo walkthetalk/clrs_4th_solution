@@ -1,0 +1,15 @@
+\startEXERCISE
+Knuth 已經證明，對所有 $1\le i < j \le n$，
+最優二叉搜索樹的根滿足 $root[i,j-1]\le root[i,j]\le root[i+1,j]$。
+利用這一特性改寫算法 \ALGO{OPTIMAL-BST}，
+使得運行時間降爲 $\Theta(n^2)$。
+\stopEXERCISE
+
+\startANSWER
+\inputsamedir{algo_optimal_bst_var}
+
+所做改動只是 $r$ 循環的範圍，
+根據 Knuth 的結論我們只需遍歷 $r[i,j-1]$ 到 $r[i+1,j]$ 之間的元素即可。
+此行的遍歷不會重疊，也就是說 $i$ 循環是 $\Theta(n)$，
+總時間爲 $\Theta(n^2)$。
+\stopANSWER
