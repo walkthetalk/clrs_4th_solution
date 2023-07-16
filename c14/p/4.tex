@@ -7,9 +7,9 @@
 我們希望將此段文本整齊打印爲多行，
 每行最多 $M$ 個字符。
 “整齊”的標準是這樣的：
-如果某行包含第 $i$ 到第 $j$ （$i\le j$）個單詞，
+如果某行包含第 $i$ 到第 $j$ 個單詞（$i\le j$），
 且單詞間隔爲一個空格符，
-則行尾的額外空格數量爲 $M-j+i-\sum_{k=i}{j}l_k$，
+則行尾的額外空格數量爲 $M-j+i-\sum_{k=i}^{j}l_k$，
 這個值不能是負數，否則一行內無法容納這些單詞。
 我們希望所有行（最後一行除外）的額外空格數的立方之和最小。
 設計一個動態規劃算法，
@@ -19,24 +19,24 @@
 
 \startANSWER
 如果某一行包含單詞 $i$ 到 $j$，
-令 $\EXTRAS[i,j] = M - j + i - \sum_{k=1}^{j}l_k$ 爲此行行尾空格數目。
-需要注意的是， $\EXTRAS$ 可能是負值。
+令 $s[i,j] = M - j + i - \sum_{k=1}^{j}l_k$ 爲此行行尾空格數目。
+需要注意的是， $s$ 可能是負值。
 
-定義此行的代價爲 $\LINECOST[i,j]$，則：
+定義此行的代價爲 $c[i,j]$，則：
 \startformula
-\LINECOST[i,j] = \startcases
-\NC \infty \NC \text{如果 $\EXTRAS[i,j] < 0$ （即單詞 $i,\ldots,j$ 不滿足要求）；} \NR
-\NC 0 \NC \text{如果 $j=n$ 且 $\EXTRAS\ge 0$ （最後一行代價爲 0）；} \NR
-\NC (\EXTRAS[i,j])^3 \NC \text{否則。} \NR
+c[i,j] = \startcases
+\NC \infty \NC \text{如果 $s[i,j] < 0$ （即單詞 $i,\ldots,j$ 不滿足要求）；} \NR
+\NC 0 \NC \text{如果 $j=n$ 且 $s\ge 0$ （最後一行代價爲 0）；} \NR
+\NC (s[i,j])^3 \NC \text{否則。} \NR
 \stopcases
 \stopformula
 
-目標就是使得所有 $\LINECOST$ 的和最小。
+目標就是使得所有 $c$ 的和最小。
 
 令 $C(j)$ 爲前 $j$ 個單詞的最小代價，其中第 $j$ 個單詞位於一行的末尾，則：
 \startformula\startmathalignment
 \NC C(0) \NC = 0 \NR
-\NC C(j) \NC = \min_{i = 1}^{j}\{C(i-1) + \LINECOST(i, j)\} \NR
+\NC C(j) \NC = \min_{i = 1}^{j}\{C(i-1) + c(i, j)\} \NR
 \stopmathalignment\stopformula
 $C(n)$ 即爲最終結果。
 
@@ -46,10 +46,9 @@ C[0] = 0
 for j = 1 to n
 	C[j] = ∞
 	for i = 1 to j
-		lc = linecost(i, j)
-		if lc == \infty
+		if s(i,j) < 0
 			break;
-		tmp = C[i-1] + lc
+		tmp = C[i-1] + s(i,j)
 		if tmp < C[j]
 			C[j] = tmp
 			L[j] = i
@@ -63,6 +62,8 @@ $L[n]$ 的值爲最後一行第一個單詞的序號，
 
 $C$ 和 $L$ 的長度均爲 $n+1$，
 因此空間複雜度爲 $O(n)$。
+
+另外 $s(i,j)$ 也可以用數組記錄下來，所用空間爲 $O(n)$。
 
 運行時間爲填充 $C$ 和 $L$ 的時間，
 加上遍歷 $L$ 打印所有單詞的時間。

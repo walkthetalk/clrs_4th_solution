@@ -1,0 +1,50 @@
+\startPROBLEM
+（Planning a company party）
+一位總經理正在向 Stewart 教授諮詢公司聚會的計劃。
+公司的內部結構關係是層次化的，
+即員工按主管——下屬關係構成一棵樹，根節點爲總經理。
+人事部按“宴會交際能力”爲每個員工打分，分值爲實數。
+爲了使所有參加聚會的員工都感到愉快，
+總經理不希望員工及其直接主管同時出席。
+
+公司總經理向 Stewart 教授提供公司結構樹，
+採用 10.3 節介紹的左孩子右兄弟表示法描述。
+樹中每個節點除保存指針外，
+還保存員工的名字和宴會交際評分。
+設計算法，給出一個出席名單，使得宴會交際評分之和最大。
+分析算法的時間複雜度。
+\stopPROBLEM
+
+\startANSWER
+令 $D[i]$ 爲僅邀請 $i$ 及其下屬的最大得分。
+令 $E[i]$ 爲僅邀請 $i$ 的下屬的最大得分。
+則：
+\startformula\startmathalignment
+\NC E[i] \NC = \sum_{j\in C_i}D[j] \NR
+\NC D[i] \NC = \max(E[i], a_i + \sum_{j\in C_i}E[j]) \NR
+\stopmathalignment\stopformula
+
+$D[1]$ 即爲所求。
+由於 $D[i]$ 和 $E[i]$ 僅依賴於 $D[j]$ 和 $E[j]$，
+其中 $j$ 爲 $i$ 的下屬，我們可以按樹中自下而上的順序進行計算。
+如果我們知道 $i$ 的下屬序號均大於 $i$，
+則可以按從 $n$ 到 $1$ 的順序計算 $E[i]$、 $D[i]$。
+
+\CLRSH{PLAN-PARTY(A, C)}
+\startCLRSCODE
+for i = n downto 1
+	E[i] = 0
+	D[i] = 0
+	foreach j ∈ C[i]
+		E[i] = E[i] + D[j]
+		D[i] = D[i] + E[j]
+	D[i] = D[i] + A[i]
+	if E[i] > D[i]
+		D[i] = E[i]
+\stopCLRSCODE
+
+第 $i$ 次迭代中的循環需要 $2|C_i|+4$ 步，
+總共需要時間 $4n + 2\sum_i|C_i|$。
+除總經理外，其他員工都有一個直接領導，因此 $\sum_i|C_i|=n-1$。
+因此總時間爲 $\Theta(n)$。
+\stopANSWER

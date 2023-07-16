@@ -33,7 +33,7 @@ image(
 	i := 0;
 	forever:
 		exitif unknown(DATA[i]);
-		fill fullcircle scaled .4gsize shifted (DATA[i] scaled gsize) withcolor clrsCfB;
+		fill fullcircle scaled .4gsize shifted (DATA[i] scaled gsize) withcolor clrsCfE;
 		i := i + 1;
 	endfor;
 
@@ -47,7 +47,7 @@ image(
 	endfor;
 	tour := tour -- cycle;
 
-	draw tour scaled gsize withpen pencircle scaled .1gsize withcolor clrsCfB;
+	draw tour scaled gsize withpen pencircle scaled .1gsize withcolor clrsCfE;
 )
 enddef;
 

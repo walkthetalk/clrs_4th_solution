@@ -1,0 +1,134 @@
+\startPROBLEM
+（Edit distance）
+爲將一串文本 $x[1..m]$ 轉換爲目標串 $y[1..n]$，
+我們可以使用多種變換操作。
+我們的目標是：給定 $x$ 和 $y$，
+求將 $x$ 轉換爲 $y$ 的一個變換操作序列。
+使用 $z$ 保存中間結果，假定他足夠大，
+可寸下中間結果的所有字符。
+初始時， $z$ 是空的，
+結束時，應有 $z[j]=y[j]$，其中 $j=1,2,\ldots,n$。
+我們維護兩個下標 $i$ 和 $j$，分別用來索引 $x$ 和 $z$，
+變換操作允許改變 $z$ 的內容和這兩個下標。
+初始時， $i=j=1$。
+在轉換過程中應處理 $x$ 的所有字符，
+這意味着在變換操作結束時，應有 $i=m+1$。
+
+我們可以使用如下 6 種變換操作，每種變化的開銷都是常數：
+\startigBase
+\item \emph{複製}（copy）——從 $x$ 複製一個字符到 $z$，
+即賦值操作 $z[j] = x[i]$，並將兩個下標 $i$ 和 $j$ 都增 1。
+此操作會處理 $x[i]$，開銷爲 $Q_C$。
+
+\item \emph{替換}（replace）——將 $x$ 中的一個字符
+替換爲另一個字符 $c$， $z[j]=c$，
+並將兩個下標 $i$ 和 $j$ 都增 1。
+此操作會處理 $x[i]$，開銷爲 $Q_R$。
+
+\item \emph{刪除}（delete）——刪除 $x$ 中一個字符，
+即將 $i$ 增 1， $j$ 不變。
+此操作會處理 $x[i]$，開銷爲 $Q_D$。
+
+\item \emph{插入}（insert）——將字符 $c$ 插入 $z$ 中，
+ $z[j]=c$，將 $j$ 增 1， $i$ 不變。
+此操作不會處理 $x$，開銷爲 $Q_I$。
+
+\item \emph{旋轉}（twiddle，即交換）——將 $x$ 中下兩個字符複製到 $z$ 中，
+但交換順序， $z[j]=x[i+1]$、 $z[j+1]=x[i]$，
+將 $i$ 和 $j$ 都增 2。
+此操作處理了 $x[i]$ 和 $x[i+1]$，開銷爲 $Q_T$。
+
+\item \emph{終止}（kill）——刪除 $x$ 中剩餘字符，
+令 $i=m+1$。
+此變換會處理 $x$ 中所有尚未處理的字符。
+如果執行此操作，則轉換過程結束。
+開銷爲 $Q_K$。
+\stopigBase
+
+圖 14.12 給出了一種變換，
+可以將源字串 {\tt algorithm} 轉換爲目標字串 {\tt altruistic}，
+下劃線標出了執行每個變換操作後兩個下標的位置。
+還有很多其他變換序列也可以完成這個變換。
+
+假設 $Q_C<Q_D+Q_I$ 且 $Q_R<Q_D+Q_I$，
+否則，拷貝和替換就沒有意義了。
+整個變換序列的總開銷就是各步驟開銷的和。
+圖 14.12 中變換序列的總開銷是 $3Q_C + Q_R + Q_D + 4Q_I + Q_T + Q_K$。
+
+\inputsamedir{fig14.12}
+
+% a
+\startigBase[a]\startitem
+給定兩個字串 $x[1..m]$ 和 $y[1..n]$ 以及變換操作的開銷，
+ $x$ 到 $y$ 的\emph{編輯距離}（edit distance）是
+將 $x$ 轉換爲 $y$ 所需變換序列的最小開銷。
+設計動態規劃算法，
+求 $x[1..m]$ 到 $y[1..n]$ 的編輯距離並打印最優變換序列。
+分析算法的時間、空間複雜度。
+\stopitem\stopigBase
+
+\startANSWER
+子問題：將 $x[1..i]$ 轉換成 $y[1..j]$，
+其中 $1\le i\le m$， $1\le j\le n$，
+其代價爲 $Q(i,j)$。則：
+\startformula\startmathalignment
+\NC Q(0,0) \NC = 0 \NR
+\NC Q(i,j) \NC = \min\startcases
+\NC Q(i-1,j-1) + Q_C \NC \text{如果 $x_i=y_j$；} \NR
+\NC Q(i-1,j-1) + Q_R \NC \text{如果 $x_i\ne y_j$；} \NR
+\NC Q(i-1,j) + Q_D \NC \NR
+\NC Q(i,j-1) + Q_I \NC \NR
+\NC Q(i-2,j-2) + Q_S \NC \text{如果$[x_{i-1}x_i]=[y_i y_{i-1}]$；} \NR
+\stopcases \NR
+\stopmathalignment\stopformula
+除 $D$ 外，我們還可以維護一張表用來記錄執行了哪些操作。
+最小代價爲
+\startformula
+Q[m,n] = \min_{i<m}\{Q[i,n]\} + Q_K
+\stopformula
+
+時間、空間複雜度均爲 $\Theta(mn)$。
+\stopANSWER
+
+編輯距離問題是 DNA 序列對齊問題的推廣
+（參考其他文獻，如 Setubal 和 Meidanis [405， 3.2 節]）。
+已有多種方法可以通過對齊兩個 DNA 序列來衡量他們的相似度。
+有一種對齊方法是將空格符插入到兩個序列 $x$ 和 $y$ 中，
+可以插入到任何位置（包括兩端），
+使得結果序列 $x'$ 和 $y'$ 的長度相同，
+但不會在相同的位置出現空格符
+（即不存在位置 $j$ 使得 $x'[j]$ 和 $y'[j]$ 都是空格符）。
+然後爲每個位置“打分”，位置 $j$ 的分數爲：
+
++1，如果 $x'[j]=y'[j]$ 且不是空格符；
+
+-1，如果 $x'[j]\ne y'[j]$ 且都不是空格符；
+
+-2， $x'[j]$ 或 $y'[j]$ 是空格符；
+
+對齊方案的分數爲所有位置的分數之和。
+例如，給定序列 $x=\text{\tt GATCGGCAT}$ 和 $y=\text{\tt CAATGTGAATC}$，
+一種對齊方案爲：
+
+{\tt G ATCG GCAT }
+
+{\tt CAAT GTGAATC}
+
+{\tt -*++*+*+-++*}
+
+其中 + 表示該位置分數爲 +1， - 表示分數爲 -1， * 表示分數爲 -2，
+因此此方案的總分數爲 $6\times 1 - 2 \times 1 - 4 \times 2 = -4$。
+
+\startigBase[continue]\startitem
+解釋如何將最優對齊問題轉換爲編輯距離問題，
+使用的操作爲變換操作復制、替換、刪除、插入、旋轉和終止的子集。
+\stopitem\stopigBase
+
+\startANSWER
+如果 $x'[j]=y'[j]$ 且不是空格符，則等效爲複製；
+如果 $x'[j]$ 爲空格， $y'[j]$ 不是空格，則等效爲插入；
+如果 $x'[j]$ 不是空格， $y'[j]$ 是空格，則等效爲刪除；
+如果 $x'[j]\ne y'[j]$ 且都不是空格符，則等效爲替換。
+\stopANSWER
+
+\stopPROBLEM

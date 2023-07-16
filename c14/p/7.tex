@@ -1,0 +1,96 @@
+\startPROBLEM
+（Viterbi algorithm）
+語音識別時可以在有向圖上進行動態規劃。
+爲有向圖 $G=(V,E)$ 中的邊打上標籤，
+從而形成一個人說某種特定語言的形式化模型。
+每條邊 $(u,v)\in E$ 所打聲音標籤 $\sigma(u, v)$，
+來自有限聲音集 $\Sigma$。
+圖中從特定頂點 $v_0\in V$ 開始的每條有向路徑
+都對應此模型所能生成的一個語音序列。
+對於一條有向路徑，我們定義其標籤爲路徑中邊上標籤的簡單連接。
+\startigBase[a]\startitem
+設計高效算法，對給定的有向圖 $G$ （邊上帶標籤）、
+特定頂點 $v_0$ 及 $\Sigma$ 上的聲音序列
+ $s=\langle \sigma_1,\sigma_2,\ldots,\sigma_k\rangle$，
+返回 $G$ 中從 $v_0$ 開始的一條路徑，
+ $s$ 爲該路徑的標籤（如果存在這樣的路徑）。
+否則，算法返回 \ALGO{NO-SUCH-PATH}。
+分析算法的時間複雜度（\hint 第 20 章中的概念可能會有幫助）。
+\stopitem\stopigBase
+
+\startANSWER
+\CLRSH{VITERBI(G, s, v_0)}
+\startformula\startmathalignment
+\NC S(i,j) \NC = \bigvee_{k:(v_k,v_i)\in E \land \sigma(v_k,v_i)=\sigma_j} S(k,j-1) \NR
+\NC S(0,0) \NC = 1 \NR
+\NC S(i,0) \NC = 0 \qquad 1\le i \le n-1 \NR
+\stopmathalignment\stopformula
+
+\CLRSH{VITERBI(G, s, v_0)}
+\startCLRSCODE
+if s.length = 0
+	return v_0
+
+for (v_0,v_1) \in E
+	if \sigma(v_0,v_1) = \sigma_1
+		res = \ALGO{VITERBI}(G, (\sigma_2,\cdots,\sigma_k), v_1)
+		if res \ne \ALGO{NO-SUCH-PATH}
+			return (v_0,res)
+
+return \ALGO{NO-SUCH-PATH}
+\stopCLRSCODE
+
+時間複雜度可能爲 $O(k |V|^2)$，待定。
+\stopANSWER
+
+現在，假定每條邊 $(u,v)\in E$ 都關聯一個非負概率 $p(u,v)$，
+他表示從頂點 $u$ 開始，經過邊 $(u,v)$，
+產生對應的聲音的概率。
+任何頂點的出射邊的概率之和均爲 1。
+一條路徑的概率定義爲路徑上邊的概率之積。
+對於從 $v_0$ 開始的一條路徑，
+我們可以將其概率看作從 $v_0$ 開始進行“隨機遊走”（random walk），
+最後恰巧經過這條路徑的概率。
+所謂“隨機遊走”，是指當位於頂點 $u$ 時，隨機選擇一條出射邊前進，
+每條邊被選中的概率就是他所關聯的概率。
+
+\startigBase[continue]\startitem
+擴展（a）中的算法，
+使得返回的路徑從 $v_0$ 開始、標籤爲 $s$，且概率最大。
+分析算法的時間複雜度。
+\stopitem\stopigBase
+
+\startANSWER
+\startformula\startmathalignment
+\NC S(i,j) \NC = \max_{k:(v_k,v_i)\in E \land \sigma(v_k,v_i)=\sigma_j}
+  \left{p(v_k,v_i) \times S(k,j-1)\right} \NR
+\NC S(0,0) \NC = 1 \NR
+\NC S(i,0) \NC = 0 \qquad 1\le i \le n-1 \NR
+\NC R(i,j) \NC = a_{k:(v_k,v_i)\in E \land \sigma(v_k,v_i)=\sigma_j}
+  \left{p(v_k,v_i) \times S(k,j-1)\right} \NR
+\stopmathalignment\stopformula
+
+上一題中，我們只須找到一條有效路徑即可，
+但本題我們需要遍歷所有有效路徑，找到概率最大的，
+因此運行時間比上一題要長，
+但時間複雜度好像並沒什麼變化，待定。
+
+\CLRSH{VITERBI'(G, s, v_0)}
+\startCLRSCODE
+if s.length = 0
+	return {v_0, 1}
+
+r.seq = \ALGO{NO-SUCH-PATH}
+r.prob = 0
+for (v_0,v_1) \in E
+	if \sigma(v_0,v_1) = \sigma_1
+		res = \ALGO{VITERBI'}(G, (\sigma_2,\cdots,\sigma_k), v_1)
+		if res.prob > r.prob
+			r.seq = {v_0, res.seq}
+			r.prob = p(v_0,v_1) * res.prob
+
+return res
+\stopCLRSCODE
+\stopANSWER
+
+\stopPROBLEM

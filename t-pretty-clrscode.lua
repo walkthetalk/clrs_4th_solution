@@ -97,7 +97,8 @@ local dquotestring= dquote * notdquote^0 * dquote
 local validName   = visualchar^1
 
 -- note: keyword match must use greedy order
-local gkeyword   = P("for")
+local gkeyword   = P("foreach")
+		  + P("for")
                   + P("to")
                   + P("downto")
                   + P("do")
