@@ -1,0 +1,46 @@
+\startEXERCISE
+根據遞迴式（15.2）爲作業選擇問題設計一個動態規劃算法。
+算法應該按前文定義生成最大兼容作業集，並給出其大小 $c[i,j]$。
+假定輸入的作業已按公式（15.1）排好序。
+並與 \ALGO{GREEDY-ACTIVITY-SELECTOR} 比較一下運行時間。
+附公式（15.1）：
+\startformula
+f_1 \le f_2 \le f_3 \le \ldots \le f_{n-1} \le f_n
+\stopformula
+
+附遞迴式（15.2）：
+\startformula
+c[i,j] = \startcases
+\NC 0 \NC \text{如果 \m{S_{ij} = \Phi}} \NR
+\NC \max_{a_k\in S_{ij}}\{c[i,k] + c[k,j] + 1\}
+   \NC \text{如果 \m{S_{ij}\ne \Phi}} \NR
+\stopcases\stopformula
+\stopEXERCISE
+
+\startANSWER
+令 $S_{ij}$ 爲兩個不相重疊的作業 $a_i$ 和 $a_j$ 的間隔。
+下列算法將爲作業選擇問題構建一張表，
+其中 $s$ 和 $f$ 分別是作業的起始和結束時間，長度均爲 $n$。
+
+\CLRSH{BUILD-ACTIVITY-TABLE(s, f)}
+\startCLRSCODE
+n = s.length
+for i = 0 to n
+	c[i][i] = 0
+
+for m = 2 to n
+	for i = 1 to (n-m+1)
+		j = (i+m-1)
+		c[i][j] = 0
+
+		for k = i+1 to j-1
+			if f[i] <= s[k] and f[k] <= s[j]
+				q = (c[i][k] + c[k][j] + 1)
+				if q > c[i][j]
+					c[i][j] = q
+					c[j][i] = k
+return c
+\stopCLRSCODE
+
+此算法總運行時間爲 $O(n^3)$，而貪婪算法運行時間爲 $O(n)$。
+\stopANSWER
