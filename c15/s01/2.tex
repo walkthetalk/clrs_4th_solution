@@ -1,0 +1,26 @@
+\startEXERCISE
+假定我們不再一直選擇最早結束的作業，而是選擇最晚開始的作業，
+前提仍然是與之前選出的所有作業兼容。
+描述如何利用這一方法設計貪心算法，並證明算法會產生最優解。
+\stopEXERCISE
+
+\startANSWER
+這個策略與選擇最早結束的方案是完全對稱的，
+假設時間倒流，所有所動倒過來執行。
+
+假設所有作業已按開始時間從大到小進行排序，即：
+
+$s_1\le s_2\le s_3\le\cdots\le s_n$。
+
+\CLRSH{GREEDY-ACTIVITY-SELECTOR-JMC(s, f, n)}
+\startCLRSCODE
+A = \{a_n\}
+k = n
+
+for m=(n-1) downto 1
+	if f[m] <= s[k]
+		A = \{a_m\} \cup A
+		k = m
+\stopCLRSCODE
+
+\stopANSWER
