@@ -1,0 +1,14 @@
+\startEXERCISE
+證明：編碼樹的總代價還可以表示爲：所有內部節點的兩個孩子節點的聯合頻率之和。
+\stopEXERCISE
+
+\startANSWER
+公式 15.4：
+\startformula
+B(T) = \sum_{c\in C} f(c)d_{T} (c)
+\stopformula
+
+如果改成計算內部節點的孩子節點聯合頻率，
+對於任何一個葉子節點 $c$ 而言，每一個祖先都會計算一次 $f(c)$，
+總共 $d_{T} (c)$ 次。因此結果與公式 15.4 一樣。
+\stopANSWER

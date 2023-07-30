@@ -1,0 +1,16 @@
+\startEXERCISE
+在證明引理 15.2 過程中，如果 $x.freq = b.freq$，
+則 $a.freq = b.freq = x.freq = y.freq$，爲什麼？
+\stopEXERCISE
+
+\startANSWER
+$x$ 和 $y$ 是頻度最低的兩個字符，
+則由於 $a.freq \le b.freq$，可知 $y.freq \le b.freq$。
+
+又由於 $x.freq = b.freq$，因此 $y.freq \le x.freq$；
+再者 $x.freq \le y.freq$，所以 $x.freq = y.freq$。
+
+而 $a.freq \le b.freq = x.freq$，因爲 $x$ 的頻度最低，
+所以 $x.freq \le a.freq$，即 $x.freq \le a.freq \le x.freq$，
+所以 $a.freq = x.freq$。
+\stopANSWER

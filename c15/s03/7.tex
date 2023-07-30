@@ -1,0 +1,30 @@
+\startEXERCISE
+假定一個數據文件由 8 位字符組成，
+ 256 個字符出現的頻率大致相同：
+最高頻率低於最低頻率的 2 倍。
+證明：在此情況下， Huffman 編碼並不比 8 位固定長度編碼更高效。
+\stopEXERCISE
+
+\startANSWER
+令最小頻率爲 $f_{\min}$：
+\startformula
+B(T) = \sum_{c\in C}f(c) d_{T}(c)
+     \ge \sum_{c\in C} f_{\min} \times d_{T}(c)
+     = f_{\min}\times\sum_{c\in C}d_{T}(c)
+\stopformula
+
+其中 $\sum_{c\in C}d_{T}(c)$ 是葉子節點高度之和。
+當 T 爲完全平衡二叉樹的時候，他取得最小值。
+因此：
+\startformula
+B(T) \ge f\times \sum_{c\in C} d_{T}(c)
+     \ge f\times 256 \times 9
+\stopformula
+
+而直接只用 8 位編碼的話，則：
+\startformula
+B(T') = \sum_{c\in C} 8 \times f(c)
+      \le \sum_{c\in C} 8 \times 2 \times f
+      = 256 \times 8 \times 2 \times f
+\stopformula
+\stopANSWER

@@ -1,0 +1,42 @@
+\startEXERCISE[exercise:16.2-2]
+設計動態規劃算法求解 0-1 揹包問題，
+要求運行時間爲 $O(nW)$， $n$ 爲商品數量，
+揹包最大承重爲 $W$。
+\stopEXERCISE
+
+\startANSWER
+$w$ 和 $v$ 長度均爲 $n$；
+ $W$ 是揹包的最大承重；
+ $B$ 是 $(w+1)\times(n+1)$ 矩陣；
+ $B[i][j]$ 是揹包最大承重爲 $j$、
+只能在前 $i$ 個商品中選擇時所能得到的最大價值。
+
+\CLRSH{KNAPSACK(w, v, W, n)}
+\startCLRSCODE
+// 初始化 $B[i,j]$，其中 $i$ 是物品索引， $j$ 是揹包最大承重
+for i=1 to n
+	B[i,0] = 0
+for j=0 to W
+	B[0,j] = 0
+
+for i=1 to n
+	for j=0 to W
+		if w[i] <= j
+			B[i,j] = \max((v[i] + B[i-1, j-w[i]]), B[i-1,w])
+		else
+			B[i,j] = B[i-1,w]
+\stopCLRSCODE
+
+\CLRSH{KNAPSACK-ITEMS(v, w, B)}
+\startCLRSCODE
+i=n
+k=W
+
+while i>0 and k>0
+	if B[i,k] != B[i-1,k]
+		\ALGO{PUSH-IN(i)}
+		k = k - w[i]
+	--i
+\stopCLRSCODE
+
+\stopANSWER
