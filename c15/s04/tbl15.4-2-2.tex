@@ -1,0 +1,39 @@
+
+\bTABLE[
+    %option=max,
+    align={middle,lohi},
+    split=yes,
+    header=repeat,
+    %footer=repeat,
+    offset=.25em,
+]
+
+\setupTABLE[column][1][leftframe=off]
+\setupTABLE[column][-1][rightframe=off]
+\setupTABLE[row][each][topframe=off,bottomframe=off]
+\setupTABLE[header][each][bottomframe=on,foregroundstyle=bold]
+
+\bTABLEhead
+\bTR \bTH 序列 \eTH\bTH 快取 \eTH\bTH 是否命中 \eTH\bTH 操作 \eTH \eTR
+\eTABLEhead
+
+% body
+\bTABLEbody
+\bTR \bTD s \eTD\bTD  \eTD\bTD 否 \eTD\bTD 將 $s$ 插入快取 \eTD \eTR
+\bTR \bTD q \eTD\bTD s \eTD\bTD 否 \eTD\bTD 將 $q$ 插入快取 \eTD \eTR
+\bTR \bTD s \eTD\bTD sq \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD q \eTD\bTD sq \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD q \eTD\bTD sq \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD s \eTD\bTD sq \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD p \eTD\bTD sq \eTD\bTD 否 \eTD\bTD 將 $q$ 換成 $p$ \eTD \eTR
+\bTR \bTD p \eTD\bTD sp \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD r \eTD\bTD sp \eTD\bTD 否 \eTD\bTD 將 $s$ 換成 $r$ \eTD \eTR
+\bTR \bTD s \eTD\bTD rp \eTD\bTD 否 \eTD\bTD 將 $p$ 換成 $s$ \eTD \eTR
+\bTR \bTD s \eTD\bTD rs \eTD\bTD 是 \eTD\bTD \eTD \eTR
+\bTR \bTD q \eTD\bTD sr \eTD\bTD 否 \eTD\bTD 將 $r$ 換成 $q$ \eTD \eTR
+\bTR \bTD p \eTD\bTD sq \eTD\bTD 否 \eTD\bTD 將 $s$ 換成 $p$ \eTD \eTR
+\bTR \bTD r \eTD\bTD pq \eTD\bTD 否 \eTD\bTD 將 $q$ 換成 $r$ \eTD \eTR
+\bTR \bTD q \eTD\bTD pr \eTD\bTD 否 \eTD\bTD 將 $p$ 換成 $q$ \eTD \eTR
+\eTABLEbody
+
+\eTABLE

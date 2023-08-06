@@ -1,0 +1,22 @@
+\startPROBLEM
+真正的快取管理器無法預知請求序列，
+所以通常根據之前的信息確定如何置換。
+\emph{最近使用}或者叫 \emph{LRU} 策略
+會在當前快取的所有數據塊中，
+選擇最早請求的進行置換。
+可以將 LRU 想成“過去最久”。
+給出例子，通過比較 LRU 與將來最久策略所
+未命中的次數，證明 LRU 不是最優的，
+\stopPROBLEM
+
+\startANSWER
+有四個不同的數據塊 $p,q,r,s$，
+請求序列爲 $s,q,s,q,q,s,p,p,r,s,s,q,p,r,q$。
+快取所能容納數據塊數目 $k=2$。
+
+\CLRSH{FURTHEST-IN-FUTURE}
+\inputsamedir{tbl15.4-2-1}
+
+\CLRSH{LEAST-RECENTLY-USED}
+\inputsamedir{tbl15.4-2-2}
+\stopANSWER

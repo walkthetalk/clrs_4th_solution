@@ -1,0 +1,48 @@
+\startPROBLEM
+如何用未來最久策略管理快取？
+已知有集合 $C$ 包含快取中的數據塊、
+快取最多能容納 $k$ 塊數據，
+請求序列 $b_1,b_2,\cdots,b_n$，
+還有序列索引 $i$ （請求的是 $b_i$）。
+對於每次請求，
+需打印出命中還是未命中，
+未命中時，
+如果有數據被置換出去，也要打印出來。
+\stopPROBLEM
+
+\startANSWER
+令 $b=\langle b_1,b_2,\cdots,b_n\rangle$。
+先預處理，記錄每種請求的下標，採用散列表存儲，
+鍵爲請求的數據塊，值是有請求序列的索引構成的隊列，
+完成請求 $b_i$ 後，散列表中 $b_i$ 對應的隊列隊頭索引出隊。
+快取用大根堆表示，
+大根堆的關鍵字爲數據塊所對應的隊列首個索引。
+如果快取已滿且需要發生置換，
+堆頂的數據塊即爲將來最久的需要請求的數據塊。
+
+\CLRSH{FURTHSET-IN-FUTURE(b, n, k)}
+\startCLRSCODE
+S = \ALGO{NEW-SET()}
+T = \ALGO{NEW-HASH-TABLE()}
+for j = i to n
+	q = \ALGO{HASH-SEARCH(T, b[j])}
+	if q == NIL
+		q = \ALGO{NEW-QUEUE()}
+		\ALGO{HASH-INSERT(T, (b[j], q))}
+	\ALGO{ENQUEUE(q, j)}
+// 用散列表中對應數據塊所在隊列的 $queue.front$ 比較大小
+H = \ALGO{NEW-HEAP()}
+for i = 1 to n
+	q = \ALGO{HASH-SEARCH(T, b[i])}
+	\ALGO{DEQUEUE(q)}
+	if b[i] \in H
+		\ALGO{PRINT(b[i], \text{"cache hit"})}
+		\ALGO{DELETE(H, b[i])}
+	else
+		\ALGO{PRINT(b[i], \text{"cache miss"})}
+		if H.n == k	// 已滿
+			\ALGO{EXTRACT-MIN(H)}
+	if q \ne NIL
+		\ALGO{INSERT(H, b[i])}
+\stopCLRSCODE
+\stopANSWER

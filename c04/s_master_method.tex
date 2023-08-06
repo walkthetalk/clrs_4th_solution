@@ -61,7 +61,7 @@ Caesar 教授想設計一個算法用於矩陣乘法，
 現有函式 $f(n)=\lg n$。
 試分析：
 儘管 $f(n/2)<f(n)$，
-任意常數 $c<1$ 都無法滿足正則條件 $af(n/b)\le cf(n)$，
+任意常數 $c<1$ 都無法滿足規則條件 $af(n/b)\le cf(n)$，
 其中 $a=1,b=2$。
 更進一步，任意 $\epsilon>0$，
 也無法滿足第三種情況中的條件 $f(n)=\Omega(n^{\log_b{a+\epsilon}})$。
@@ -86,7 +86,7 @@ af(n/b)=f(n/2)=\lg(n/2)=\lg n - 1 = f(n)-1\le cf(n)
 \startEXERCISE
 有函式 $f(n)=2^{\lceil \lg n\rceil}$，
 選擇適當的常數 $a,b,\epsilon$，
-可以使其滿足主定理第三種情況中所有條件（正則條件除外）。
+可以使其滿足主定理第三種情況中所有條件（規則條件除外）。
 \stopEXERCISE
 \startANSWER
 令 $2^{k-1}< n\le 2^{k}$，則 $f(n)=2^k$，
