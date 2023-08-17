@@ -1,0 +1,23 @@
+\startPROBLEM
+（硬幣找零）
+用最少的硬幣找零。
+假設每枚硬幣的面值都是整數。
+
+\startigBase[a]\startitem
+設計貪心算法求解找零問題，
+硬幣面值爲 25 分、10 分、5 分、 1 分。
+並證明其結果最優。
+\stopitem\stopigBase
+
+\startANSWER
+將硬幣按面值從小到大排列： $d_1,d_2,\cdots,d_k$。
+
+\CLRSH{MAKE-CHANGE(M)}
+\startCLRSCODE
+for i = k downto 1
+	Q[i] = \lfloor M / d[i]\rfloor
+	M = M - Q[i] * d[i]
+\stopCLRSCODE
+\stopANSWER
+
+\stopPROBLEM
