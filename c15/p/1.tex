@@ -3,6 +3,7 @@
 用最少的硬幣找零。
 假設每枚硬幣的面值都是整數。
 
+% a
 \startigBase[a]\startitem
 設計貪心算法求解找零問題，
 硬幣面值爲 25 分、10 分、5 分、 1 分。
@@ -19,5 +20,86 @@ for i = k downto 1
 	M = M - Q[i] * d[i]
 \stopCLRSCODE
 \stopANSWER
+
+% b
+\startigBase[continue]\startitem
+假定硬幣面額是 $c$ 的冪，
+即面額爲 $c^0,c^1,\ldots,c^k$，
+其中 $c$ 和 $k$ 爲整數， $c>1$ 且 $k\ge 1$。
+證明：貪心算法總能得到最優解。
+\stopitem\stopigBase
+
+\startANSWER
+\startformula
+M = \sum_{i=1}^k Q[i] \times d[i]
+\stopformula
+
+總的硬幣數目爲 $\sum_{i=1}^k n[i]$。
+對於任意 $i < k$，都有 $Q[i] < c$。
+否則，如果 $Q[i]\ge c$，
+我們可以將 $Q[i]$ 減小 $c$，
+並將 $Q[i+1]$ 增加 1。
+
+下面來證明貪心算法會得到最優解。
+令最優解中各面值硬幣數目爲 $O[i]$。
+令 $j$ 第一個（最大的）滿足 $Q[j]\ne O[j]$。
+我們知道 $Q[j]>O[j]$，
+因爲貪心算法始終會曲最大數目的硬幣。
+如果 $O[j]>Q[j]$，則最優解找零會超過 $M$。
+
+\startformula\startmathalignment
+\NC \sum_{i=1}^{j}O[i]\times d_i = \NC \sum_{i=1}^{j}Q[i]\times d_i \NR
+\NC O[j]\times d_j + \sum_{i=1}^{j-1}O[i]\times d_i = \NC \sum_{i=1}^{j-1}Q[i]\times d_i + Q[j] \times d_j\NR
+\NC \sum_{i=1}^{j-1}O[i]\times d_i = \NC \sum_{i=1}^{j-1}Q[i]\times d_i + (Q[j] -O[j]) \times d_j\NR
+\NC \sum_{i=1}^{j-1}O[i]\times d_i = \NC \sum_{i=1}^{j-1}Q[i]\times d_i + (Q[j] -O[j]) \times c^{j-1}\NR
+\NC \sum_{i=1}^{j-1}O[i]\times d_i - \sum_{i=1}^{j-1}Q[i]\times d_i = \NC (Q[j] -O[j]) \times c^{j-1} > c^{j-1}\NR
+\stopmathalignment\stopformula
+
+如果對於 \m{i=1,2,\ldots,j-1}，滿足 \m{O[i] < c}，則：
+\startformula\startmathalignment
+\NC     \NC \sum_{i=1}^{j-1}O[i]\times d_i \NR
+\NC \le \NC \sum_{i=1}^{j-1}(c-1)\times c^{i-1} \NR
+\NC   = \NC (c-1) \sum_{i=1}^{j-1} c^{i-1} \NR
+\NC   = \NC (c-1) \sum_{i=0}^{j-2} c^i \NR
+\NC   = \NC (c-1) \frac{c^{j-1}-1}{c-1} \NR
+\NC   = \NC c^{j-1} - 1
+\stopmathalignment\stopformula
+這與上面得到的 \m{\sum_{i=1}^{j-1}O[i]\times d_i > c^{j-1}} 矛盾。因此最優解中編號爲 1 到 \m{j-1} 的硬幣中，必定有一種面值的硬幣個數達到或超過了 \m{c}。
+但是如上所述，這樣的話就不可能是最優的了。
+
+因此，貪心算法的解必定是最優解。
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+設計一組硬幣面額，使得貪心算法不能保證得到最優解。
+這組硬幣面額中應該包含 1 美分，
+以保證任意 $n$ 都存在找零方案。
+\stopitem\stopigBase
+
+\startANSWER
+面額爲 $10,9,1$。
+要使得總面值爲 $27$，
+貪心算法解爲 $2+7=9$ 個硬幣，
+而最優解爲 $3$ 個硬幣。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+設計一個時間複雜度爲 $O(nk)$ 的找零算法，
+使得無論 $k$ 種硬幣的面額爲多少，總能得到最優解（硬幣數最少），
+假設肯定包含面額爲 $1$ 美分的硬幣。
+\stopitem\stopigBase
+
+\startANSWER
+使用動態規劃。
+令找零 $j$ 美分至少需要 $c[j]$ 枚硬幣。
+\startformula
+c[j] = \startcases
+\NC 0 \NC \text{如果 $j\le 0$；} \NR
+\NC 1 + \min_{1\le i \le k}\{c[j-d_i]\} \NC \text{如果 $j>1$。} \NR
+\stopcases\stopformula
+\stopANSWER
+
 
 \stopPROBLEM

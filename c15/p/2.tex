@@ -1,0 +1,90 @@
+\startPROBLEM
+（Scheduling to minimize average completion time）
+給定任務集合 $S=\{a_1,a_2,\ldots,a_n\}$，
+其中任務 $a_i$ 需要的處理時間爲 $p_i$。
+令 $C_i$ 表示任務 $a_i$ 的\emph{完成時間（completion time）}，
+即 $a_i$ 處理完成的時間。
+目標是使得平均完成時間最小，即 $(1/n)\sum_{i-1}^{n}c_i$ 最小。
+例如，有兩個任務 $a_1$ 和 $a_2$， $p_1=3$， $p_2=5$，
+如果先執行 $a_2$，則 $c_2=5,c_1=8$，平均完成時間爲 $(5+8)/2=6.5$。
+如果先執行 $a_1$，則 $c_1=3,c_2=8$，平均完成時間爲 $(3+8)/2=5.5$。
+
+% a
+\startigBase[a]\startitem
+設計算法來調度這些任務，使得平均完成時間最小。
+執行任務時不允許搶佔，即一旦開始一個任務，必須等其執行完後才能執行另一個任務。
+證明算法的正確性，並分析其運行時間。
+\stopitem\stopigBase
+
+\startANSWER
+輸入：任務集合 $\{a_i\}$， $1\le i\le n$。 $a_i$ 的執行時間爲 $p_i$。
+如果任務按 $a_1,a_2,\ldots,a_n$ 的順序執行，則 $a_k$ 的完成時間爲：
+\startformula
+c_k = \sum_{i=1}^{k}p_i
+\stopformula
+
+直覺：如果先執行處理時間長的任務，則之後的所有任務的完成時間都會增加，
+最好先執行處理時間短的任務。
+
+貪婪算法：首先將任務按處理時間遞增順序排序，
+即使得 $p_1 \le p_2 \le \ldots \le p_n$。
+然後按 $\{a_1,a_2,\ldots,a_n\}$ 的順序執行任務。
+排序時間爲 $O(n\lg n)$，執行任務時間固定或者爲 $O(n)$（用於選擇任務）。
+總用時爲 $O(n\lg n)$。
+
+正確性的證明：假設執行順序爲 $a_1 a_2 \ldots a_m \ldots a_n$，
+其中 $a_m$ 的處理時間最少。
+則我們可以調換 $a_1$ 和 $a_m$，
+將執行順序改爲 $a_m a_2 \ldots a_{m-1} a_1 a_{m+1} \ldots a_n$。
+重排後的平均完成時間要少於原來順序的平均完成時間。
+\startformula\startmathalignment[n=1, m=3, align={left,left,left}, distance=2em]
+\NC n \NC p_1 \NC p_m \NR
+\NC n-1 \NC p_2 \NC p_2 \NR
+\NC \ldots \NC \ldots \NC \ldots \NR
+\NC n-(m-2) \NC p_{m-1} \NC p_{m-1} \NR
+\NC n-(m-1) \NC p_m \NC p_1 \NR
+\NC n-m \NC p_{m+1} \NC p_{m+1} \NR
+\NC \ldots \NC \ldots \NC \ldots \NR
+\NC 1 \NC p_n \NC p_n \NR
+\stopmathalignment\stopformula
+
+我們可以按每個任務對總完成時間的貢獻來考慮，這個貢獻只與任務的執行順序有關。
+假設任務 $i$ 的在執行順序中的位置爲 $j$，則其貢獻爲 $p_i \times (n-(j-1))$。
+這樣我們再來比較這兩種執行順序，則只有 $a_1$ 和 $a_m$ 的貢獻發生了變化，
+其餘任務對總完成時間的貢獻不變。
+由於 $p_m < p_1$，則 $n p_1 + (n-(m-1)) p_m > n p_m + (n-(m-1)) p_1$，
+因此重新排序後總完成時間變少了，
+這樣一直執行剩餘任務中執行時間最少的，就可以滿足要求。
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+現在假定任務不能立刻執行，
+每個任務都有一個\emph{釋放時間（release time）} $b_i$，
+在此之後才可執行。
+此外假定任務是可以\emph{搶佔的（preemption）}，
+即可以將任務掛起，稍後再繼續。
+例如，任務 $a_i$ 的運行時間爲 $p_i=6$，
+釋放時間爲 $b_i=1$，
+他可能在時刻 1 開始運行，在時刻 4 被搶佔。
+然後在時刻 10 恢復運行，
+在時刻 11 再次被搶佔，
+最後在時刻 13 恢復運行，
+在時刻 15 運行完畢。
+任務 $a_i$ 共運行了 6 個時間單位，
+但運行時間被分割成三部分， $a_i$ 的完成時間爲 15。
+設計算法，在新場景下求解平均完成時間最小的調度方案。
+證明其正確性，並分析算法的運行時間。
+\stopitem\stopigBase
+
+\startANSWER
+任意時刻 $t$，在 $b_i \le t$ 的任務中選擇\emph{剩餘}時間最小的運行。
+由於可搶佔，我們可以在任意時刻執行這個動作。
+實際上，只需要在有新任務準備好，以及某個任務執行完畢時才需要做此動作。
+也就是說一旦開始執行任務，如果沒有新任務準備好，
+則可以一直執行完畢（此過程中，當前任務的剩餘時間一直是最小）。
+即一旦有新任務，則要做插入排序，新任務和當前正在執行且沒有執行完的任務都需要插入。
+此算法運行時間爲 $O(n\lg n)$。
+\stopANSWER
+
+\stopPROBLEM
