@@ -1,0 +1,13 @@
+\startEXERCISE
+如果棧支持 \ALGO{MULTIPUSH}，
+可以將 $k$ 個數據一起壓入棧中，
+那麼棧操作攤還代價還是 $O(1)$ 嗎？
+\stopEXERCISE
+
+\startANSWER
+不是了，考慮最壞情況。
+比如 \ALGO{MULTIPUSH} 和 \ALGO{MULTIPOP} 交替執行，
+每次操作代價均爲 $O(k)$，此時每個棧操作的攤還代價就是 $O(k)$。
+因此，加入 \ALGO{MULTIPUSH} 後，
+棧操作的攤還代價取決於具體的操作序列。
+\stopANSWER

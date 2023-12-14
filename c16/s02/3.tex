@@ -1,0 +1,14 @@
+\startEXERCISE
+假定我們不僅對計數器進行增 1 操作，
+還會進行復位操作（即將所有位置 0）。
+設檢測或修改一位的時間爲 $\Theta(1)$，
+說明如何用一個位數列來實現計數器，
+使得對一個初值爲 0 的計數器執行任一含有 $n$ 個操作的序列花費時間爲 $O(n)$，
+序列中僅含 \ALGO{INCREMENT} 和 \ALGO{RESET} 兩種操作。
+
+（\hint 維護一個指針一直指向最高位的 1）
+\stopEXERCISE
+
+\startANSWER
+\scomponent{tbl16.2-3.tex}
+\stopANSWER

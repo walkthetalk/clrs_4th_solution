@@ -1,0 +1,31 @@
+\startEXERCISE[exercise:power_cost]
+假定對一數據結構執行長度爲 $n$ 的操作序列，
+當 $i$ 爲 $2$ 的冪時，第 $i$ 個操作的代價爲 $i$；
+否則代價爲 $1$。
+使用聚合分析確定每個操作的攤還代價。
+\stopEXERCISE
+
+\startANSWER
+總代價小於 $3n$，攤還代價爲 $3$。
+歸納遞推：
+\startsplitformula\startmathalignment
+\NC \sum_{i=1}^{2^i} d_i \NC < 3 \times 2^i \NR
+\NC \sum_{i=1}^{2^{i+1}} d_i \NC= \sum_{i=1}^{2^i} d_i + 1 + 1 + \ldots + 1 + 2^{i+1} \NR
+\NC \NC< 3\times 2^i + (2^i - 1) + 2^{i+1} \NR
+\NC \NC= 6\times 2^i - 1 \NR
+\NC \NC< 3\times 2^{i+1} \NR
+\stopmathalignment\stopsplitformula
+
+也可以：
+\startsplitformula\startmathalignment
+\NC \sum_{i=1}^{n}c(i)
+    \NC = \sum_{j=0}^{\lfloor \lg n\rfloor}2^j
+          + (n - \lfloor \lg n \rfloor - 1) \cdot 1 \NR
+\NC \NC = (2^{\lfloor\lg n\rfloor + 1} - 1)
+          + n - \lfloor\lg n\rfloor - 1 \NR
+\NC \NC < (2 \cdot 2^{\lg n} - 1) + n - (\lg n - 1) - 1 \NR
+\NC \NC = 3n - \lg n - 1 \NR
+\NC \NC < 3n \NR
+\NC \NC = O(n) \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
