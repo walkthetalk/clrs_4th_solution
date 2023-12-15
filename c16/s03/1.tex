@@ -1,0 +1,22 @@
+\startEXERCISE
+假定有勢函數 $\Phi$，對所有 $i$ 滿足 $\Phi(D_i)\ge\Phi(D_0)$，
+但 $\Phi(D_0)\ne 0$。
+證明：存在勢函數 $\Phi'$，使得 $\Phi'(D_0)=0$，
+對所有 $i\ge 1$ 滿足 $\Phi'(D_i)\ge 0$，
+且使用 $\Phi'$ 的攤還代價與使用 $\Phi$ 的攤還代價相同。
+\stopEXERCISE
+
+\startANSWER
+令 $\Phi'(D_i)=\Phi(D_i)-\Phi(D_0)$，
+又由於 $\Phi(D_i)\ge\Phi(D_0)$，
+可得 $\Phi'(D_i)\ge 0$ 且 $\Phi'(D_0)=0$。
+
+\startsplitformula\startmathalignment
+\NC \hat{c_i} \NC= c_i + \Phi(D_i) - \Phi(D_{i-1}) \NR
+\NC \NC= c_i
+         + \left(\Phi(D_i)-\Phi(D_0)\right)
+         - \left(\Phi(D_{i-1}) - \Phi(D_0)\right) \NR
+\NC \NC= c_i + \Phi'(D_i) - \Phi'(D_{i-1}) \NR
+\stopmathalignment\stopsplitformula
+
+\stopANSWER

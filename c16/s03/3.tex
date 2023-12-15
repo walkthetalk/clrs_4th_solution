@@ -1,0 +1,24 @@
+\startEXERCISE
+有一數據結構爲普通二叉最小堆，包含 $n$ 個元素，
+他支持兩種操作 \ALGO{INSERT} 和 \ALGO{EXTRACT-MIN}，
+請實現這兩種操作，要求最壞運行事件爲 $O(\lg n)$，
+其中 $n$ 爲結構中的元素個數。
+給出一個勢函數 $\Phi$，
+使得 \ALGO{INSERT} 的攤還代價爲 $O(\lg n)$，
+而 \ALGO{EXTRACT-MIN} 的攤還代價爲 $O(1)$，
+並證明。
+分析時，可以將 $n$ 視爲結構中當前元素個數，
+且堆中所能存儲的元素個數沒有上限。
+\stopEXERCISE
+
+\startANSWER
+令勢能函數爲 \m{\Phi(D_i)=k\lg n}，其中 \m{k} 爲堆中元素個數。則 \ALGO{INSERT} 的攤還代價爲：
+\startformula
+\hat{c_i} = c_i + \Phi(D_i) - \Phi(D_{i-1}) \le \lg n + (k+1)\lg n - k\lg n = 2\lg n \in O(\lg n)
+\stopformula
+
+\ALGO{EXTRACT-MIN} 的攤還代價爲：
+\startformula
+\hat{c_i} = c_i + \Phi(D_i) - \Phi(D_{i-1}) \le \lg n + (k-1)\lg n - k\lg n = 0 \in O(1)
+\stopformula
+\stopANSWER

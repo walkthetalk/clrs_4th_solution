@@ -1,0 +1,28 @@
+\startEXERCISE
+用勢能法重做\inexercise[power_cost]。
+\stopEXERCISE
+
+\startANSWER
+勢能函數 $\Phi$ 定義爲：
+\startformula
+\Phi(D_i) =\startmathcases
+\NC 0 \NC i = 0 \NR
+\NC 2 i - 2^{1+\lfloor \lg i\rfloor} \NC i > 0 \NR
+\stopmathcases
+\stopformula
+對於所有 $i$，均滿足 $\Phi(D_i)\ge 0$。
+
+總攤還代價爲：
+\startsplitformula\startmathalignment
+\NC \sum_{i=1}^{n}\hat{c_i}
+    \NC = \sum_{i=1}^{n} \left(c_i + \Phi(D_i) - \Phi(D_{i-1})\right) \NR
+\NC \NC = \sum_{i=1}^{n} c_i + \Phi(D_n) - \Phi(D_0) \NR
+\NC \NC = \left(2^{\lfloor\lg n\rfloor + 1} - 1\right)
+          + n - \lfloor\lg n\rfloor - 1
+	  - 2^{\lfloor\lg n\rfloor + 1} + 2n \NR
+\NC \NC = 3n - \lfloor\lg n\rfloor - 2 \NR
+\NC \NC < 3n \NR
+\NC \NC = O(n) \NR
+\stopmathalignment\stopsplitformula
+每個操作的攤還代價爲 $O(n)/n = O(1)$。
+\stopANSWER
