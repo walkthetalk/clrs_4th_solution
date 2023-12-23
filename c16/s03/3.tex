@@ -12,13 +12,79 @@
 \stopEXERCISE
 
 \startANSWER
-令勢能函數爲 \m{\Phi(D_i)=k\lg n}，其中 \m{k} 爲堆中元素個數。則 \ALGO{INSERT} 的攤還代價爲：
-\startformula
-\hat{c_i} = c_i + \Phi(D_i) - \Phi(D_{i-1}) \le \lg n + (k+1)\lg n - k\lg n = 2\lg n \in O(\lg n)
-\stopformula
+假設普通二叉最小堆 $D_i$ 中元素個數爲 $n_i$，
+一次操作使得 $D_{i-1}$ 變爲 $D_i$，
+則 $n=\max\{n_{i-1},n_i\}$。
 
-\ALGO{EXTRACT-MIN} 的攤還代價爲：
+若操作 $i$ 爲 \ALGO{INSERT}，
+實際代價爲 $c_i=O(\lg n_i)\le k\lg n_i$，
+其中 $k$ 爲某常數。
+定義勢函數 $\Phi$ 爲：
 \startformula
-\hat{c_i} = c_i + \Phi(D_i) - \Phi(D_{i-1}) \le \lg n + (k-1)\lg n - k\lg n = 0 \in O(1)
+\Phi=\startmathcases
+\NC 0 \NC n_i = 0 \NR
+\NC k n_i \lg n_i \NC i > 0 \NR
+\stopmathcases
 \stopformula
+對於所有 $i$， $\Phi(D_i)\ge 0$。
+若初始堆 $D_0$ 爲空，則 $\Phi(D_0)=0$。
+當 $n\ge 2$ 時，有：
+\startsplitformula\startmathalignment
+\NC n\lg \frac{n}{n-1}
+    \NC = n \lg \left(1 + \frac{1}{n-1}\right) \NR
+\NC \NC = \lg \left( 1 + \frac{1}{n-1} \right)^n \NR
+\NC \NC = \lg \left(
+                    \left(1 + \frac{1}{n-1}\right)^{n-1}
+               \right)^{\frac{n}{n-1}} \NR
+\NC \NC \le \lg e^{\frac{n}{n-1}} \NR
+\NC \NC = \frac{n}{n-1}\lg e \NR
+\NC \NC \le 2\lg e \NR
+\stopmathalignment\stopsplitformula
+若第 $i$ 個操作爲 \ALGO{INSERT}，則 $n_i=n_{i-1}+1$。
+
+若 $n_{i-1}=0$，則：
+\startsplitformula\startmathalignment
+\NC \hat{c_i}
+    \NC = c_i + \Phi(D_i) - \Phi(D_{i-1}) \NR
+\NC \NC = k\cdot 1 \lg 1 + k\cdot 1 \lg 1 - 0 \NR
+\NC \NC = 0 \NR
+\NC \NC = O(\lg n_i) \NR
+\stopmathalignment\stopsplitformula
+
+若 $n_{i-1}>0$，則：
+\startsplitformula\startmathalignment
+\NC \hat{c_i}
+    \NC = c_i + \Phi(D_i) - \Phi(D_{i-1}) \NR
+\NC \NC \le k\lg n_i + kn_i\lg n_i - kn_{i-1}\lg n_{i-1} \NR
+\NC \NC = k\left(\lg n_i + n_i\lg \frac{n_i}{n_i - 1} + \lg n_{i-1}\right) \NR
+\NC \NC < k(2\lg n_i + 2\lg e) \NR
+\NC \NC = O(\lg n_i) \NR
+\stopmathalignment\stopsplitformula
+
+綜上， \ALGO{INSERT} 的攤還代價爲 $O(\lg n)$。
+
+若第 $i$ 個操作爲 \ALGO{EXTRACT-MIN}，則 $n_i=n_{i-1}-1$，
+假設修改根節點的代價爲 $c$，調整堆的代價爲 $O(\lg n_i)$。
+
+若 $n_{i-1}=1$，則：
+\startsplitformula\startmathalignment
+\NC \hat{c_i}
+    \NC = c_i + \Phi(D_i) - \Phi(D_{i-1}) \NR
+\NC \NC = c + 0 - k \cdot 1 \lg 1\NR
+\NC \NC = c \NR
+\NC \NC = O(1)\NR
+\stopmathalignment\stopsplitformula
+
+若 $n_{i-1}>1$，則：
+\startsplitformula\startmathalignment
+\NC \hat{c_i}
+    \NC = c_i + \Phi(D_i) - \Phi(D_{i-1}) \NR
+\NC \NC \le c + k\lg n_i + kn_i\lg n_i - kn_{i-1}\lg n_{i-1}\NR
+\NC \NC = c+ k(n_i + 1)\lg n_i - kn_{i-1}\lg n_{i-1} \NR
+\NC \NC = c + kn_{i-1}\lg \frac{n_{i-1}-1}{n_{i-1}} \NR
+\NC \NC < c \NR
+\NC \NC = O(1) \NR
+\stopmathalignment\stopsplitformula
+
+綜上， \ALGO{EXTRACT-MIN} 的攤還代價爲 $O(1)$。
 \stopANSWER

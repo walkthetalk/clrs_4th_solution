@@ -1,0 +1,14 @@
+\startEXERCISE
+在棧上執行 \ALGO{PUSH}、 \ALGO{POP} 和 \ALGO{MULTIPOP} 共 $n$ 個操作的總代價是多少？
+假定開始時棧中有 $s_0$ 個對象，結束後包含 $s_n$ 個對象。
+\stopEXERCISE
+
+\startANSWER
+\startformula\startmathalignment
+\NC \sum_{i=1}^{n}c_i
+    \NC = \sum_{i=1}^{n}\left(\hat{c_i} - \Phi(D_i) + \Phi(D_{i-1})\right) \NR
+\NC \NC = \sum_{i=1}^{n}\hat{c_i} - \Phi(D_n) + \Phi(D_0) \NR
+\NC \NC \le \sum_{i=1}^{n}2 - s_n + s_0 \NR
+\NC \NC = 2n - s_n + s_0 \NR
+\stopmathalignment\stopformula
+\stopANSWER

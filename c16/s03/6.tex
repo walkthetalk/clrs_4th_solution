@@ -1,0 +1,21 @@
+\startEXERCISE
+爲動態整數多重集合 $S$ （允許包含重複值）設計一種數據結構，支持如下兩種操作：
+\startigBase[2]
+\item \ALGO{INSERT(S,x)} 將 $x$ 插入 $S$ 中。
+\item \ALGO{DELETE-LARGER-HALF(S)} 將
+最大的 $\left\lceil |S|/2 \right\rceil$ 個元素從 $S$ 中刪除。
+\stopigBase
+如何實現這種數據結構，
+使得任意 $m$ 個 \ALGO{INSERT} 和 \ALGO{DELETE-LARGER-HALF} 組成的操作序列
+能在 $O(m)$ 時間內完成，
+還能在 $O(|S|)$ 時間內輸出 $S$ 中所有元素？
+\stopEXERCISE
+
+\startANSWER
+用數列來存儲元素。
+
+\ALGO{INSERT}：將元素追加到數列中。
+
+\ALGO{DELETE-LARGER-HALF}：在 $O(n)$ 時間內找到中值，
+並刪除較大的 $\left\lceil |S|/2 \right\rceil$ 個元素。
+\stopANSWER

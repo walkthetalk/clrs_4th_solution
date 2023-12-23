@@ -1,0 +1,31 @@
+\startEXERCISE
+證明：如何用兩個普通的棧實現一個隊列（\inexercise[two_stack_to_queue]），
+使得每個 \ALGO{ENQUEUE} 和 \ALGO{DEQUEUE} 的攤還代價爲 $O(1)$。
+\stopEXERCISE
+
+\startANSWER
+令兩個棧分別爲 D 和 E，大小均爲 \m{n}。 E 用於入隊， D 用於出隊。
+
+\CLRSH{ENQUEUE(E,x)}
+\startCLRSCODE
+PUSH(E,x)
+\stopCLRSCODE
+
+\CLRSH{DEQUEUE(E,D)}
+\startCLRSCODE
+if \ALGO{STACK-EMPTY(D)}
+	do
+		x = \ALGO{POP(E)}
+		if \ALGO{STACK-EMPTY(E)}
+			return x
+		\ALGO{PUSH(D, x)}
+	while true
+else
+	return \ALGO{POP(D)}
+\stopCLRSCODE
+
+\ALGO{ENQUEUE} 的攤還代價爲 4， \ALGO{DEQUEUE} 的攤還代價爲 0。
+ \m{k} 個入隊操作剩餘信用爲 \m{3k}。
+第一個出隊操作會用掉 \m{2k} 的信用。
+後續每個出隊操作使用 1 個信用。
+\stopANSWER
