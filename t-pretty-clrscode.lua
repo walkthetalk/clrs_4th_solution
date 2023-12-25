@@ -100,6 +100,7 @@ local validName   = visualchar^1
 local gkeyword   = P("foreach")
 		  + P("for")
                   + P("to")
+		  + P("in")
                   + P("downto")
                   + P("do")
                   + P("while")

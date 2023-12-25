@@ -1,0 +1,23 @@
+\startxtable[
+    option=max,
+    align={middle,lohi},
+    split=yes,
+    header=repeat,
+    footer=repeat,
+    offset=.25em,
+]
+
+% head
+\startxtablehead[frame=off,topframe=on,bottomframe=on]
+\startxrow[foregroundstyle=bold,]
+  \processcommalist[操作,攤還代價]{\xcell[align={middle}]}
+\stopxrow
+\stopxtablehead
+
+% body
+\startxtablebody[frame=off,bottomframe=on]
+\startxrow \processcommalist[\ALGO{TABLE-INSERT},3]\xcell \stopxrow
+\startxrow \processcommalist[\ALGO{TABLE-DELETE},3]\xcell \stopxrow
+\stopxtablebody
+
+\stopxtable

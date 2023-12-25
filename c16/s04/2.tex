@@ -1,0 +1,52 @@
+\startEXERCISE
+假定我們希望實現一個動態的開放地址散列表。
+爲什麼我們要在裝載因子達到一個嚴格小於 1 的值 $\alpha$ 時就認爲表已經滿了？
+簡要描述如何爲動態開放地址散列表設計一個插入算法，
+使得每個插入操作的攤還代價期望值爲 $O(1)$。
+爲什麼每個插入操作的實際代價期望值不必對所有插入操作都是 $O(1)$。
+\stopEXERCISE
+
+\startANSWER
+根據定理 11.6 和推論 11.7，
+向裝載因子爲 $\alpha$ 的開放尋址散列表插入一個關鍵字，
+在平均情況下至多需要探測 $1/(1-\alpha)$ 次，
+而 $\lim\frac{1}{1-\alpha}=+\infty$，
+即當裝載因子無限趨近於 $1$ 時，
+在開放尋址散列表中執行插入操作的期望開銷接近無窮大，
+所以必須要考慮當裝載因子達到一個嚴格小於 $1$ 的值 $\alpha$ 時就認爲表滿了。
+
+比如在 Java 中的 HashMap，源碼中的裝載因子缺省爲 $0.75$。
+
+當 $\alpha_{i-1}=0.75$ 時，第 $i$ 個插入操作後，
+表會擴展， $s_i = 2\cdot s_{i-1}$。
+
+又比如 C++ 標準庫中的 unordered_set，
+當 $n_{i-1}=s_{i-1}-1$ 時，
+第 $i$ 個插入操作後，表進行擴展，
+ $s_i$ 爲大於 $2\cdot s_{i-1}$ 的第一個質數。
+注意， $T.num$ 對應 C++ 中的 $T.size()$，
+ $T.size()$ 對應 C++ 中的 $T.bucket\_count()$。
+
+模擬 Java 的啓發式策略，修改 \ALGO{TABLE-INSERT(T,x)} 的僞碼如下：
+
+\CLRSH{TABLE-INSERT(T,x)}
+\startCLRSCODE
+if T.size == 0
+	T.table = \ALGO{ALLOCATE(1)}
+	T.size = 1
+if T.num \ge T.size \cdot 3 / 4
+	n = \ALGO{ALLOCATE(2\cdot T.size)}
+	for i in T.table
+		\ALGO{INSERT(n, i)}
+	\ALGO{FREE(T.table)}
+	T.table = n
+	T.size = 2\cdot T.size
+\ALGO{INSERT(T.table, x)}
+T.num = T.num + 1
+\stopCLRSCODE
+
+此時每個插入操作的攤還代價期望值爲 $O(1)$，
+但由於要考慮插入後表需要擴展的情況，
+需要將舊表中的所有內容複製到新表中。
+所以每個插入操作實際代價的期望不必對所有插入操作都是 $O(1)$。
+\stopANSWER

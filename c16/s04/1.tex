@@ -1,0 +1,20 @@
+\startEXERCISE
+對於表的第一個插入操作，用勢能法分析其攤還代價。
+\stopEXERCISE
+
+\startANSWER
+執行第一次插入前， $n_0 = 0, s_0 = 0, \Phi_0 = 0$。
+
+執行第一次插入後， $n_1 = 0, s_1 = 1, \Phi_1 = 2(n_1 - s_1 / 2) = 1$。
+
+\startformula
+\Delta\Phi = \Phi_1 - \Phi_0 = 1
+\stopformula
+
+第一個插入操作的攤還代價爲：
+\startsplitformula\startmathalignment
+\NC \hat{c_1} \NC = c_1 + \Delta\Phi_1 \NR
+\NC \NC = 1 + 1 \NR
+\NC \NC = 2 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER
