@@ -1,0 +1,77 @@
+\startPROBLEM
+（making binary search dynamic）
+有序數列上的二分查找花費對數時間，
+但插入一個新元素的時間與數列規模呈線性關係。
+我們可以通過維護多個有序數列來提高插入性能。
+
+具體地，假定我們希望支持 $n$ 元集合上的 \ALGO{SEARCH} 和 \ALGO{INSERT} 操作。
+令 $k=\lceil \lg{(n+1)}\rceil$，
+令 $n$ 的二進制表示爲 $\langle n_{k-1},n_{k-2},\ldots,n_0\rangle$。
+我們維護 $k$ 個有序數列 $A_0,A_1,\ldots,A_{k-1}$，
+對 $i=0,1,\ldots,{k-1}$，數列 $A_i$ 的長度爲 $2^i$。
+每個數列或滿或空，
+取決於 $n_i=1$ 還是 $n_i=0$。
+因此，所有 $k$ 個數列中保存的元素總數爲 $\sum_{i=0}^{k-1}n_i 2^i = n$。
+雖然單獨每個數列都是有序的，
+但不同數列中的元素之間不存在特定的大小關係。
+
+% a
+\startigBase[a]\startitem
+設計算法，實現這種數據結構上的 \ALGO{SEARCH} 操作，分析其最壞情況運行時間。
+\stopitem\stopigBase
+
+\startANSWER
+對於每個數列都用二分查找進行搜索，直到找到想要的元素。
+最壞情況下需要搜索所有數列：
+\startformula\startmathalignment
+\NC T(n) \NC = \Theta(\lg 1 + \lg 2 + \lg 2^2 + \ldots + \lg 2^{k-1}) \NR
+\NC \NC = \Theta(0+1+\ldots+(k-1)) \NR
+\NC \NC = \Theta(\frac{1}{2}k(k-1)) \NR
+\NC \NC = \Theta(\lg^2 n) \NR
+\stopmathalignment\stopformula
+
+從按數列大小遞減順序搜索，在某些情況下性能會更好一些，但不影響最壞情況的結果。
+\stopANSWER
+
+% b
+\startigBase[a,continue]\startitem
+設計 \ALGO{INSERT} 算法。分析最壞情況運行時間和攤還時間。
+\stopitem\stopigBase
+
+\startANSWER
+找到最小的空數列 \m{A_i}，將新元素插入 \m{A_i}，
+並將 \m{A_0,A_1,\ldots,A_{i-1}} 中所有元素全部轉移到 \m{A_i} 中。
+最壞情況下，需要移動所有 \m{n+1} 個元素。
+
+用聚合法分析攤還代價。
+對於 \m{n} 次插入操作，數列 \m{A_i} 會改變 \m{n/2^i} 次，
+此處所謂改變，指數列由空變滿，或由滿變空。
+因此：
+\startformula
+\sum_{i=0}^{k-1}\frac{n}{2^i}2^i = \sum_{i=0}^{k-1}n = nk \in O(n\lg n)
+\stopformula
+即攤還代價爲 $O(\lg n)$。
+\stopANSWER
+
+% c
+\startigBase[a,continue]\startitem
+討論如何實現 \ALGO{DELETE}。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{DELETE} 花的時間不可能比 \ALGO{SEARCH} 更少。
+實際上， \ALGO{DELETE} 最快也需要線性時間，除非我們以其他方式描述元素間的關係。
+比如，刪除最長數列 $A_{k-1}$ 正中間的元素。
+刪除後，至少得有一個元素 $e$ 從其他數列中轉移到 $A_{k-1}$ 中。
+但由於我們不知道 $e$ 與 $A_{k-1}$ 中其他元素的關係，
+重排 $A_{k-1}$ 需要時間爲 $2^{k-1}\in O(n)$。
+由於每次刪除都需要這麼多時間，攤還代價也是 $O(n)$。
+
+找到最小非空數列 \m{A_i}，並找到要刪除的元素。
+假定要刪除的元素在數列 \m{A_j} 中，將其刪除。
+從 \m{A_i} 中轉移一個元素到 \m{A_j} 中（如果 \m{i=j}，則保持不變）。
+然後將 \m{A_i} 中剩餘元素轉移到 \m{A_0,A_1,\ldots,A_{i-1}} 中。
+最後，重排 \m{A_j}。
+\stopANSWER
+
+\stopPROBLEM

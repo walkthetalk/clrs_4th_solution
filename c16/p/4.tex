@@ -1,0 +1,172 @@
+\startPROBLEM
+（The cost of restructuring red-black tree）
+紅黑樹有 4 種基本的\emph{結構性修改}（structural modification）操作：
+插入、刪除、旋轉及更改顏色。
+我們已經看到 \ALGO{RB-INSERT} 和 \ALGO{RB-DELETE} 操作僅使用 $O(1)$ 次旋轉、
+插入和刪除操作來維持紅黑樹的性質，
+但可能會多次更改顏色。
+
+% a
+\startigBase[a]\startitem
+設計一個 $n$ 節點的合法的紅黑樹，
+使得調用 \ALGO{RB-INSERT} 添加第 $n+1$ 個節點
+會引起 $\Omega(\lg n)$ 次顏色更改。
+然後設計一個 $n$ 節點的合法紅黑樹，
+使得調用 \ALGO{RB-DELETE} 刪除一個特定節點
+會引起 $\Omega(\lg n)$ 次顏色更改。
+\stopitem\stopigBase
+
+\startANSWER
+如果完全二叉樹最底層節點全部爲紅色，則插入新節點時，
+需要 $\Omega(\lg n)$ 個 case 1 來改變節點的顏色。
+如果完全二叉樹中節點全部爲黑色，則刪除節點所需時間爲 $\Omega(\lg n)$，
+因爲 while 循環的每次迭代都會觸發 case 2。
+\stopANSWER
+
+雖然最壞情況下，每個操作更改顏色的次數可能是對數的，
+但我們可以證明，在一個空紅黑樹上執行任意 $m$ 個操作序列
+ \ALGO{RB-INSERT} 和 \ALGO{RB-DELETE}，
+最壞情況也只會引起 $O(m)$ 次結構性修改。
+注意：每次更改顏色都算作一次結構性修改。
+
+% b
+\startigBase[continue]\startitem
+\ALGO{RB-INSERT-FIXUP} 和 \ALGO{RB-DELETE-FIXUP} 的主循環
+都處理一些\emph{終止}條件：
+一旦條件得到滿足，會導致循環在常數次操作後終止。
+對於 \ALGO{RB-INSERT-FIXUP} 和 \ALGO{RB-DELETE-FIXUP} 中處理的各種情況，
+指出其中哪些會導致循環終止，哪些不會。
+（\hint 參見圖 13-5、圖 13-6 和圖 13-7）
+\stopitem\stopigBase
+
+\startANSWER
+插入操作中， case 2 和 case 3 會終止。
+刪除操作中， case 1 和 case 3 會終止。
+\stopANSWER
+
+我們首先分析僅僅執行插入操作時引起的結構性修改。
+另 $T$ 爲一棵紅黑樹，
+定義 $\Phi(T)$ 是 $T$ 中紅節點數量。
+假定一個單位的勢可以支付 \ALGO{RB-INSERT-FIXUP} 的三種情況
+的任意一種所引起的結構性修改的代價。
+
+% c
+\startigBase[continue]\startitem
+令 $T'$ 表示對 $T$ 應用 \ALGO{RB-INSERT-FIXUP} 時 case 1 所得結果。
+證明： $\Phi(T')=\Phi(T) - 1$。
+\stopitem\stopigBase
+
+\startANSWER
+在應用 case 1 後， $z$ 和父節點和叔父節點均變成黑色，
+而 $z$ 的祖父節點變爲紅色。少了一個紅節點，
+因此 $\Phi(T')=\Phi(T) - 1$。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+當使用 \ALGO{RB-INSERT} 向一棵紅黑樹中插入一個節點時，
+我們可以將操作分解爲三部分。
+列出 \ALGO{RB-INSERT} 的第 1 ～ 16 行引起的結構性改變和勢的變化，
+以及 \ALGO{RB-INSERT-FIXUP} 中各種情況引起的變化。
+\stopitem\stopigBase
+
+\startANSWER
+對於 case 1，紅色節點會減少一個，因此勢函數也會減一。
+然而，調用一次 \ALGO{RB-INSERT-FIXUP} 會
+導致 $\Omega(\lg n)$ 個 case 1。
+
+對於 case 2 和 3，顏色保持不變，都會執行一次旋轉。
+\stopANSWER
+
+% e
+\startigBase[continue]\startitem
+用（d）證明：
+任意一次 \ALGO{RB-INSERT} 所導致的結構性修改的攤還次數爲 $O(1)$。
+\stopitem\stopigBase
+
+\startANSWER
+每個 case 1 都要求特定節點是紅色的，
+紅色節點減少的個數不會超過 $\Phi(T)$。
+因此勢函數永遠非負。
+每次插入最多使紅色節點數目增一，
+每個單位勢均能償還任一 case 中中任一結構性修改。
+最壞情況下，調用 \ALGO{RB-INSERT} 會執行 $k$ 次 case 1，
+其中 $k$ 等於 $\Phi(T_i)-\Phi(T_{i-1})$。
+因此，總攤還代價有上界 $2(\Phi(T_n)-\Phi(T_0))\le n$，
+所以，每次插入的攤還代價爲 $O(1)$。
+\stopANSWER
+
+我們現在希望證明既有插入又有刪除時，所引起的結構性修改次數仍爲 $O(m)$。
+對每個節點 $x$，我們定義：
+\startformula
+\omega(x) = \startcases
+\NC 0 \NC \text{若 $x$ 是紅節點} \NR
+\NC 1 \NC \text{若 $x$ 是黑節點且沒有紅孩子} \NR
+\NC 0 \NC \text{若 $x$ 是黑節點且有一個紅孩子} \NR
+\NC 2 \NC \text{若 $x$ 是黑節點且由兩個紅孩子} \NR
+\stopcases
+\stopformula
+現在定義紅黑樹 $T$ 的勢函數爲：
+\startformula
+\Phi(T) = \sum_{x\in T}\omega(x)
+\stopformula
+且令 $T'$ 爲對 $T$ 應用 \ALGO{RB-INSERT-FIXUP} 或
+ \ALGO{RB-DELETE-FIXUP} 的任意非終結性情況後的結果。
+
+% f
+\startigBase[continue]\startitem
+證明：
+對 \ALGO{RB-INSERT-FIXUP} 的任意非終結性情況，
+有 $\Phi(T')\le \Phi(T) - 1$。
+證明： \ALGO{RB-INSERT-FIXUP} 的任意一次調用
+所引起的結構性修改的攤還次數爲 $O(1)$。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{RB-ISNERT} 時，如果是 case 1，
+有兩個紅孩子的黑節點會少一個，
+沒有紅孩子的黑節點最多多一個，
+從而勢函數最多減一。
+新的勢函數， $\Phi(T_n)-\Phi(T_0)\le n$。
+由於每個操作需要一個單位的勢，
+且終止條件會引發常數次結構性修改，
+而總攤還代價爲 $O(n)$，
+因此每個 \ALGO{RB-INSERT-FIXUP} 的攤還代價爲 $O(1)$。
+\stopANSWER
+
+% g
+\startigBase[continue]\startitem
+證明：
+對 \ALGO{RB-DELETE-FIXUP} 的任意非終結性情況，
+有 $\Phi(T')\le \Phi(T) - 1$。
+證明： \ALGO{RB-DELETE-FIXUP} 的任意一次調用
+所引起的結構性修改的攤還次數爲 $O(1)$。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{RB-DELETE} 時，如果是 case 2，
+有兩個紅孩子的黑節點會少一個，
+從而勢函數減 2。
+由於勢至少減 1，所以就償還了結構性修改的代價。
+其他 case 會引發常數次結構性修改，
+而總攤還代價又是 $O(n)$，
+因此每個 \ALGO{RB-DELETE-FIXUP} 的攤還代價爲 $O(1)$。
+\stopANSWER
+
+% h
+\startigBase[continue]\startitem
+證明：
+由任意 $m$ 個 \ALGO{RB-INSERT-FIXUP} 和
+ \ALGO{RB-DELETE-FIXUP} 構成的序列最壞情況下執行 $O(m)$ 次結構性修改。
+\stopitem\stopigBase
+
+\startANSWER
+根據上面所述，無論是插入還是刪除，也無論哪種情況，
+只要是非終止，勢函數都會償還所引發的變化。
+如果是終止，則他們所用時間本身就是常數。
+所以如果操作序列中含有 $m$ 個插入和刪除操作，
+其中任一操作的攤還代價都是 $O(1)$，
+從而總攤還代價爲 $O(m)$。
+\stopANSWER
+
+\stopPROBLEM

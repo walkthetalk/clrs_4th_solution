@@ -1,0 +1,140 @@
+\startPROBLEM
+（amortized weight-balanced tree）
+考慮擴充普通二叉搜索樹，
+爲每個節點 $x$ 增加屬性 $x.size$，
+此屬性給出了根爲 $x$ 的子樹中關鍵字的數量。
+另 $\alpha$ 是 $1/2\le \alpha < 1$ 之間的一個常數。
+當 $x.left.size\le \alpha\cdot x.size$ 且 $x.right.size\le \alpha\cdot x.size$ 時，
+我們稱節點 $\alpha$ 是 \emph{$\alpha$ 平衡的}。
+如果樹中每個節點都是 $\alpha$ 平衡的，
+則稱樹整體是 \emph{$\alpha$ 平衡的}。
+ G.Varghese 提出了如下攤還方法來維護加權平衡樹。
+
+% a
+\startigBase[a]\startitem
+在某種意義上，一棵 $1/2$ 平衡樹達到了極限的平衡。
+給定任意一棵二叉搜索樹中的一個節點 $x$，
+證明：如何重建以 $x$ 爲根的子樹，
+使得他變爲 $1/2$ 平衡的。
+你的算法運行時間應爲 $\Theta(x.size)$，
+可以使用 $O(x.size)$ 的輔助空間。
+\stopitem\stopigBase
+
+\startANSWER
+首先中序遍歷子樹，並按順序將所有元素存儲在輔助空間中。
+然後選擇數列中中間元素作爲子樹的根，並依此遞迴構建其左、右兩棵子樹。
+所用時間以及所用輔助空間均爲 $O(x.size)$。
+\stopANSWER
+
+% b
+\startigBase[continue]\startitem
+證明：在一棵 $n$ 個節點的 $\alpha$ 平衡二叉搜索樹
+中執行一次搜索操作的最壞情況時間爲 $O(\lg n)$。
+\stopitem\stopigBase
+
+\startANSWER
+令 $f(n)$ 爲所需時間，則 $f(n)\le f(\alpha n) + O(1)$。
+求解得：
+\startformula
+f(n)\in O(\lg_{1/\alpha}n) = O(\lg n)
+\stopformula
+\stopANSWER
+
+對於本問題的剩餘部分，假定常數 $\alpha$ 嚴格大於 $1/2$。
+假定你實現的 \ALGO{INSERT} 和 \ALGO{DELETE} 算法
+與普通 $n$ 節點二叉搜索樹的算法是一樣的，
+差別僅在於，如果發現樹中任何節點不再是 $\alpha$ 平衡的，
+則在最高的不平衡節點，
+對以他爲根的子樹執行“重建”，
+使其變爲 $1/2$ 平衡的。
+
+我們用勢能法分析此重建方法。
+對於二叉搜索樹 $T$ 中的一個節點 $x$，定義：
+\startformula
+\Delta(x) = |x.left.size - x.right.size|
+\stopformula
+定義 $T$ 的勢函數爲：
+\startformula
+\Phi(T) = c \sum_{x\in T: \Delta(x)\ge 2}\Delta(x)
+\stopformula
+其中 $c$ 是一個足夠大的常數，他依賴於 $\alpha$。
+
+% c
+\startigBase[continue]\startitem
+證明：任意二叉搜索樹的勢都是非負的， $1/2$ 平衡樹的勢爲 $0$。
+\stopitem\stopigBase
+
+\startANSWER
+略。
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+假定 $m$ 個單位的勢夠支付重建 $m$ 節點子樹的代價。
+相對於 $\alpha$ 來說， $c$ 應該多大才能使得
+重建一棵非 $\alpha$ 平衡的子樹攤還時間爲 $O(1)$。
+\stopitem\stopigBase
+
+\startANSWER
+重建前：
+\startsplitformula\startmathalignment
+\NC \Delta(x)
+   \NC = |x.left.size - x.right.size| \NR
+\NC\NC \ge \alpha \cdot x.size - (1-\alpha)\cdot x.size \NR
+\NC\NC = (2\alpha - 1)\cdot x.size \NR
+\stopmathalignment\stopsplitformula
+即重建前， $\Phi(T) \ge c \cdot \Delta(x) \ge c\cdot (2\alpha - 1)\cdot x.size$。
+
+而重建後 $\Phi(T) = 0$。
+因此必須滿足 $\Phi(T) \ge x.size$，其中等式右側爲重建代價。
+
+如果可以保證 $c\dot(2\alpha-1) \cdot x.size \ge x.size$，
+則就可以滿足要求。
+求解得：
+\startformula
+c\ge \frac{1}{2\alpha -1}
+\stopformula
+\stopANSWER
+
+% e
+\startigBase[continue]\startitem
+證明：在一棵 $n$ 節點的 $\alpha$ 平衡樹中插入一個節點
+或刪除一個節點的攤還時間爲 $O(\lg n)$。
+\stopitem\stopigBase
+
+\startANSWER
+令攤還代價爲 $\hat{c_i}$。
+如果沒有觸發重構，則：
+\startformula
+\hat{c_i} = c_i + \Phi(D_i) - \Phi(D_{i-1})
+\stopformula
+由 (b) 可知， $c_i \in O(\lg n)$。
+類似，樹高也是 $O(\lg n)$。
+無論是插入還是刪除節點 $v$ 都會改變從他到根節點路徑上所有節點的 $\Delta(x)$。
+因此：
+\startformula
+\Phi(D_i) - \Phi(D_{i-1}) \le c\cdot O(\lg n) \in O(\lg n)
+\stopformula
+
+如果觸發了重構，令 $c_i = c_i' + c_i''$，
+其中 $c_i'$ 是插入或刪除的代價，而 $c_i''$ 是重構的代價。
+令 $D_i'$ 是插入或刪除之後、重構之前的狀態。那麼：
+\startformula
+\hat{c_i}=c_i' + c_i'' + (\Phi(D_i) - \Phi(D_i')) + (\Phi(D_i') - \Phi(D_{i-1}))
+\stopformula
+
+$\Phi(D_i')$ 是重構之前的勢， $\Phi(D_i)$ 是刪除之後的勢，
+ $\Phi(D_i')-\Phi(D_i)$ 是重構後減少的勢。根據上一個問題：
+\startformula
+c_i'' \le \Phi(D_i')-\Phi(D_i)
+\stopformula
+因此：
+\startsplitformula\startmathalignment
+\NC \hat{c_i} \NC = c_i' + c_i'' + (\Phi(D_i) - \Phi(D_i')) + (\Phi(D_i') - \Phi(D_{i-1})) \NR
+\NC \NC \le O(\lg n) + c_i'' - (\Phi(D_i')) - \Phi(D_i)) + O(\lg n) \NR
+\NC \NC \le O(\lg n) \NR
+\stopmathalignment\stopsplitformula
+
+\stopANSWER
+
+\stopPROBLEM
