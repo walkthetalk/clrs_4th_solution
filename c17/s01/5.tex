@@ -1,0 +1,16 @@
+\startEXERCISE
+給定一個元素 x 和一個自然數 i，
+其中 x 所屬順序統計樹中含有 n 個元素，
+如何在 $O(\lg n)$ 的時間內確定 x 在該樹線性序中的第 i 個後繼？
+\stopEXERCISE
+
+\startANSWER
+先計算 x 的秩，記爲 r，然後在此樹中搜索秩爲 \m{r+i} 的節點。
+
+\CLRSH{OS-SUCCESSOR(T,x,i)}
+\startCLRSCODE
+r = \ALGO{OS-RANK(T, x)}
+s = r + i
+return \ALGO{OS-SELECT(T.root, s)}
+\stopCLRSCODE
+\stopANSWER

@@ -1,0 +1,115 @@
+\startEXERCISE
+在 \ALGO{OS-SELECT} 或 \ALGO{OS-RANK} 中，
+節點的 size 屬性僅用於計算秩。
+如果我們不存儲 size，而是存儲他在以自己爲根的子樹中的秩。
+試說明在插入和刪除節點時，如何維護這個信息。
+（注意，這兩種操作都可能引起旋轉）
+\stopEXERCISE
+
+\startANSWER
+令新屬性爲 $rank'$，則 $x.rank' = x.size + 1$。
+
+在插入節點 $z$ 時，需要在樹中搜索 $z$ 的正確位置。
+對於該路徑上的每個節點 $x$，
+如果在 $x$ 的左子樹中插入了 $z$，則在 $x.rank'$ 上加 1；
+如果在 $x$ 的右子樹中插入了 $z$，則 $x.rank'$ 保持不變。
+
+\CLRSH{RB-INSERT(T,z)}
+\startCLRSCODE
+x = T.root
+y = T.nil
+while x \ne T.nil
+	y = x
+	if z.key < x.key
+		x = x.left
+		x.rank' = x.rank' + 1
+	else
+		x = x.right
+z.p = y	// 找到了插入位置
+if y == T.nil
+	T.root = z	// 樹 T 爲空
+elseif z.key < y.key
+	y.left = z
+else
+	y.right = z
+z.left = T.nil
+z.right = T.nil
+z.color = RED
+z.rank' = 1
+\ALGO{RB-INSERT-FIXUP(T,z)}
+\stopCLRSCODE
+
+在刪除節點 $z$ 時，所有順序統計量大於 $z$ 且爲 $z$ 的祖先的節點，
+其 $rank'$ 都要減 1。
+
+\CLRSH{RB-DELETE(T,z)}
+\startCLRSCODE
+y = z
+y-original-color = y.color
+if z.left == T.nil
+	x = z.right
+	\ALGO{RB-TRANSPLANT(T, z, z.right)}    // 將 z 替換爲其右孩子
+else if z.right == T.nil
+	x = z.left
+	\ALGO{RB-TRANSPLANT(T, z, z.left)}	// 將 z 替換爲其左孩子
+else
+	y = \ALGO{RB-MINIMUM(T, z.right)}	// y 是 z 的後繼
+	y-original-color = y.color
+	x = y.right
+	if y \ne z.right	// is y father down the tree?
+		\ALGO{RB-TRANSPLANT(T, y, y.right)}	// 將 y 替換爲其右孩子
+		y.right = z.right	// z 的右孩子成了 y 的右孩子
+		y.right.p = y     
+	else
+		x.p = y	// x 爲 T.nil
+	\ALGO{RB-TRANSPLANT(T, z, y)}	// 將 z 替換爲其後繼 y
+	y.left = z.left			// 將 z 的左孩子送給 y
+	y.left.p = y
+	y.color = z.color
+t = x
+while t.p \ne T.nil
+	if t == t.p.left
+		t.p.rank' = t.p.rank' - 1
+	t = t.p
+if y-original-color == BLACK
+	\ALGO{RB-DELETE-FIXUP(T, x)}
+\stopCLRSCODE
+
+此外還要處理旋轉操作。
+
+\CLRSH{LEFT-ROTATE(T,x)}
+\startCLRSCODE
+y = x.right
+x.right = y.left
+if y.left \ne T.nil
+	y.left.p = x
+y.p = x.p
+if x.p == nil
+	T.root = y
+elseif x == x.p.left
+	x.p.left = y
+else
+	x.p.right = y
+y.left = x
+x.p = y
+y.rank' = y.rank' + x.rank'
+\stopCLRSCODE
+
+\CLRSH{RIGHT-ROTATE(T,x)}
+\startCLRSCODE
+y = x.left
+x.left = y.right
+if y.right \ne T.nil
+	y.right.p = x
+y.p = x.p
+if x.p == nil
+	T.root = y
+elseif x == x.p.right
+	x.p.right = y
+else
+	x.p.left = y
+y.right = x
+x.p = y
+x.rank' = x.rank' - y.rank'
+\stopCLRSCODE
+\stopANSWER

@@ -1,0 +1,14 @@
+\startEXERCISE
+說明 \ALGO{OS-RANK(T, x)} 在圖 17.1 中的紅黑樹 T 上的執行過程，
+其中 $x.key = 35$。
+\stopEXERCISE
+
+\startANSWER
+\startigBase
+\item 訪問關鍵字 35， $r=1$，轉到其父節點；
+\item 訪問關鍵字 38， $r=1$，轉到其父節點；
+\item 訪問關鍵字 30， $r=1+2=3$，轉到其父節點；
+\item 訪問關鍵字 41， $r=3$，轉到其父節點；
+\item 訪問關鍵字 26， $r=3+13=16$，到達根節點，返回 16。
+\stopigBase
+\stopANSWER

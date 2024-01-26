@@ -1,0 +1,51 @@
+\startEXERCISE
+說明如何在 $O(n\lg n)$ 時間內，
+利用順序統計樹計算數列（規模爲 n）中逆序對的數目（參見問題 2-4）。
+\stopEXERCISE
+
+\startANSWER
+令數列爲 $A[1:n]$，將 $A[1],A[2],\dots,A[n]$ 依次插入一棵初始爲空的順序統計樹 T，
+如果 $i < j$，當插入 $A[j]$ 時， $A[i]$ 已經在樹中。
+如果 $A[j]$ 位於 $A[i]$ 的左子樹，即 $A[j]<A[i]$，
+就產生了一個逆序對，即每次插入左子樹都會使逆序對數目增加 1。
+
+爲 T 增加屬性 $T.inv$，初始 $T.inv = 0$。
+
+\CLRSH{COUNT-INVERSIONS(A,n)}
+\startCLRSCODE
+T = \ALGO{NEW-ORDER-STATISTIC-TREE()}
+T.inv = 0
+for i = 1 to n
+	z = \ALGO{NEW-NODE()}
+	z.key = A[i]
+	\ALGO{RB-INSERT(T, z)}
+return T.inv
+\stopCLRSCODE
+
+修改 \ALGO{RB-INSERT(T,z)}：
+\startCLRSCODE
+x = T.root
+y = T.nil
+while x \ne T.nil
+	y = x
+	if z.key < x.key
+		x = x.left
+		T.inv = T.inv + 1
+	else
+		x = x.right
+z.p = y
+if y == T.nil
+	T.root = z
+elseif z.key < y.key
+	y.left = z
+else
+	y.right = z
+z.left = T.nil
+z.right = T.nil
+z.color = RED
+\ALGO{RB-INSERT-FIXUP(T,z)}
+\stopCLRSCODE
+
+每次 \ALGO{RB-INSERT} 的運行時間爲 $O(\lg n)$，
+總計插入 $n$ 個元素，所以 \ALGO{COUNT-INVERSIONS} 的運行時間爲 $O(n\lg n)$。
+\stopANSWER

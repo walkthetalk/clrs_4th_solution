@@ -1,0 +1,16 @@
+\startEXERCISE
+說明執行 \ALGO{OS-SELECT(T.root, 10)} 在圖 17-1 中紅黑樹 T 上的執行的過程。
+附圖 17.1：
+
+\externalfigure[fig17-1-1]
+\stopEXERCISE
+
+\startANSWER
+\startigBase
+\item 訪問關鍵字 26， $r=13,i=10$，即 $r > i$，轉到左子樹；
+\item 訪問關鍵字 17， $r= 8,i=10$，即 $r < i$，轉到右子樹；
+\item 訪問關鍵字 21， $r= 3,i= 2$，即 $r > i$，轉到左子樹；
+\item 訪問關鍵字 19， $r= 1,i= 2$，即 $r > i$，轉到右子樹；
+\item 訪問關鍵字 20， $r= 1,i= 1$，即 $r = i$，返回該節點；
+\stopigBase
+\stopANSWER

@@ -10,6 +10,8 @@ vardef declare.bintree(suffix tree) :=
 	% draw options
 	boolean tree.isfull;
 	tree.isfull := true;
+	boolean tree.hasSize;
+	tree.hasSize := false;
 
 	numeric tree.gsize;
 	numeric tree.xunit;
@@ -170,6 +172,20 @@ vardef rtNof(suffix tree)(expr n) :=
 		r := r + rtNof(tree)(tree[n]rt);
 	else:
 		r := 1;
+	fi;
+
+	r
+enddef;
+
+vardef sizeNof(suffix tree)(expr n) :=
+	save r;
+	numeric r;
+	r := 1;
+	if tree[n]lft <> nullptr:
+		r := r + sizeNof(tree)(tree[n]lft);
+	fi;
+	if tree[n]rt <> nullptr:
+		r := r + sizeNof(tree)(tree[n]rt);
 	fi;
 
 	r

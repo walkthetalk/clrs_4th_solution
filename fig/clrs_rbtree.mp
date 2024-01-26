@@ -97,7 +97,14 @@ vardef subdraw.rbtree(suffix tree)(expr i) :=
 	if known tree[i]frcolor:
 		draw (tree.fr shifted positionOf(tree)(i)) withcolor tree[i]frcolor;
 	fi;
-	label(TEX("$" & tree[i]key & "$"), positionOf(tree)(i)) withcolor tree[i]lblcolor;
+	save lbl;
+	string lbl;
+	if (tree.hasSize):
+		lbl := "${" & tree[i]key & " \over " & decimal(sizeNof(tree)(i)) & "}$";
+	else:
+		lbl := "$" & tree[i]key & "$";
+	fi;
+	label(TEX(lbl), positionOf(tree)(i)) withcolor tree[i]lblcolor;
 
 	if isleaf.rbtree(tree)(i) and tree.drawnil:
 		save nilposition;

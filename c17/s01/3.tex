@@ -1,0 +1,20 @@
+\startEXERCISE
+寫出 \ALGO{OS-SELECT} 的非遞迴版本。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{OS-SELECT(x, i)}
+\startCLRSCODE
+root = x
+idx = i
+while root \ne NIL
+	r = root.left.size + 1
+	if idx == r
+		return x
+	elseif idx < r
+		root = root.left
+	else
+		root = root.right
+		idx = idx - r
+\stopCLRSCODE
+\stopANSWER

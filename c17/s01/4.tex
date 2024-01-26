@@ -1,0 +1,28 @@
+\startEXERCISE
+寫出一個遞迴過程 \ALGO{OS-KEY-RANK(T, k)}，
+以一棵順序統計樹 T 和一個關鍵字 k 作爲輸入，
+要求返回 k 在動態集合 T 中的秩。
+假設 T 中沒有重複的關鍵字。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{OS-KEY-RANK(T, k)}
+\startCLRSCODE
+if T == NIL
+	return 0
+if k == T.key
+	if T.left == NIL
+		return 1
+	else
+		return 1 + T.left.size
+
+if k < T.key
+	return \ALGO{OS-KEY-RANK(T.left, k)}
+
+ret = \ALGO{OS-KEY-RANK(T.right, k)}
+if T.left == NIL
+	return ret + 1
+else
+	return ret + 1 + T.left.size
+\stopCLRSCODE
+\stopANSWER
