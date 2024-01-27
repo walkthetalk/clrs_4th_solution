@@ -1,0 +1,25 @@
+\startEXERCISE
+寫出區間樹上左旋操作 \ALGO{LEFT-ROTATE} 的僞碼，
+使其可以在 $O(1)$ 時間內更新所有 $\max$ 屬性。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{LEFT-ROTATE(T, x)}
+\startCLRSCODE
+y = x.right
+x.right = y.left
+if y.left \ne T.nil
+	y.left.p = x
+y.p = x.p
+if x.p == nil
+	T.root = y
+else if x == x.p.left
+	x.p.left = y
+else
+	x.p.right = y
+y.left = x
+x.p = y
+y.max = x.max
+x.max = \max\{x.int.high, x.left.max, y.left.max\}
+\stopCLRSCODE
+\stopANSWER

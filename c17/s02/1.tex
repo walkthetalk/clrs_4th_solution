@@ -1,0 +1,16 @@
+\startEXERCISE[exercise:add_pointer_for_node]
+通過爲節點增加指針的方式，試說明如何在增強的順序統計樹上，
+以最壞時間 $O(1)$ 完成動態集合的查詢操作
+ \ALGO{MINIMUM}、 \ALGO{MAXIMUM}、 \ALGO{SUCCESSOR} 和 \ALGO{PREDECESSOR}。
+順序統計樹上其他操作的漸進性能不應受影響。
+\stopEXERCISE
+
+\startANSWER
+在每個節點中加入兩個指針數據項，分別指向左子樹中最小的元素和右子樹中最大的元素。
+\startformula\startmathalignment
+\NC MINIMUM(x) \NC = x.min\NR
+\NC MAXIMUM(x) \NC = x.max\NR
+\NC SUCCESSOR(x) \NC = x.right.min\NR
+\NC PREDECESSOR(x) \NC = x.left.max\NR
+\stopmathalignment\stopformula
+\stopANSWER

@@ -1,0 +1,28 @@
+\startEXERCISE
+一個圓上有 n 條弦，每條弦都由其端點來定義。
+請給出一個算法確定這些弦有多少對相交，要求時間爲 $O(n\lg n)$。
+（例如，如果 n 條弦都爲直徑，他們相交於圓心，
+則答案爲 $\binom{n}{2}$）
+假設沒有重複的端點。
+\stopEXERCISE
+
+\startANSWER
+n 條弦共 2n 個端點，每個端點都對應一個角度。
+按角度大小對這個 2n 個端點進行排序（按逆時針方向）。
+
+掃描時，遇到的每條弦的第一個端點視爲這條弦的起點，另一個視爲其終點。
+
+用一棵順序統計樹輔助處理（初始爲空）。
+
+\startCLRSCODE
+T = \ALGO{NEW-ORDER-STATISTICS()}
+r = 0
+for i in 1 to 2n
+	if \ALGO{IS_BEGIN(v_i)}
+		\ALGO{INSERT(T, v_i)}
+	else if \ALGO{IS_END(v_i)}
+		r += \ALGO{BIGGER_THAN(T, v_i)}
+		\ALGO{DELETE(T, \ALGO{BEGIN_OF(v_i)})}
+\stopCLRSCODE
+
+\stopANSWER

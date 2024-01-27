@@ -1,0 +1,20 @@
+\startEXERCISE
+請給出一個高效算法，輸入爲區間 i，
+返回一個與 i 重疊、且具有最小低端點的區間；
+如果不存在在這樣的區間，則返回 T.nil。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MIN_INTERVAL_SEARCH(x, i)}
+\startCLRSCODE
+if x == NIL
+	return NIL
+if x.left \ne NIL and x.left.max \ge i.low
+	ret = \ALGO{MIN_INTERVAL_SEARCH(x.left, i)}
+	if ret \ne NIL
+		return ret
+if \ALGO{IS_OVERLAP(x.int, i)}
+	return x
+return \ALGO{MIN_INTERVAL_SEARCH(x.right, i)}
+\stopCLRSCODE
+\stopANSWER

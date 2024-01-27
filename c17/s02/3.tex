@@ -1,0 +1,33 @@
+\startEXERCISE
+設 $\otimes$ 爲一個滿足結合律的二元運算符，
+令 $a$ 爲紅黑樹中每個節點要維護的一個屬性。
+假設在每個節點 $x$ 上增加一個屬性 $f$，
+使得 $x.f=x_1.a \otimes x_2.a \otimes \cdots \otimes x_m.a$，
+其中 $x_1,x_2,\cdots,x_m$ 是以 $x$ 爲根的子樹中按中序排列的所有節點。
+說明旋轉後，如何在 $O(1)$ 時間內更新屬性 $f$。
+對其稍作修改，使得他能夠應用到順序統計樹的屬性 $size$ 中。
+\stopEXERCISE
+\startANSWER
+根據結合律可知： \m{x.f = x.left.f \otimes x.a \otimes x.right.f}。
+其運行時間爲 $O(1)$。
+
+\externalfigure[e13_2_3-1]
+
+\bTABLE[align=center]
+\bTABLEhead\bTR
+	\bTH 左旋 \eTH
+	\bTH 右旋 \eTH
+\eTR\eTABLEhead
+\bTABLEbody\bTR
+	\bTD \startformula\startmathalignment
+\NC x'.f \NC = \alpha.f \otimes x.a \otimes \beta.f \NR
+\NC y'.f \NC = x.f \NR
+\stopmathalignment\stopformula \eTD
+	\bTD \startformula\startmathalignment
+\NC y'.f \NC = \beta.f \otimes y.a \otimes \gamma.f \NR
+\NC x'.f \NC = y.f \NR
+\stopmathalignment\stopformula \eTD
+\eTR\eTABLEbody
+\eTABLE
+
+\stopANSWER
