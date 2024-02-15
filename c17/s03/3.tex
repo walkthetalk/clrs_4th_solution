@@ -1,0 +1,19 @@
+\startEXERCISE
+給定一棵區間樹 $T$ 和一個區間 $i$，
+請描述如何在 $O(\min(n, k\lg n))$ 時間內列出 $T$ 中所有與 $i$ 重疊的區間，
+其中 $k$ 爲輸出清單中區間的數目。
+（\hint 一種簡單的方法是做若干次查詢，並且在這些查詢操作中修改樹，
+如果不想修改樹就要複雜一點。）
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{INTERVAL-OVERLAP-LIST(T, x, i)}
+\startCLRSCODE
+if x.int overlap i
+	print x
+if x.left != T.nil and x.left.max >= i.low
+	INTERVAL-OVERLAP-LIST(T, x.left, i)
+if x.right != T.nil and x.low <= i.high && x.right.max >= i.low
+	INTERVAL-OVERLAP-LIST(T, x.right, i)
+\stopCLRSCODE
+\stopANSWER

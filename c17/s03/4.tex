@@ -1,0 +1,27 @@
+\startEXERCISE
+對區間樹 $T$ 和一個區間 $i$，
+請修改有關區間樹的過程來支持新的操作 \ALGO{INTERVAL-SEARCH-EXACTLY(T, i)}，
+他返回的指針指向 $T$ 中節點 $x$，
+使得 $x.int.low = i.low$ 且 $x.int.high = i.high$；
+或者，如果 $T$ 不包含這樣的區間時返回 $T.nil$。
+所有的操作（包括 \ALGO{INTERVAL-SEARCH-EXACTLY}）
+對於包含 $n$ 個節點的區間樹的運行時間都應爲 $O(\lg n)$。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{INTERVAL-SEARCH-EXACTLY(T, i)}
+\startCLRSCODE
+x = T.root
+while x \ne T.nil
+	if i.high > x.int.max or i.low < x.int.min
+		return T.nil
+	if i.high == x.int.high and i.low == x.int.low
+		return x
+	if i.low < x.int.low or
+	  (i.low == x.int.low and x.int.high > i.high)
+		x = x.left
+	else
+		x = x.right
+return x
+\stopCLRSCODE
+\stopANSWER

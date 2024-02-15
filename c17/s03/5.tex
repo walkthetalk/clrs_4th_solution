@@ -1,0 +1,48 @@
+\startEXERCISE
+說明如何來維護一個動態集合 $Q$，使其支持操作 \ALGO{MIN-GAP}，
+該操作能給出 $Q$ 中兩個最接近的數之間的差值。
+例如， $Q=\{1,5,9,15,18,22\}$，
+則 \ALGO{MIN-GAP} 返回 $18-15=3$，
+因爲 15 和 18 是 $Q$ 中兩個最接近的數。
+同時要使得操作 \ALGO{INSERT}、 \ALGO{DELETE}、 \ALGO{SEARCH} 和 \ALGO{MIN-GAP} 儘可能高效，
+並分析他們的運行時間。
+\stopEXERCISE
+
+\startANSWER
+以紅黑樹作爲基礎數據結構，
+並爲每個節點 $x$ 增加屬性：
+\startigBase
+\item min\text{-}gap：以 $x$ 爲根的子樹中兩個最接近的數之間的差值。如果 $x$ 是葉子節點，則此屬性值爲 $\infty$
+\item min\text{-}val：以 $x$ 爲根的子樹中的最小值。
+\item max\text{-}val：以 $x$ 爲根的子樹中的最大值。
+\stopigBase
+
+計算方式如下：
+\startformula
+x.min\text{-}val = \startmathcases
+\NC x.left.min\text{-}val \NC \text{如果 $x.left \ne T.nil$，} \NR
+\NC x.key \NC \text{否則。} \NR
+\stopmathcases
+\stopformula
+
+\startformula
+x.max\text{-}val = \startmathcases
+\NC x.right.max\text{-}val \NC \text{如果 $x.right \ne T.nil$，} \NR
+\NC x.key \NC \text{否則。} \NR
+\stopmathcases
+\stopformula
+
+\startsplitformula\startmathalignment
+\NC x.min\text{-}gap = \min\{ \NC
+  x.left.min\text{-}gap, \NR
+\NC \NC x.right.min\text{-}gap, \NR
+\NC \NC x.key - x.left.max\text{-}val, \NR
+\NC \NC x.right.min\text{-}val - x.key \} \NR
+\stopmathalignment\stopsplitformula
+
+
+根據定理 17.1，插入、刪除操作可以在 $O(\lg n)$ 時間內完成，
+而更新這幾個屬性均可在旋轉操作時用 $O(1)$ 時間完成。
+
+\ALGO{MIN-GAP} 只需返回根節點的 $min\text{-}gap$ 屬性值，運行時間爲 $O(1)$。
+\stopANSWER
