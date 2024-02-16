@@ -1,0 +1,49 @@
+\startPROBLEM
+（Point of maximum overlap）
+假設我們希望記錄一個區間集合的\emph{最大重疊點}，即覆蓋此點的區間數目最多。
+\startigBase[a]\startitem
+證明：總有一個最大重疊點是某個區間的端點。
+\stopitem\stopigBase
+
+\startANSWER
+任選一個最大重疊點（如是任何區間的端點），
+我們總能在所有區間端點中找到離他最近的那個端點，
+覆蓋這個端點的區間數與我們所選重疊點是一樣的。
+\stopANSWER
+
+\startigBase[continue]\startitem
+設計一個數據結構，使其能有效地支持 \ALGO{INTERVAL-INSERT}、 \ALGO{INTERVAL-DELETE}，
+以及 \ALGO{FIND-POM} （返回最大重疊點） 操作。
+（\hint 用紅黑樹記錄所有的端點。
+左端點關聯 +1，右端點關聯 -1，
+並且給樹中的每個節點加些額外信息來維護最大重疊點。）
+\stopitem\stopigBase
+
+\startANSWER
+令 $e_1,e_2,\cdots,e_n$ 爲已排序的所有端點，
+滿足 $e_1\le e_2 \le \cdots \le e_n$。
+從左至右掃描，若爲左端點，則 p 的值爲 +1，若爲右端點，則 p 的值爲 -1。
+令 $s(i,j)=p_i + p_{i+1} + \cdots + p_j$，
+其中 $1\le i\le j\le n$。
+目標是要找到使 $s(1,j)$ 最大的 $j$。
+
+每個節點記錄三個值：
+\startigBase
+\item $v$，子樹所有節點的 $p$ 之和；
+\item $m$，子樹上 \m{s(i,j)} 的最大值；
+\item $j$，即 $m$ 所對應的 $j$。
+\stopigBase
+定義 NIL 的 $m$ 和 $v$ 均爲 0。
+用自底向上的方式計算這些值。
+\startformula
+x.m = \startcases
+\NC x.left.m	\NC (x.j = x.left.j) \NR
+\NC x.left.m + x.v \NC (x.j = x) \NR
+\NC x.left.m + x.v + x.right.m \NC (x.j = x.right.j) \NR
+\stopcases
+\stopformula
+
+\ALGO{FIND-POM} 直接返回 $T.root.j$ 即可。
+\stopANSWER
+
+\stopPROBLEM
