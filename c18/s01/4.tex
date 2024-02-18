@@ -1,0 +1,14 @@
+\startEXERCISE
+高度爲 $h$ 的 B 樹中，最多可以存儲多少個關鍵字？
+用最小度數 $t$ 的函數表示。
+\stopEXERCISE
+
+\startANSWER
+每個節點最多包含 $2t-1$ 個關鍵字。每個節點最多有 $2t$ 個孩子。
+\startsplitformula\startmathalignment
+\NC \NC (2t-1)[(2t)^0 + (2t)^1 + \ldots + (2t)^h] \NR
+\NC = \NC (2t-1)\sum_{i=0}^{h}(2t)^i \NR
+\NC = \NC (2t-1)\frac{(2t)^{h+1} - 1}{2t-1} \NR
+\NC = \NC (2t)^{h+1} - 1 \NR
+\stopmathalignment\stopsplitformula
+\stopANSWER

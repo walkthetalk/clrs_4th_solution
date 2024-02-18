@@ -1,0 +1,15 @@
+\startEXERCISE
+當 $t$ 取何值時，圖 18-1 所示的樹是一棵合法的 B 樹？
+
+附圖 18-1：
+
+\externalfigure[fig18-1-1]
+\stopEXERCISE
+
+\startANSWER
+根節點之外的節點至少要有 $t-1$ 個關鍵字，最多有 $2t-1$ 個關鍵字；
+或者至少有 $t$ 個孩子，最多有 $2t$ 個孩子。
+圖 18-1 中，有兩個內部節點，其一有 3 個孩子，另一個有 4 個孩子，
+因此 $t\le 3\le 2t$，且 $t\le 4\le 2t$，
+解得 $t=2$ 或 $t=3$。
+\stopANSWER
