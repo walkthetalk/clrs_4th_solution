@@ -1,0 +1,25 @@
+\startEXERCISE
+請解釋在什麼情況下（如果有的話），
+在調用 \ALGO{B-TREE-INSERT} 的過程中，
+會執行冗餘的 \ALGO{DISK-READ} 或 \ALGO{DISK-WRITE} 操作。
+（所謂冗餘的 \ALGO{DISK-READ}，是指對已經在主存中的某頁做 \ALGO{DISK-READ}。
+冗餘的 \ALGO{DISK-WRITE} 是指將已經存在於磁盤上某頁又完全相同的重寫一遍。）
+\stopEXERCISE
+
+\startANSWER
+\ALGO{B-TREE-SPLIT-CHILD} 中，
+第 1、 2 和 13 行分別對節點 $x$， $y$ 和 $z$ 進行更改，
+第 18、 19 和 20 行對應的 \ALGO{DISK-WRITE} 操作，沒有冗餘。
+主過程 \ALGO{B-TREE-INSERT} 中沒有調用 \ALGO{DISK-READ} 和 \ALGO{DISK-WRITE}。
+
+\ALGO{B-TREE-SPLIT-ROOT} 中也沒有調用 \ALGO{DISK-READ} 和 \ALGO{DISK-WRITE}。
+
+在 \ALGO{B-TREE-INSERT-NONFULL} 中，
+由於第 3~7 行修改了 $x$，因此第 8 行的 \ALGO{DISK-WRITE} 不是冗餘的。
+對 \ALGO{DISK-READ} 的唯一調用發生在第 12 行。
+由於對 \ALGO{B-TREE-INSERT-NONFULL} 的調用是單程的，
+因此沒有冗餘的 \ALGO{DISK-READ} 和 \ALGO{DISK-WRITE}。
+
+綜上所述， \ALGO{B-TREE-INSERT} 利用預處理策略保證了其單程性質，
+不會產生冗餘的讀寫操作。
+\stopANSWER
