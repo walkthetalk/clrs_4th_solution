@@ -48,7 +48,7 @@ $2: | ${output_dir}/
 	echo [compile] $1 at $$$${COMPILE_DIR}; \
 	cp $${$4} $$$${COMPILE_DIR}/; \
 	cd $$$${COMPILE_DIR}; \
-	mptopdf $(notdir $1) > /dev/null; \
+	mptopdf $(notdir $1); \
 	cp *.pdf ${output_dir}/; \
 	rm -r $$$${COMPILE_DIR}
 endef
@@ -60,3 +60,5 @@ figs: ${fig_dsts}
 ${main_object}: ${fig_dsts}
 
 include ${fig_deps}
+
+$(eval $(call define_object,test,test_clrscode.tex))

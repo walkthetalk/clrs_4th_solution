@@ -48,6 +48,7 @@ local handler = visualizers.newhandler {
                         context.verbatim.CSnippetStrip(s)
                     end,
     fnewline    = function(s)
+			context("\n\n")
                         context.verbatim.CSnippetStrip(s)
                     end,
     ftabs       = function(s)
@@ -99,6 +100,7 @@ local validName   = visualchar^1
 -- note: keyword match must use greedy order
 local gkeyword   = P("foreach")
 		  + P("for")
+		  + P("upto")
                   + P("to")
 		  + P("in")
                   + P("downto")
@@ -110,6 +112,7 @@ local gkeyword   = P("foreach")
                   + P("NIL")
                   + P("and")
                   + P("or")
+		  + P("not")
                   + P("repeat")
                   + P("until")
                   + P("break")
