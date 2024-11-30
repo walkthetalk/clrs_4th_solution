@@ -1,0 +1,60 @@
+\startEXERCISE
+因爲葉子節點無需指向孩子節點的指針，
+那麼對於同樣大小的磁盤塊，可選用一個與內部節點不同的（更大的） $t$ 值。
+請說明如何修改 B 樹的創建和插入過程來處理這個變化。
+\stopEXERCISE
+
+\startANSWER
+最小度數爲 $t$ 的 B 樹，一個節點最多可存儲 $2t-1$ 個關鍵字以及 $2t$ 個指針。
+而葉子節點沒有子節點，因此 $2t$ 個指針可以用來存儲關鍵字。
+若將新的 $t$ 值記爲 $t'$，總空間要足夠容納 $2t'-1$ 個關鍵字，
+即根據關鍵字和指針各佔空間多少，即可求出 $t'$ 的最大值。
+
+B 樹的創建過程當無需修改（空節點）。
+插入過程需要修改。
+葉子節點分裂出來的節點仍是葉子節點，且仍只分裂出一個葉子節點，
+不會出現一個葉子節點一次分裂出多個葉子節點的情況。
+插入過程需要修改兩處：1）葉子節點和內部節點的分裂條件不同。
+2）分裂後葉子節點和內部節點需要複製的關鍵字數目不同。
+
+\CLRSH{GET-T(x)}
+\startCLRSCODE
+if x.leaf
+	return t'
+else
+	return t
+\stopCLRSCODE
+
+\CLRSH{B-TREE-INSERT(T, k)}
+\startCLRSCODE
+r = T.root
+if r.n == 2 \cdot \ALGO{GET-T(r)} - 1
+	s = \ALGO{B-TREE-SPLIT-ROOT(T)}
+	\ALGO{B-TREE-INSERT_NONFULL(s, k)}
+else
+	\ALGO{B-TREE-INSERT_NONFULL(r, k)}
+\stopCLRSCODE
+
+\CLRSH{B-TREE-INSERT-NONFULL(x, k)}
+\startCLRSCODE
+i = x.n
+if x.leaf
+	while i \ge 1 and k < x.key[i]
+		x.key[i+1] = x.key[i]
+		i = i - 1
+	x.key[i + 1] = k
+	x.n = x.n + 1
+	\ALGO{DISK-WRITE(x)}
+else
+	while i \ge 1 and k < x.key[i]
+		i = i - 1
+	i = i + 1
+	\ALGO{DISK-READ(x.c[i])}
+	if x.c[i].n == 2 \cdot \ALGO{GET-T(x.c[i])} - 1
+		\ALGO{B-TREE-SPLIT-CHILD(x, i)}
+		if k > x.key[i]
+			i = i + 1
+	\ALGO{B-TREE-INSERT-NONFULL(x.c[i], k)}
+\stopCLRSCODE
+
+\stopANSWER

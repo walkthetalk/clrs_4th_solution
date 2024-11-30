@@ -1,0 +1,30 @@
+\startEXERCISE
+假設磁盤硬件允許我們任意選擇磁盤塊的大小，
+但讀取磁盤塊的時間是 $a+bt$，
+其中 $a$ 和 $b$ 爲規定的常數，
+$t$ 爲確定磁盤塊大小後 B 樹的最小度數。
+請描述如何選擇 $t$ 以（近似的）最小化 B 樹的查找時間。
+對 $a=5$ 毫秒和 $b=10$ 毫秒，請給出 $t$ 的一個最優值。
+\stopEXERCISE
+
+\startANSWER
+令 B 樹高爲 $h$，
+關鍵字數目爲 $n$，
+搜索過程最多需要讀取次數爲 $h$，
+則讀頁面總用時爲 $(a+bt)\times h$，
+對 $t$ 求導數。
+
+\startformula
+f(t)=(a+bt)\log_t n
+\stopformula
+
+\startformula
+f'(t) =\frac{bt\ln t - (a+bt)}{t\ln^2 t} \cdot \ln n
+\stopformula
+令 $f'(t)=0$，將 $a=5,b=t$ 帶入，得：
+\startformula
+t = exp\left\{W(\frac{1}{2e})+1\right\}
+\stopformula
+其中 $W$ 為朗伯 W 函数（Lambert W Function）。
+由於 $t$ 為整數， $t=3$ 時使得 B 樹的查找時間最少。
+\stopANSWER

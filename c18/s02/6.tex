@@ -1,0 +1,20 @@
+\startEXERCISE
+假設實現 \ALGO{B-TREE-SEARCH} 時，
+在每個節點內採用二分查找，而不是線性查找。
+證明：
+無論怎樣選擇 $t$ （$t$ 爲 $n$ 的函數），
+這種實現所需的 CPU 時間都爲 $O(\lg n)$。
+\stopEXERCISE
+
+\startANSWER
+令 B 樹高爲 $h$，所含關鍵字數目爲 $n$，
+則 $O(h)=O(\log_{t}n)$，
+且 $h\le \log_{t}\frac{n+1}{2}$。
+每個節點中關鍵字數目不會大於 $2t-1$，
+二分查找用時 $O(\lg t)$。
+因此總時間爲：
+\startformula
+O(\lg t \times \log_{t}n) = O(\lg t \times \frac{\lg n}{\lg t}) = O(\lg n)
+\stopformula
+與 $t$、 $n$ 之間的關係無關。
+\stopANSWER
