@@ -1,0 +1,37 @@
+\startEXERCISE
+假設將關鍵字 $\{1,2,\ldots,n\}$ 插入一棵最小度數爲 2 的空 B 樹中，
+那麼最終的 B 樹有多少個節點？
+\stopEXERCISE
+
+\startANSWER
+
+\startcombination[nx=5,ny=1,location=top]
+{\externalfigure[output/e18_2-4-1]}{}
+{\externalfigure[output/e18_2-4-2]}{}
+{\externalfigure[output/e18_2-4-3]}{}
+{\externalfigure[output/e18_2-4-4]}{}
+{\externalfigure[output/e18_2-4-5]}{}
+\stopcombination
+
+\startcombination[nx=3,ny=2,location=top]
+{\externalfigure[output/e18_2-4-6]}{}
+{\externalfigure[output/e18_2-4-7]}{}
+{\externalfigure[output/e18_2-4-8]}{}
+{\externalfigure[output/e18_2-4-9]}{}
+{\externalfigure[output/e18_2-4-10]}{}
+{\externalfigure[output/e18_2-4-11]}{}
+\stopcombination
+
+關鍵字由小到大依次插入，
+每次插入的新關鍵字都比樹中所有關鍵字大，
+即每次插入的新關鍵字都位於樹的右下角節點。
+除了從根到葉的路徑，
+即右軸上節點中關鍵字個數可能大於 1 外，
+其他節點中關鍵字個數都是 1。
+如果右軸上節點個數均為 3，
+假設樹高為 $h$，
+則關鍵字個數 $n=2h+2^{h+1}-1$，
+節點個數 $m=2^{h+1}-1$，
+因此 $m=\Theta(n)$，
+最終樹上有 $\Theta(n)$ 個節點。
+\stopANSWER
