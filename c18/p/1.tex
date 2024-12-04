@@ -1,0 +1,85 @@
+\startPROBLEM
+（stacks on secondary storage）
+在一臺計算機上，內存速度快，但量少，而磁盤速度慢，但量多，
+如何實現\emph{棧}。
+\ALGO{PUSH} 和 \ALGO{POP} 的操作對象爲單字。
+我們希望這個棧可以比內存大得多，
+其中大部分可以放在磁盤上。
+
+一種簡單但低效的方法是將整個棧放在磁盤上。
+在內存中僅保持一個指針，指向棧頂元素的磁盤地址。
+如果該指針的值爲 $p$，
+則棧頂元素是磁盤的第 $\lfloor \frac{p}{m}\rfloor$ 頁上的第 $p \mod m$ 個字，
+這裏 $m$ 爲每頁所含字數。
+
+爲了實現 \ALGO{PUSH}，
+我們可以增大棧指針，
+將磁盤中對應頁讀到內存中，
+將要入棧的元素複製到該頁上對應位置，
+最後將該頁寫回磁盤。
+ \ALGO{POP} 操作與之類似。
+我們減小棧指針，從磁盤上讀入所需的頁，再返回棧頂元素。
+由於沒有修改，所以無需寫回磁盤。
+
+與分析 B 樹類似，
+我們要統計兩部分代價：
+總的磁盤存取次數和總的 CPU 時間。
+從磁盤存取一個包含 $m$ 個字的頁面，
+需要佔用 $\Theta(m)$ 的 CPU 時間。
+
+% a
+\startigBase[a]\startitem
+從漸進意義上看，用這種簡單的方式實現，
+在最壞情況下，
+$n$ 個棧操作需要存取多少次磁盤？
+CPU 時間又是多少？
+（用 $m$ 和 $n$ 來表示這個問題及後面幾個問題的答案）
+\stopitem\stopigBase
+
+\startANSWER
+$2n$ 次， $\Theta(mn)$。
+\stopANSWER
+
+現在考慮棧的另一種實現，
+即在內存中始終保持存放棧中的一頁。
+（還要用少量的內存來記錄當前哪一頁在內存中）
+只有對應的磁盤頁面駐留在內存中，才能執行棧操作。
+如果需要，可以將當前內存中的頁寫回磁盤，
+並且可以從磁盤讀入新的一頁放入內存。
+如果對應磁盤頁已經在內存中，
+那麼就無需任何磁盤存取。
+
+% b
+\startigBase[continue]\startitem
+最壞情況下， $n$ 個 \ALGO{PUSH} 操作所需的磁盤存取次數是多少？
+所需的 CPU 時間是多少？
+\stopitem\stopigBase
+
+\startANSWER
+$n/m$ 次， $\Theta(n)$。
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+最壞情況下， $n$ 個棧操作所需的磁盤存取次數是多少？
+所需的 CPU 時間是多少？
+\stopitem\stopigBase
+
+\startANSWER
+$n/2$ 次， $\Theta(mn)$。
+\stopANSWER
+
+% d
+假設還有一種實現方式，在內存中保持棧的 2 頁
+（此外還有少量的字來記錄哪些頁在內存中）。
+\startigBase[continue]\startitem
+請描述如何管理棧頁，使得任何棧操作的攤還磁盤存取次數爲 $O(1/m)$，
+攤還 CPU 時間爲 $O(1)$。
+\stopitem\stopigBase
+
+\startANSWER
+少於 $m/3$ 時加載前面一頁。
+多於 $2m/3$ 時加載後面一頁。
+\stopANSWER
+
+\stopPROBLEM
