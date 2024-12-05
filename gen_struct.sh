@@ -53,7 +53,7 @@ for i in `seq 1 ${PRL_NUM}`; do
 done
 echo "\sectioncomponents[
   title={Problems},
-]{p}{${SEC_NUM}}" >> ${CHAP_TEX}
+]{p}{${PRL_NUM}}" >> ${CHAP_TEX}
 
 echo "
 \stopchapter
