@@ -1,0 +1,29 @@
+\startEXERCISE
+有無向圖 $G=(V,E)$，
+其中 $V=\{a,b,c,d,e,f,g,h,i,j,k\}$，
+執行 \ALGO{CONNECTED-COMPONENTS} 時，
+邊 $E$ 的處理順序為：
+ $(d,i)$， $(f,k)$， $(g,i)$， $(b,g)$， $(a,h)$， $(i,j)$， $(d,k)$， $(b,j)$， $(d,f)$， $(g,j)$， $(a,e)$。
+請列出每次執行完第 3～5 行後各連通分量的頂點。
+
+\CLRSH{CONNECTED-COMPONENTS(G)}
+\startCLRSCODE
+for v \in G.V
+	\ALGO{MAKE-SET(v)}
+for (u,v) \in G.E
+	if \ALGO{FIND-SET(u)} \ne \ALGO{FIND-SET(v)}
+		\ALGO{UNION(u,v)}
+\stopCLRSCODE
+
+\CLRSH{SAME-COMPONENT(u,v)}
+\startCLRSCODE
+if \ALGO{FIND-SET(u)} == \ALGO{FIND-SET(v)}
+	return TRUE
+return FALSE
+\stopCLRSCODE
+
+\stopEXERCISE
+
+\startANSWER
+\inputsamedir{tbl19.1-1}
+\stopANSWER
