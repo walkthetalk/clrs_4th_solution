@@ -1,0 +1,25 @@
+\startxtable[
+    option=max,
+    bodyfont={x},
+    align={middle,lohi},
+    split=yes,
+    header=repeat,
+    footer=repeat,
+    offset=.25em,
+]
+
+% head
+\startxtablehead[frame=off]
+\startxrow[foregroundstyle=bold,]
+  \xcell[rightframe=on]{操作}\xcell{攤還代價}
+\stopxrow
+\stopxtablehead
+
+% body
+\startxtablebody[frame=off,topframe=on]
+\startxrow \xcell[rightframe=on]{\ALGO{MAKE-SET}}\xcell{$c$} \stopxrow
+\startxrow \xcell[rightframe=on]{\ALGO{FIND-SET}}\xcell{$c$} \stopxrow
+\startxrow \xcell[rightframe=on]{\ALGO{UNION}}\xcell{$c(\lg n + 1)$} \stopxrow
+\stopxtablebody
+
+\stopxtable

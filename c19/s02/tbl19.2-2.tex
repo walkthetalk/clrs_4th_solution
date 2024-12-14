@@ -1,0 +1,61 @@
+
+\startxtable[
+    option=max,
+    align={lohi},
+    split=yes,
+    header=repeat,
+    footer=repeat,
+    offset=.15em,
+    toffset=.2em,
+    boffset=.2em,
+]
+
+% head
+\startxtablehead[frame=off,bottomframe=on]
+\startxrow[foregroundstyle=bold]
+  \xcell[rightframe=on]{}\xcell{所有並查集}
+\stopxrow
+\stopxtablehead
+
+% body
+\startxtablebody[frame=off,topframe=on]
+\startxrow \xcell[rightframe=on]{1,2} \xcell{
+	$\{x_1\}$ $\{x_2\}$
+	$\{x_3\}$ $\{x_4\}$
+	$\{x_5\}$ $\{x_6\}$
+	$\{x_7\}$ $\{x_8\}$
+	$\{x_9\}$ $\{x_{10}\}$
+	$\{x_{11}\}$ $\{x_{12}\}$
+	$\{x_{13}\}$ $\{x_{14}\}$
+	$\{x_{15}\}$ $\{x_{16}\}$ } \stopxrow
+
+\startxrow \xcell[rightframe=on]{3,4} \xcell{
+	$\{x_1, x_2\}$
+	$\{x_3, x_4\}$
+	$\{x_5, x_6\}$
+	$\{x_7, x_8\}$
+	$\{x_9, x_{10}\}$
+	$\{x_{11}, x_{12}\}$
+	$\{x_{13}, x_{14}\}$
+	$\{x_{15}, x_{16}\}$ } \stopxrow
+
+\startxrow \xcell[rightframe=on]{5,6} \xcell{
+	$\{x_1, x_2, x_3, x_4\}$
+	$\{x_5, x_6, x_7, x_8\}$
+	$\{x_9, x_{10}, x_{11}, x_{12}\}$
+	$\{x_{13}, x_{14}, x_{15}, x_{16}\}$ } \stopxrow
+
+\startxrow \xcell[rightframe=on]{7} \xcell{
+	$\{x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8\}$
+	$\{x_9, x_{10}, x_{11}, x_{12}\}$
+	$\{x_{13}, x_{14}, x_{15}, x_{16}\}$ } \stopxrow
+
+\startxrow \xcell[rightframe=on]{8} \xcell{
+	$\{x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8\}$
+	$\{x_9, x_{10}, x_{11}, x_{12}, x_{13}, x_{14}, x_{15}, x_{16}\}$ } \stopxrow
+
+\startxrow \xcell[rightframe=on]{9} \xcell{
+	$\{x_1, x_2, x_3, x_4, x_5, x_6, x_7, x_8, x_9, x_{10}, x_{11}, x_{12}, x_{13}, x_{14}, x_{15}, x_{16}\}$ } \stopxrow
+\stopxtablebody
+
+\stopxtable

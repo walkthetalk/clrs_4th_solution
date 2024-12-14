@@ -1,0 +1,39 @@
+\startEXERCISE
+對定理 19.1 的整體證明進行改造，
+使用鏈表表示和加權合併啓發式策略，
+使得 \ALGO{MAKE-SET}、 \ALGO{UNION} 和 \ALGO{FIND-SET} 的攤還時間上界爲 $O(1)$，
+以及 \ALGO{UNION} 的攤還時間上界爲 $O(\lg n)$。
+附定理 19.1：
+
+使用鏈表表示和加權合併啓發式策略，
+\ALGO{MAKE-SET}、 \ALGO{UNION} 和 \ALGO{FIND-SET} 總調用次數數為 $m$，
+其中 \ALGO{MAKE_SET} 的調用次數為 $n$，這些操作總時間為 $O(m+n\lg n)$。
+\stopEXERCISE
+
+\startANSWER
+使用鏈表和加權合併的啟發式策略，
+一個操作序列中如果共有 $m$ 個 \ALGO{MAKE-SET}、 \ALGO{UNION} 和 \ALGO{FIND-SET}，
+其中有 $n$ 個 \ALGO{MAKE-SET}，
+$l$ 個 \ALGO{UNION}（$l < n$），
+$m-n-l$ 個 \ALGO{FIND_SET}。
+
+總運行時間為:
+\startformula
+\sum_{i=1}^{m}c_i = O(m-l+l\lg l) = O(m+l\lg l)
+\stopformula
+令 $\sum_{i=1}^{m}c_i\le c(m+l\lg l)$，每個操作的均攤代價：
+
+\inputsamedir{tbl19.2-3}
+
+總均攤代價為：
+\startformula\startmathalignment
+\NC \sum_{i=1}^{m}\hat{c_i} \NC = cn + c(m-n-l) + c(\lg n+1) \NR
+\NC \NC =c(m+l\lg n) \NR
+\NC \NC >c(m+l\lg l) \NR
+\NC \NC \ge \sum_{i=1}^{m}c_i \NR
+\stopmathalignment\stopformula
+即總均攤代價能支付總的實際代價，成立。
+
+所以 \ALGO{MAKE-SET} 和 \ALGO{FIND-SET} 的均攤時間為 $c=O(1)$，
+\ALGO{UNION} 的均攤時間為 $c(\lg n + 1) = O(n\lg n)$。
+\stopANSWER

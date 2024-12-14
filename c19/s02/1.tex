@@ -1,0 +1,45 @@
+\startEXERCISE
+使用鏈表表示和加權合併啓發式策略，
+寫出 \ALGO{MAKE-SET}、 \ALGO{FIND-SET} 和 \ALGO{UNION} 的僞碼。
+並指明你在集合對象和表對象中所使用的屬性。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{MAKE-SET}
+\startCLRSCODE
+// S 具備屬性 key, set, next
+S = \ALGO{CREATE-NODE()}
+
+x.set = S
+x.next = NIL
+S.head = x
+S.tail = x
+S.size = 1
+
+return S
+\stopCLRSCODE
+
+\CLRSH{FIND-SET(x)}
+\startCLRSCODE
+return x.set.head
+\stopCLRSCODE
+
+\CLRSH{UNION(x, y)}
+\startCLRSCODE
+S_1 = x.set
+S_2 = y.set
+
+if S_1 \ge S_2.size
+	S_1.tail.next = S_2.head
+	z = S_2.head
+	while z \ne NIL
+		z.set = S_1
+		z = z.next
+	S_1.tail = S_2.tail
+	S_1.size = S_1.size + S_2.size
+	return S_1
+
+return UNION(y, x)
+\stopCLRSCODE
+
+\stopANSWER

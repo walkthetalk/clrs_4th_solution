@@ -1,0 +1,31 @@
+\startEXERCISE[exercise:21.2-2]
+給出下面程序的結果，
+並給出該程序中 \ALGO{FIND-SET} 返回的值。
+這裏使用加權合併啓發式策略的鏈表表示。
+
+假定 $x_i$ 所屬集合 和 $x_j$ 所屬集合大小相同，
+則 \ALGO{UNION(x_i, x_j)} 會將 $x_j$ 所在鏈表拼接到 $x_i$ 所在鏈表的尾部。
+\stopEXERCISE
+
+\startCLRSCODE
+for i=1 to 16
+	\ALGO{MAKE-SET(x[i])}
+for i=1 to 15 by 2
+	\ALGO{UNION(x[i], x[i+1])}
+for i=1 to 13 by 4
+	\ALGO{UNION(x[i], x[i+2])}
+\ALGO{UNION(x[1], x[5])}
+\ALGO{UNION(x[11], x[13])}
+\ALGO{UNION(x[1], x[10])}
+\ALGO{FIND-SET(x[2])}
+\ALGO{FIND-SET(x[9])}
+\stopCLRSCODE
+
+\startANSWER
+兩個 \ALGO{FIND-SET} 返回的都是第一個集合，即 $x_1$ 所在集合。
+
+{
+\txx
+\inputsamedir{tbl19.2-2}
+}
+\stopANSWER

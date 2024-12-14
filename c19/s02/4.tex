@@ -1,0 +1,19 @@
+\startEXERCISE
+假定使用鏈表表示和加權合併啓發式策略，
+請給出圖 19.3 所示操作序列所需運行時間的漸進緊確界，
+附圖 19.3：
+\inputsamedir{tbl19-3}
+\stopEXERCISE
+
+\startANSWER
+執行了 $n$ 次 \ALGO{MAKE-SET}，
+每次運行時間是 $\Theta(1)$，合計 $\Theta(n)$。
+
+執行了 $n-1$ 次 \ALGO{UNION}，
+每次 \ALGO{UNION} 需要修改規模較小的集合中所有鏈表對象的 set 指針，
+由於規模較小的集合中鏈表對象只有一個，需要時間為 $\Theta(1)$，
+還要考慮更新 tail 指針和表長度，
+每次 \ALGO{UNION} 這些更新需要時間 $\Theta(1)$，合計 $\Theta(n)$。
+
+綜上，總運行時間為 $\Theta(n)$。
+\stopANSWER
