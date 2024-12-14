@@ -1,0 +1,18 @@
+\startEXERCISE
+無向圖 $G=(V,E)$ 中有 $k$ 個連通分量，
+對其執行 \ALGO{CONNECTED-COMPONENTS} 的過程中，
+會調用多少次 \ALGO{FIND-SET}？
+會調用多少次 \ALGO{UNION}？
+用 $|V|$、 $|E|$ 和 $k$ 表示。
+\stopEXERCISE
+
+\startANSWER
+在 \ALGO{CONNECTED-COMPONENTS} 的第 3~4 行，
+對每條邊都會調用兩次 \ALGO{FIND-SET}
+總共調用 $2|E|$ 次。
+
+開始每個頂點就是一個集合，總計 $|V|$ 個集合，
+調用一次 \ALGO{UNION} 就會減少一個集合，
+最終集合數為 $k$，
+因此會調用 $|V|-k$ 次 \ALGO{UNION}。
+\stopANSWER
