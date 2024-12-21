@@ -2,6 +2,13 @@
 % vardef newnode@#(suffix tree)(expr ...)
 % vardef associate@#(suffix tree)(expr parent, child, idx)
 
+vardef declare_tree(suffix tree) :=
+	declare_memorypool(tree);
+
+	numeric tree.root;
+	tree.root := nullptr;
+enddef;
+
 vardef build@#(suffix tree) expr s :=
 	save lvl, idx, pNode, lastCH;
 	numeric lvl;

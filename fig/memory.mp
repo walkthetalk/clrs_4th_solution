@@ -34,15 +34,13 @@ vardef alloc_slot(suffix tree) :=
 	ret
 enddef;
 
-vardef declare_tree(suffix tree) :=
+vardef declare_memorypool(suffix tree) :=
 	numeric tree.maxnodes;
 	numeric tree.cnt;
 	numeric tree.free_list[];
-	numeric tree.root;
 
 	tree.maxnodes := 0;
 	tree.cnt := 0;
-	tree.root := nullptr;
 	tree.free_list[0] := nullptr;
 
 	__ext_slots(tree)(16);
