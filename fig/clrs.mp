@@ -11,6 +11,8 @@ color clrsCfD;
 clrsCfD := (0.95,0.95,0.6);
 color clrsCfE;
 clrsCfE := (0.0,0.52,0.71);
+color clrsCfF;
+clrsCfF := (0.95,0.72,0.17);
 
 % line color 0
 color clrsClA;
