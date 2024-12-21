@@ -1,11 +1,18 @@
 \startEXERCISE
-如何對 \ALGO{UNION} 過程做一個簡單的改動，
-在採用鏈表表示中拿掉讓集合對象的 \m{tail} 指針總是指向每個表的最後一個對象的要求。
+對 \ALGO{UNION} 過程做一個簡單的改動，
+在採用鏈表表示中，不再要求集合對象包含 $tail$ 指針。
 無論是否使用加權合併啓發式策略，
-這個修改不應該改變 \ALGO{UNION} 過程的漸進運行時間。
+這個修改不應該改變 \ALGO{UNION} 的漸進運行時間。
 （\hint 而不是把一個表連接到另一個表後面，將他們拼接在一起。）
 \stopEXERCISE
 
 \startANSWER
-\TODO{略。}
+將 $S_2$ 中的元素插入到 $S_1$ 中第一個元素的後面。
+
+\startcombination[2*2]
+{\externalfigure[e19_2-6-1]}{a}
+{\externalfigure[e19_2-6-2]}{b}
+{\externalfigure[e19_2-6-3]}{c}
+{}{}
+\stopcombination
 \stopANSWER
