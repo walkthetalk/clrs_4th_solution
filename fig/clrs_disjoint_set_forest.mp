@@ -9,10 +9,13 @@ vardef declare.disjointSetForest(suffix tree) :=
 	declare_tree(tree);
 
 	% draw
+	numeric tree.rootinterval;
+	tree.rootinterval := 5;
+
 	numeric tree.xinterval;
 	tree.xinterval := 1;
 	numeric tree.cxinterval;
-	tree.cxinterval := 10;
+	tree.cxinterval := 5;
 	% 中心點 y 方向的距離，不是節點間的間隔
 	numeric tree.cyinterval;
 	tree.cyinterval := 30;
@@ -21,6 +24,11 @@ vardef declare.disjointSetForest(suffix tree) :=
 	color tree[]framecolor;
 
 	% prepare
+	numeric tree.xyunit;
+	tree.xyunit := .5cm;
+	path tree.baseframe;
+	tree.baseframe = fullcircle scaled tree.xyunit;
+
 	pair tree[]keysize[];
 	pair tree[]nodesize;
 	pair tree[]keyposition[];
@@ -80,7 +88,6 @@ vardef newnode.disjointSetForest(suffix tree)(expr ks, comment) :=
 enddef;
 
 vardef associate.disjointSetForest(suffix tree)(expr parent, child, idx) :=
-	%message("associate " & decimal(parent) & " " & child & " " & idx);
 	tree[parent]children[idx - 1] := child;
 	tree[parent]nchildren := tree[parent]nchildren + 1;
 enddef;
@@ -179,34 +186,30 @@ vardef layoutAt.disjointSetForest(suffix tree)(expr idx, pos) :=
 	endfor;
 enddef;
 
-vardef prepare.disjointSetForest(suffix tree) :=
-	calcSizes.disjointSetForest(tree)(tree.root);
-	calcSubTree.disjointSetForest(tree)(tree.root);
-	layoutAt.disjointSetForest(tree)(tree.root, (0,0));
+vardef prepare.disjointSetForest(suffix tree)(expr idx) :=
+	calcSizes.disjointSetForest(tree)(idx);
+	calcSubTree.disjointSetForest(tree)(idx);
+	layoutAt.disjointSetForest(tree)(idx, (0,0));
 enddef;
 
-vardef bottomOf.disjointSetForest(suffix tree)(expr idx) :=
-	((ypart tree[idx]position) - (ypart tree[idx]nodesize) / 2)
-enddef;
-vardef topOf.disjointSetForest(suffix tree)(expr idx) :=
-	save tmp;
-	numeric tmp;
-	tmp := ypart(tree[idx]nodesize);
-
-	save pos;
-	pair pos;
-	pos := tree[idx]position;
-
-	((xpart pos), (ypart pos) + tmp / 2)
+vardef __linkpath.disjointSetForest(suffix tree)(expr sidx, eidx) :=
+	save spath;
+	save epath;
+	path spath;
+	path epath;
+	spath := tree.baseframe shifted tree[sidx]position;
+	epath := tree.baseframe shifted tree[eidx]position;
+	save lpath;
+	path lpath;
+	lpath := tree[sidx]position -- tree[eidx]position;
+	(lpath cutbefore spath cutafter epath)
 enddef;
 
 vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 	% 畫外框
 	save frame;
 	path frame;
-	frame := unitsquare shifted (-0.5, -0.5)
-		xscaled (xpart tree[idx]nodesize)
-		yscaled (ypart tree[idx]nodesize)
+	frame := tree.baseframe
 		shifted tree[idx]position;
 	fill frame withcolor tree[idx]fillcolor;
 	draw frame withcolor tree[idx]framecolor;
@@ -226,12 +229,11 @@ vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 	endfor;
 
 	% 畫鏈接
-	save botSelf;
-	numeric botSelf;
-	botSelf := bottomOf.disjointSetForest(tree)(idx);
 	save x;
 	numeric x;
-	for j := 0 upto (tree[idx]nkeys - 1):
+	pair sss;
+	pair eee;
+	for j := 0 upto tree[idx]nkeys:
 		if known tree[idx]children[j]:
 			x := (xpart tree[idx]keyposition[j])
 				- (xpart tree[idx]keysize[j]) / 2
@@ -239,22 +241,32 @@ vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 			save m;
 			numeric m;
 			m := tree[idx]children[j];
-			draw (x, botSelf) -- topOf.disjointSetForest(tree)(m);
+			drawarrow __linkpath.disjointSetForest(tree)(m, idx);
 		fi;
 	endfor;
-	j := tree[idx]nkeys;
-	if known tree[idx]children[j]:
-		x := (xpart tree[idx]keyposition[j-1])
-			+ (xpart tree[idx]keysize[j-1]) / 2
-			+ tree.xinterval / 2;
-		draw (x, botSelf) -- topOf.disjointSetForest(tree)(tree[idx]children[j]);
-	fi;
 enddef;
 
 vardef img.disjointSetForest(suffix tree) :=
 image(
-	prepare.disjointSetForest(tree);
+	picture rpics[];
+	save ridx;
+	numeric ridx;
 
-	subdraw.disjointSetForest(tree)(tree.root);
+	for ridx := 0 upto (tree.nroot - 1):
+		rpics[ridx] := image(
+			prepare.disjointSetForest(tree)(tree.root[ridx]);
+			subdraw.disjointSetForest(tree)(tree.root[ridx]);
+		);
+	endfor;
+
+	save pos;
+	pair pos;
+	pos := (0,0);
+	for ridx := 0 upto (tree.nroot - 1):
+		pos := pos - (xpart ulcorner rpics[ridx], 0);
+		draw rpics[ridx] shifted pos;
+		pos := pos + (xpart urcorner rpics[ridx], 0);
+		pos := pos + (tree.rootinterval, 0);
+	endfor;
 )
 enddef;

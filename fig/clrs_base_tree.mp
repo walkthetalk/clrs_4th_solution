@@ -5,8 +5,14 @@
 vardef declare_tree(suffix tree) :=
 	declare_memorypool(tree);
 
-	numeric tree.root;
-	tree.root := nullptr;
+	numeric tree.root[];
+	numeric tree.nroot;
+	tree.nroot := 0;
+enddef;
+
+vardef __addRoot(suffix tree)(expr idx) :=
+	tree.root[tree.nroot] := idx;
+	tree.nroot := tree.nroot + 1;
 enddef;
 
 vardef build@#(suffix tree) expr s :=
@@ -15,6 +21,8 @@ vardef build@#(suffix tree) expr s :=
 	numeric idx[];
 	numeric pNode[];
 	string lastCH;
+
+	% 初始化
 	lvl := 0;
 	idx[lvl] := 0;
 	pNode[lvl] := nullptr;
@@ -29,7 +37,14 @@ vardef build@#(suffix tree) expr s :=
 	for i := 0 upto ((length s) - 1):
 		ch := substring (i,i+1) of s;
 		% todo: skip spaces
-		if ch = "(":
+		if (ch = ",") and (lastCH = ")"):
+			__addRoot(tree)(pNode[1]);
+			% 重新初始化
+			lvl := 0;
+			idx[lvl] := 0;
+			pNode[lvl] := nullptr;
+			lastCH := "";
+		elseif ch = "(":
 			if lastCH = ")":
 				idx[lvl] := idx[lvl] + 1;
 			else:
@@ -74,5 +89,5 @@ vardef build@#(suffix tree) expr s :=
 		lastCH := ch;
 	endfor;
 
-	tree.root := pNode[1];
+	__addRoot(tree)(pNode[1]);
 enddef;

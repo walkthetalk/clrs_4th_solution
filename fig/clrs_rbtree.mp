@@ -129,13 +129,31 @@ enddef;
 
 vardef img.rbtree(suffix tree) :=
 image(
-	prepare.rbtree(tree)(tree.root, 0,0);
+	picture rpics[];
+	save ridx;
+	numeric ridx;
 
-	if not tree.isfull:
-		draw (0, tree.yunit)--(0, 0);
-	fi;
-	% check if root is nullptr
-	subdraw.rbtree(tree)(tree.root);
-	drawcomments.rbtree(tree)(tree.root);
+	for ridx := 0 upto (tree.nroot - 1):
+		rpics[ridx] := image(
+			prepare.rbtree(tree)(tree.root[ridx], 0,0);
+
+			if not tree.isfull:
+				draw (0, tree.yunit)--(0, 0);
+			fi;
+			% check if root is nullptr
+			subdraw.rbtree(tree)(tree.root[ridx]);
+			drawcomments.rbtree(tree)(tree.root[ridx]);
+		);
+	endfor;
+
+	save pos;
+	pair pos;
+	pos := (0,0);
+	for ridx := 0 upto (tree.nroot - 1):
+		pos := pos - (xpart ulcorner rpics[ridx], 0);
+		draw rpics[ridx] shifted pos;
+		pos := pos + (xpart urcorner rpics[ridx], 0);
+		pos := pos + (tree.xunit, 0);
+	endfor;
 )
 enddef;

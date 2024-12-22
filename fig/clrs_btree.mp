@@ -178,10 +178,10 @@ vardef layoutAt.btree(suffix tree)(expr idx, pos) :=
 	endfor;
 enddef;
 
-vardef prepare.btree(suffix tree) :=
-	calcSizes.btree(tree)(tree.root);
-	calcSubTree.btree(tree)(tree.root);
-	layoutAt.btree(tree)(tree.root, (0,0));
+vardef prepare.btree(suffix tree)(expr idx) :=
+	calcSizes.btree(tree)(idx);
+	calcSubTree.btree(tree)(idx);
+	layoutAt.btree(tree)(idx, (0,0));
 enddef;
 
 vardef bottomOf.btree(suffix tree)(expr idx) :=
@@ -252,8 +252,26 @@ enddef;
 
 vardef img.btree(suffix tree) :=
 image(
-	prepare.btree(tree);
+	picture rpics[];
+	save ridx;
+	numeric ridx;
 
-	subdraw.btree(tree)(tree.root);
+	for ridx := 0 upto (tree.nroot - 1):
+		rpics[ridx] := image(
+			prepare.btree(tree)(tree.root[ridx]);
+
+			subdraw.btree(tree)(tree.root[ridx]);
+		);
+	endfor;
+
+	save pos;
+	pair pos;
+	pos := (0,0);
+	for ridx := 0 upto (tree.nroot - 1):
+		pos := pos - (xpart ulcorner rpics[ridx], 0);
+		draw rpics[ridx] shifted pos;
+		pos := pos + (xpart urcorner rpics[ridx], 0);
+		pos := pos + (tree.rootinterval, 0);
+	endfor;
 )
 enddef;
