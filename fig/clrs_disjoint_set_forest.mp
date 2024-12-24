@@ -12,26 +12,22 @@ vardef declare.disjointSetForest(suffix tree) :=
 	numeric tree.rootinterval;
 	tree.rootinterval := 5;
 
-	numeric tree.xinterval;
-	tree.xinterval := 1;
 	numeric tree.cxinterval;
-	tree.cxinterval := 5;
+	tree.cxinterval := .3cm;
 	% 中心點 y 方向的距離，不是節點間的間隔
 	numeric tree.cyinterval;
-	tree.cyinterval := 30;
+	tree.cyinterval := 1cm;
 	% 顏色
 	color tree[]fillcolor;
 	color tree[]framecolor;
 
 	% prepare
 	numeric tree.xyunit;
-	tree.xyunit := .5cm;
+	tree.xyunit := .6cm;
 	path tree.baseframe;
 	tree.baseframe = fullcircle scaled tree.xyunit;
 
-	pair tree[]keysize[];
 	pair tree[]nodesize;
-	pair tree[]keyposition[];
 	pair tree[]position;
 	numeric tree[]widthOfSubTree;
 
@@ -39,8 +35,7 @@ vardef declare.disjointSetForest(suffix tree) :=
 	numeric tree.t;
 	numeric tree.height;
 
-	string tree[]keys[];
-	numeric tree[]nkeys;
+	string tree[]key;
 	numeric tree[]children[];
 	numeric tree[]nchildren;
 
@@ -54,7 +49,6 @@ vardef newnode.disjointSetForest(suffix tree)(expr ks, comment) :=
 	idx := alloc_slot(tree);
 
 	% init
-	tree[idx]nkeys := 0;
 	tree[idx]nchildren := 0;
 	tree[idx]rank := 0;
 
@@ -71,21 +65,7 @@ vardef newnode.disjointSetForest(suffix tree)(expr ks, comment) :=
 	fi;
 
 	% add keys
-	save j;
-	numeric j;
-	save k;
-	numeric k;
-	k := 0;
-	save mkeys;
-	string mkeys;
-	mkeys := ks & " "; % 尾部添加一個空格
-	for j := 0 upto ((length mkeys) - 1):
-		if (substring(j,j+1) of mkeys) = " ":
-			tree[idx]keys[tree[idx]nkeys] := substring(k, j) of mkeys;
-			tree[idx]nkeys := tree[idx]nkeys + 1;
-			k := j+1;
-		fi;
-	endfor;
+	tree[idx]key := ks;
 
 	idx
 enddef;
@@ -100,26 +80,11 @@ vardef calcSizes.disjointSetForest(suffix tree)(expr idx) :=
 	save j;
 	numeric j;
 
-	for j := 0 upto (tree[idx]nkeys - 1):
-		tree[idx]keysize[j] := urcorner thelabel.urt(tree[idx]keys[j], (0,0));
-	endfor;
-	save w,h;
-	numeric w;
-	numeric h;
-	w := 0;
-	h := 0;
-	for j := 0 upto (tree[idx]nkeys - 1):
-		h := max(ypart tree[idx]keysize[j], h);
-		w := w + xpart tree[idx]keysize[j];
-	endfor;
-	tree[idx]nodesize := (w + tree.xinterval * (tree[idx]nkeys+1),
-		h + tree.xinterval*2);
+	tree[idx]nodesize := (urcorner tree.baseframe) - (llcorner tree.baseframe);
 
 	% 計算孩子節點
-	for j := 0 upto (tree[idx]nkeys):
-		if known tree[idx]children[j]:
-			calcSizes.disjointSetForest(tree)(tree[idx]children[j]);
-		fi;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		calcSizes.disjointSetForest(tree)(tree[idx]children[j]);
 	endfor;
 enddef;
 
@@ -132,14 +97,12 @@ vardef calcSubTree.disjointSetForest(suffix tree)(expr idx) :=
 	numeric j;
 	save cidx;
 	numeric cidx;
-	for j := 0 upto tree[idx]nkeys:
-		if known tree[idx]children[j]:
-			cidx := tree[idx]children[j];
-			calcSubTree.disjointSetForest(tree)(cidx);
-			childrenWidth := childrenWidth
-				+ tree.cxinterval
-				+ tree[cidx]widthOfSubTree;
-		fi;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		cidx := tree[idx]children[j];
+		calcSubTree.disjointSetForest(tree)(cidx);
+		childrenWidth := childrenWidth
+			+ tree.cxinterval
+			+ tree[cidx]widthOfSubTree;
 	endfor;
 
 	save tmp;
@@ -173,29 +136,18 @@ vardef layoutAt.disjointSetForest(suffix tree)(expr idx, pos, srank) :=
 	save tmprank;
 	numeric tmprank;
 
-	% 確定關鍵字的位置
-	x := (xpart pos) - (xpart tree[idx]nodesize)/2 + tree.xinterval;	% 有邊界
-	for j := 0 upto (tree[idx]nkeys - 1):
-		width := xpart(tree[idx]keysize[j]);
-		x := x + width / 2;
-		tree[idx]keyposition[j] := (x, ypart pos);
-		x := x + width / 2 + tree.xinterval;
-	endfor;
-
 	% 確定孩子的位置
 	x := (xpart pos) - tree[idx]widthOfSubTree/2;
 	y := (ypart pos) - tree.cyinterval;
-	for j := 0 upto tree[idx]nkeys:
-		if known tree[idx]children[j]:
-			cidx := tree[idx]children[j];
-			x := x + tree[cidx]widthOfSubTree / 2;
-			tmprank := layoutAt.disjointSetForest(tree)(cidx, (x, y), srank + 1);
-			if tmprank > maxrank:
-				maxrank := tmprank;
-			fi;
-
-			x := x + tree[cidx]widthOfSubTree / 2 + tree.cxinterval;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		cidx := tree[idx]children[j];
+		x := x + tree[cidx]widthOfSubTree / 2;
+		tmprank := layoutAt.disjointSetForest(tree)(cidx, (x, y), srank + 1);
+		if tmprank > maxrank:
+			maxrank := tmprank;
 		fi;
+
+		x := x + tree[cidx]widthOfSubTree / 2 + tree.cxinterval;
 	endfor;
 
 	maxrank
@@ -237,34 +189,23 @@ vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 	draw frame withcolor tree[idx]framecolor;
 
 	% 畫關鍵字
-	save j;
-	numeric j;
-	for j := 0 upto (tree[idx]nkeys - 1):
-		label(TEX("$" & tree[idx]keys[j] & "$"), tree[idx]keyposition[j]);
-	endfor;
+	label(TEX("$" & tree[idx]key & "$"), tree[idx]position);
 
 	% 畫孩子節點
-	for j := 0 upto tree[idx]nkeys:
-		if known tree[idx]children[j]:
-			subdraw.disjointSetForest(tree)(tree[idx]children[j]);
-		fi;
+	save j;
+	numeric j;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		subdraw.disjointSetForest(tree)(tree[idx]children[j]);
 	endfor;
 
 	% 畫鏈接
-	save x;
-	numeric x;
 	pair sss;
 	pair eee;
-	for j := 0 upto tree[idx]nkeys:
-		if known tree[idx]children[j]:
-			x := (xpart tree[idx]keyposition[j])
-				- (xpart tree[idx]keysize[j]) / 2
-				- tree.xinterval / 2;
-			save m;
-			numeric m;
-			m := tree[idx]children[j];
-			drawarrow __linkpath.disjointSetForest(tree)(m, idx);
-		fi;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		save m;
+		numeric m;
+		m := tree[idx]children[j];
+		drawarrow __linkpath.disjointSetForest(tree)(m, idx);
 	endfor;
 enddef;
 

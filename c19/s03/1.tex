@@ -1,0 +1,27 @@
+\startEXERCISE
+用按秩合併與路徑壓縮啓發式策略的不相交集合森林重做\inexercise[19.2-2]。
+
+\startCLRSCODE
+for i=1 to 16
+	\ALGO{MAKE-SET(x[i])}
+for i=1 to 15 by 2
+	\ALGO{UNION(x[i], x[i+1])}
+for i=1 to 13 by 4
+	\ALGO{UNION(x[i], x[i+2])}
+\ALGO{UNION(x[1], x[5])}
+\ALGO{UNION(x[11], x[13])}
+\ALGO{UNION(x[1], x[10])}
+\ALGO{FIND-SET(x[2])}
+\ALGO{FIND-SET(x[9])}
+\stopCLRSCODE
+
+\stopEXERCISE
+
+\startANSWER
+\startcombination[1*4]
+{\externalfigure[e19_3-1-1][factor=fit]}{a}
+{\externalfigure[e19_3-1-2]}{b}
+{\externalfigure[e19_3-1-3]}{c}
+{\externalfigure[e19_3-1-4]}{d}
+\stopcombination
+\stopANSWER
