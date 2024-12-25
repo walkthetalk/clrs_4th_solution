@@ -181,6 +181,17 @@ vardef __frameof(suffix tree)(expr idx) :=
 enddef;
 
 vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
+
+	% 畫鏈接
+	pair sss;
+	pair eee;
+	for j := 0 upto (tree[idx]nchildren - 1):
+		save m;
+		numeric m;
+		m := tree[idx]children[j];
+		drawarrow __linkpath.disjointSetForest(tree)(m, idx);
+	endfor;
+
 	% 畫外框
 	save frame;
 	path frame;
@@ -196,16 +207,6 @@ vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 	numeric j;
 	for j := 0 upto (tree[idx]nchildren - 1):
 		subdraw.disjointSetForest(tree)(tree[idx]children[j]);
-	endfor;
-
-	% 畫鏈接
-	pair sss;
-	pair eee;
-	for j := 0 upto (tree[idx]nchildren - 1):
-		save m;
-		numeric m;
-		m := tree[idx]children[j];
-		drawarrow __linkpath.disjointSetForest(tree)(m, idx);
 	endfor;
 enddef;
 

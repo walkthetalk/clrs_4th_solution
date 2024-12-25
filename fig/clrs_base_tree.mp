@@ -36,8 +36,10 @@ vardef build@#(suffix tree) expr s :=
 	numeric newnodeLvl;
 	for i := 0 upto ((length s) - 1):
 		ch := substring (i,i+1) of s;
-		% todo: skip spaces
-		if (ch = ",") and (lastCH = ")"):
+		% @note: skip spaces
+		if (ch = " ") and (lastCH = ")"):
+			ch := ")";
+		elseif (ch = ",") and (lastCH = ")"):
 			__addRoot(tree)(pNode[1]);
 			% 重新初始化
 			lvl := 0;

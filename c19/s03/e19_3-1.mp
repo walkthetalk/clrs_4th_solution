@@ -33,12 +33,36 @@ beginfig(4);
 	draw img.disjointSetForest(DDD);
 endfig;
 
-beginfig(4);
+beginfig(5);
 	declare.disjointSetForest(EEE);
 
 	build.disjointSetForest(EEE) "(x_8)((x_4)(x_1)(x_2)(x_3))(x_5)(x_6)(x_7),(x_{16})((x_{12})(x_{10})(x_{11}))(x_{13})(x_{14})(x_{15})";
 
 	draw img.disjointSetForest(EEE);
+endfig;
+
+beginfig(6);
+	declare.disjointSetForest(FFF);
+
+	build.disjointSetForest(FFF) "(x_{16})((x_8)(x_1)((x_4)(x_2)(x_3))(x_5)(x_6)(x_7))((x_{10})(x_9))((x_{12})(x_{11}))(x_{13})(x_{14})(x_{15})";
+
+	draw img.disjointSetForest(FFF);
+endfig;
+
+beginfig(7);
+	declare.disjointSetForest(GGG);
+
+	build.disjointSetForest(GGG) "(x_{16})(x_2) ((x_4)(x_3)) ((x_8)(x_1)(x_5)(x_6)(x_7)) ((x_{10})(x_9)) ((x_{12})(x_{11})) (x_{13})(x_{14})(x_{15})";
+
+	draw img.disjointSetForest(GGG);
+endfig;
+
+beginfig(8);
+	declare.disjointSetForest(HHH);
+
+	build.disjointSetForest(HHH) "(x_{16})(x_2) ((x_4)(x_3)) ((x_8)(x_1)(x_5)(x_6)(x_7)) (x_9)(x_{10}) ((x_{12})(x_{11})) (x_{13})(x_{14})(x_{15})";
+
+	draw img.disjointSetForest(HHH);
 endfig;
 
 
