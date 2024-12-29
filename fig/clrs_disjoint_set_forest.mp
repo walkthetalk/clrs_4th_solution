@@ -21,6 +21,9 @@ vardef declare.disjointSetForest(suffix tree) :=
 	color tree[]fillcolor;
 	color tree[]framecolor;
 
+	boolean tree.drawrank;
+	tree.drawrank := false;
+
 	% prepare
 	numeric tree.xyunit;
 	tree.xyunit := .6cm;
@@ -115,9 +118,8 @@ vardef calcSubTree.disjointSetForest(suffix tree)(expr idx) :=
 	tree[idx]widthOfSubTree := tmp;
 enddef;
 
-vardef layoutAt.disjointSetForest(suffix tree)(expr idx, pos, srank) :=
+vardef layoutAt.disjointSetForest(suffix tree)(expr idx, pos) :=
 	tree[idx]position := pos;
-	tree[idx]rank := srank;
 
 	save j;
 	numeric j;
@@ -130,36 +132,49 @@ vardef layoutAt.disjointSetForest(suffix tree)(expr idx, pos, srank) :=
 	save y;
 	numeric y;
 
-	save maxrank;
-	numeric maxrank;
-	maxrank := srank;
-	save tmprank;
-	numeric tmprank;
-
 	% 確定孩子的位置
 	x := (xpart pos) - tree[idx]widthOfSubTree/2;
 	y := (ypart pos) - tree.cyinterval;
 	for j := 0 upto (tree[idx]nchildren - 1):
 		cidx := tree[idx]children[j];
 		x := x + tree[cidx]widthOfSubTree / 2;
-		tmprank := layoutAt.disjointSetForest(tree)(cidx, (x, y), srank + 1);
-		if tmprank > maxrank:
-			maxrank := tmprank;
-		fi;
+		layoutAt.disjointSetForest(tree)(cidx, (x, y));
 
 		x := x + tree[cidx]widthOfSubTree / 2 + tree.cxinterval;
 	endfor;
+enddef;
 
-	maxrank
+vardef refresh.disjointSetForest(suffix tree)(expr idx) :=
+	save j;
+	numeric j;
+	save cidx;
+	numeric cidx;
+
+	save maxrank;
+	numeric maxrank;
+	maxrank := 0;
+
+	% 確定孩子的位置
+	for j := 0 upto (tree[idx]nchildren - 1):
+		cidx := tree[idx]children[j];
+		refresh.disjointSetForest(tree)(cidx);
+		if tree[cidx]rank > maxrank:
+			maxrank := tree[cidx]rank;
+		fi;
+	endfor;
+
+	if (tree[idx]nchildren > 0):
+		tree[idx]rank := maxrank + 1;
+	else:
+		tree[idx]rank := 0;
+	fi;
 enddef;
 
 vardef prepare.disjointSetForest(suffix tree)(expr idx) :=
 	calcSizes.disjointSetForest(tree)(idx);
 	calcSubTree.disjointSetForest(tree)(idx);
-	save maxrank;
-	numeric maxrank;
-	maxrank := layoutAt.disjointSetForest(tree)(idx, (0,0), 0);
-	maxrank
+	layoutAt.disjointSetForest(tree)(idx, (0,0));
+	refresh.disjointSetForest(tree)(idx);
 enddef;
 
 vardef __linkpath.disjointSetForest(suffix tree)(expr sidx, eidx) :=
@@ -199,6 +214,14 @@ vardef subdraw.disjointSetForest(suffix tree)(expr idx) :=
 	fill frame withcolor tree[idx]fillcolor;
 	draw frame withcolor tree[idx]framecolor;
 
+	% rank
+	if tree.drawrank:
+		save ranklabel;
+		picture ranklabel;
+		ranklabel := thelabel(TEX("$" & decimal(tree[idx]rank) & "$") scaled 0.5, (0,0));
+		draw ranklabel shifted (lrcorner frame) withcolor clrsCtA;
+	fi;
+
 	% 畫關鍵字
 	label(TEX("$" & tree[idx]key & "$"), tree[idx]position);
 
@@ -222,14 +245,15 @@ image(
 			path frame;
 			save lframe;
 			path lframe;
-			save maxrank;
-			numeric maxrank;
 
-			maxrank := prepare.disjointSetForest(tree)(tree.root[ridx]);
+			prepare.disjointSetForest(tree)(tree.root[ridx]);
 			frame := __frameof(tree)(tree.root[ridx]);
 			lframe := frame rotated -90 shifted (0, tree.xyunit * 0.75);
 			subdraw.disjointSetForest(tree)(tree.root[ridx]);
 			drawarrow (lframe cutbefore frame cutafter frame);
+			save maxrank;
+			numeric maxrank;
+			maxrank := tree[tree.root[ridx]]rank;
 			label.top(TEX("$rank=" & decimal(maxrank) & "$"), (0,0)) scaled 0.8 shifted (0, tree.xyunit * 1.25);
 		);
 	endfor;

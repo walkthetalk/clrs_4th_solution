@@ -1,0 +1,19 @@
+\startEXERCISE
+使用路徑壓縮寫出 \ALGO{FIND-SET} 的非遞迴版本。
+\stopEXERCISE
+
+\startANSWER
+\CLRSH{FIND-SET-NONREC(x)}
+\startCLRSCODE
+r = x
+// 搜索 root
+while r \ne r.p	// 不是 root
+	r = r.p	// 向上搜索
+// 路徑上每個節點都直接指向 root
+while x \ne x.p	// 不是 root
+	t = x.p	// 保存父節點
+	x.p = r	// 更新 x.p
+	x = t	// 移動到父節點
+return r
+\stopCLRSCODE
+\stopANSWER

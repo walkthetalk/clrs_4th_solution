@@ -22,3 +22,6 @@ color clrsClB;
 clrsClB := (0.3,0.6,0.9);
 color clrsClC;
 clrsClC := (0.71,0.57,0.44);
+
+color clrsCtA;
+clrsCtA := (0.55,0.23,0.24);

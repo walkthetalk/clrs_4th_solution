@@ -1,0 +1,28 @@
+\startEXERCISE
+給出一個操作序列，共含 $m$ 個 \ALGO{MAKE-SET}、 \ALGO{UNION} 和 \ALGO{FIND-SET}
+（其中 $n$ 個是 \ALGO{MAKE-SET}），
+當僅使用按秩合併，而不是用路徑壓縮時，所需時間為 $\Omega(m\lg n)$。
+\stopEXERCISE
+
+\startANSWER
+\ALGO{UNION} 的結果是一棵高度爲 $\lg n$ 的樹。
+
+第一步：執行 $n$ 次 \ALGO{MAKE-SET}。
+每次 \ALGO{MAKE-SET} 所需時間為 $\Theta(1)$，
+總時間為 $\Theta(n)$。
+\startformula
+\{x_1\},\{x_2\},\{x_3\},\cdots,\{x_n\}
+\stopformula
+
+第二步：執行 $n-1$ 次 \ALGO{UNION}。
+由於單獨使用按秩合併，所以每次 \ALGO{UNION} 所需時間為 $\Theta(1)$，
+總時間為 $\Theta(n)$。
+
+第三步：執行 $m-2n+1$ 次 \ALGO{FIND-SET}。
+如果每次都查找深度最大的節點，
+則每次運行時間為 $\Omega(\lg n)$。
+如果 $m\ge 3n$，則至少有 $m/3$ 次 \ALGO{UNION}，
+總時間為 $\Omega(m\lg n)$。
+
+綜上，總運行時間為 $\Omega(m\lg n)$。
+\stopANSWER

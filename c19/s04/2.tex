@@ -1,0 +1,22 @@
+\startEXERCISE[exercise:19.4-2]
+證明每個節點的秩最多爲 $\lfloor \lg n\rfloor$。
+\stopEXERCISE
+
+\startANSWER
+採用歸納法，歸納基礎：給定一個節點，每個節點的秩為 0，顯然 $0=\lfloor 1\rfloor$。
+
+歸納猜想，給定 $k$ 個節點，每個節點的秩最多為 $\lfloor \lg k\rfloor$。
+
+歸納步驟，給定 $k+1$ 個節點，
+假設 \ALGO{UNION} 操作的兩個結合規模分別為 $a$ 和 $b$，其中 $a\le b\le k$，
+當且僅當 $a=b\le(k+1)/2$ 時，合併後的根節點秩會增 1，
+此時合併後根節點的秩為：
+\startformula\startmathalignment
+\NC \NC \lfloor\lg a\rfloor + 1 \NR
+\NC \le \NC \lfloor\lg(k+1)/2\rfloor + 1 \NR
+\NC = \NC \lfloor\lg(k+1) - 1\rfloor + 1 \NR
+\NC = \NC \lfloor\lg(k+1)\rfloor \NR
+\stopmathalignment\stopformula
+
+綜上，給定 $n$ 個節點，每個節點的秩最多為 $\lg n$。
+\stopANSWER

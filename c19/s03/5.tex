@@ -1,0 +1,14 @@
+\startEXERCISE\DIFFICULT
+證明：任何具有 $m$ 個 \ALGO{MAKE-SET}、 \ALGO{FIND-SET} 和 \ALGO{LINK} 操作的序列，
+其中所有的 \ALGO{LINK} 都出現在 \ALGO{FIND-SET} 之前，
+如果同時使用路徑壓縮和按秩合併啓發式策略，
+則這些操作只需 $O(m)$ 的時間。
+在同樣情況下，如果只使用路徑壓縮啓發式策略，又會如何？
+\stopEXERCISE
+
+\startANSWER
+$n-1$ 個 \ALGO{UNION} 需要 $O(n)$ 時間，會創建 $n-1$ 條邊。
+ \ALGO{FIND-SET} 會壓縮到根節點路徑上的所有邊。
+所以 $m$ 個 \ALGO{FIND-SET} 需要的時間不會多於 $O(m+n)$。
+只使用路徑壓縮，結果也一樣。
+\stopANSWER

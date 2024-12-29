@@ -1,0 +1,12 @@
+\startEXERCISE
+利用\inexercise[19.4-2] 請給出一個簡單的證明，
+證明在一個不相交集合森林上使用按秩合併策略而不使用路徑壓縮策略的運行時間爲 $O(m\lg n)$。
+\stopEXERCISE
+
+\startANSWER
+\ALGO{MAKE-SET} 和 \ALGO{UNION} 的運行時間為 $O(1)$，
+每個節點的秩最大為 $\lfloor \lg n\rfloor$，
+查找路徑長度為 $O(\lg n)$，
+\ALGO{FIND-SET} 運行時間為 $O(\lg n)$，
+因此，整個操作序列的運行時間為 $O(m\lg n)$。
+\stopANSWER

@@ -1,0 +1,55 @@
+\startEXERCISE
+假設想要增加一個操作 \ALGO{PRINT-SET(x)}，
+給定節點 $x$，打印出 $x$ 所在集合的所有成員，順序可以任意。
+如何對一棵不相交集合森林的每個節點僅增加一個屬性，
+使得 \ALGO{PRINT-SET(x)} 所花費的時間同 $x$ 所在集合元素的個數呈線性關係，
+並且其他操作的漸進運行時間變。
+這裏假設我們可在 $O(1)$ 時間內打印出集合的每個成員。
+\stopEXERCISE
+
+\startANSWER
+為每個節點增加一個屬性 $next$，形成一個循環單鏈表，
+可以通過 $next$ 訪問下一個對象。
+
+\CLRSH{MAKE-SET(x)}
+\startCLRSCODE
+x.p = x
+x.next = x
+x.rank = 0
+\stopCLRSCODE
+
+\CLRSH{UNION(x,y)}
+\startCLRSCODE
+\ALGO{LINK(\ALGO{FIND-SET(x)}, \ALGO{FIND-SET(y)})}
+\stopCLRSCODE
+
+\CLRSH{LINK(x,y)}
+\startCLRSCODE
+if x.rank > y.rank:
+	y.p = x
+else:
+	x.p = y
+	if x.rank == y.rank:
+		y.rank = y.rank + 1
+p = x.next
+q = y.next
+x.next = q
+y.next = p
+\stopCLRSCODE
+
+\CLRSH{FIND-SET(x)}
+\startCLRSCODE
+if x \ne x.p:
+	x.p = \ALGO{FIND-SET(x.p)}
+return x.p
+\stopCLRSCODE
+
+\CLRSH{PRINT-SET(x)}
+\startCLRSCODE
+\ALGO{PRINT(x)}
+t = x.next
+while t \ne x:
+	\ALGO{PRINT(t)}
+	t = t.next
+\stopCLRSCODE
+\stopANSWER

@@ -1,0 +1,21 @@
+\startEXERCISE
+證明引理 19.4。附引理 19.4：
+
+對於所有節點 $x$，如果 $x\ne x.p$，
+一定有 $x.rank\le x.p.rank$。
+$x.rank$ 初值爲 0，並且隨時間而增加，直到 $x\ne x.p$；
+此後， $x.rank$ 的值就不再發生變化。
+$x.p.rank$ 的值隨時間單調遞增。
+\stopEXERCISE
+
+\startANSWER
+對於所有節點 $x$， $x.rank$ 的初值為 0，
+根據 \ALGO{LINK} 的偽碼，合併後根節點的秩大於其孩子的秩，
+即只要 $x$ 不是根節點，就有 $x.rank < x.p.rank$。
+當 $x\ne x.p$ 時，即 $x$ 不是根節點，
+\ALGO{LINK} 不會改變非根節點的秩，
+其他操作不會改變任一節點的秩，
+此時 $x.rank$ 的值就不再發生變化，
+由於每次 \ALGO{LINK} 使得根節點的秩不變或者加 1，
+$x.p.rank$ 的值隨時間單調遞增。
+\stopANSWER

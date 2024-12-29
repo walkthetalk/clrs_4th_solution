@@ -1,0 +1,37 @@
+\startEXERCISE
+Dante 教授認爲，因爲各節點的秩在一條指向根的簡單路徑上是嚴格遞增的，
+所以節點的層級沿着路徑也一定是單調遞增的。
+換句話說，如果 $x.rank > 0$，
+並且 $x.p$ 不是根，那麼 $level(x)\le level(x.p)$。
+請問這位教授的想法正確嗎？
+\stopEXERCISE
+
+\startANSWER
+Dante 教授的想法是錯誤的。考慮如下偽碼：
+\startCLRSCODE
+for i = 1 to 16
+	\ALGO{MAKE-SET(x[i])}
+for i = 1 to 15 by 2
+	\ALGO{UNION(x[i], x[i+1])}
+for i = 1 to 13 by 4
+	\ALGO{UNION(x[i], x[i+2])}
+for i = 1 to 9 by 8
+	\ALGO{UNION(x[i], x[i+4])}
+\ALGO{UNION(x[1], x[9])}
+\stopCLRSCODE
+
+\externalfigure[e19_4-5-1][hfactor=fit]
+\externalfigure[e19_4-5-2]
+\externalfigure[e19_4-5-3]
+\externalfigure[e19_4-5-4]
+\externalfigure[e19_4-5-5]
+
+查找路徑 $x_6\rightarrow x_8\rightarrow x_{16}$，
+令 $x$ 為 $x_6$， $y$ 為 $x_8$， $y=x.p$，則 $x.rank = 1$， $y.rank = 3$。
+
+由於 $A_1(x.rank)=x.p.rank = 3$， $level(x)=1$，
+$A_0(y.rank)=y.p.rank = 4$， $level(y) = 0$。
+明顯 $level(x) > level(x.p)$。
+
+與教授的想法矛盾，因此教授的想法是錯誤的。
+\stopANSWER
