@@ -1,0 +1,64 @@
+\startPROBLEM
+（Off-line minimum）
+\emph{脫機最小值問題}（off-line minimum problem）是使用 \ALGO{INSERT} 和 \ALGO{EXTRACT-MIN}
+維護一個動態集合 $T$，其中的元素取自域 $\{1,2,\ldots,n\}$。
+輸入是一個操作序列 $S$，包含 $n$ 個 \ALGO{INSERT} 和 $m$ 個 \ALGO{EXTRACT-MIN}，
+其中 $\{1,2,\ldots,n\}$ 中的每個關鍵字只被插入一次。
+我們希望確定每個 \ALGO{EXTRACT-MIN} 返回的是哪個關鍵字。
+也就是說，我們需要填充一個數組 $extracted[1:m]$，
+對於 $i=1,2,\cdots,m$， $extracted[i]$ 就是由第 $i$ 次調用 \ALGO{EXTRACT-MIN} 所返回的關鍵字。
+所謂“脫機”，是指可以在確定任何返回的關鍵字之前處理整個序列 $S$。
+
+\startigBase[a]\startitem
+在下面脫機最小值問題的實例中，每個 \ALGO{INSERT(i)} 用 $i$ 值來表示，
+每個 \ALGO{EXTRACT-MIN} 用字母 $E$ 來表示：
+\startformula
+4,8,E,3,E,9,2,6,E,E,E,1,7,E,5
+\stopformula
+將正確的值填入數組 $extracted$。
+\stopitem\stopigBase
+
+\startANSWER
+$4,3,2,6,8,1$
+\stopANSWER
+
+爲了設計一個算法來解決此問題，我們把序列 $S$ 劃分成若干個同構的子序列，
+即將 $S$ 表示為：
+\startformula
+I_1,E,I_2,E,I_3,\ldots,I_m,E,I_{m+1}
+\stopformula
+這裏每個 $E$ 代表調用一次 \ALGO{EXTRACT-MIN}，
+每個 $I_j$ 代表連續多次調用 \ALGO{INSERT}（可能爲空）。
+對於每個子序列 $I_j$，
+開始時把由這些操作插入的關鍵字放入集合 $K_j$，
+如果 $I_j$ 爲空，那麼 $K_j$ 也爲空。然後執行下面的程序：
+
+\CLRSH{OFF-LINE-MINIMUM(m, n)}
+\startCLRSCODE
+for i = 1 to n
+	// 確定 $j$，滿足 $i \in K[j]$
+	if j \ne m + 1
+		extracted[j] = i
+		// 令 $l$ 是大於 $j$ 的最小值，使得存在 $K[l]$
+		K[l] = K[j] \cup K[l]	// 並銷燬 $K[j]$
+return extracted
+\stopCLRSCODE
+
+\startigBase[continue]\startitem
+證明：由 \ALGO{OFF-LINE-MINIMUM} 返回的數組 $extracted$ 是正確的。
+\stopitem\stopigBase
+
+\startANSWER
+可以使用歸納，分情況討論。
+\stopANSWER
+
+\startigBase[continue]\startitem
+描述如何用並查集數據結構來實現高效的 \ALGO{OFF-LINE-MINIMUM}。
+給出其最壞情況下運行時間的緊確界。
+\stopitem\stopigBase
+
+\startANSWER
+$n\alpha(n)$。
+\stopANSWER
+
+\stopPROBLEM
