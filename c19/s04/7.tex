@@ -1,0 +1,26 @@
+\startEXERCISE\DIFFICULT
+考慮函數 $\alpha'(n)=\min\{k:A_k(1)\ge\lg(n+1)\}$。
+證明：
+對於 $n$ 的所有實際值，有 $\alpha'(n)\le 3$，
+並利用 \inexercise[19.4-2] 說明：
+對於一個並查集森林使用按秩合併與路徑壓縮，如何修改勢函數，
+使得一組含 $m$ 個 \ALGO{MAKE-SET}、 \ALGO{UNION} 和 \ALGO{FIND-SET} 的操作序列
+（其中 $n$ 個是 \ALGO{MAKE-SET}）所需時間為 $O(m\alpha'(n))$。
+\stopEXERCISE
+
+\startANSWER
+首先， $\alpha'(2^{2047}-1)=\min\{k:A_k(1)\ge 2047\} = 3$，
+其中 $2^{2047}-1\gg 10^{80}$。
+
+然後，若 $x$ 不是根節點且 $x.rank\ge 1$，根據 $\alpha'(n)$ 的定義，有
+
+\startformula\startmathalignment
+\NC A_{\alpha'(n)}(x.rank) \NC \ge A_{\alpha'(n)}(1) \NR
+\NC \NC \ge \lg (n+1) \NR
+\NC \NC > \lg n \NR
+\NC \NC > x.p.rank \NR
+\stopmathalignment\stopformula
+因此， $\ALGO{level(x)} < \alpha'(n)$。
+
+所以， $0\le \ALGO{level(x)} < \alpha'(n)$。
+\stopANSWER

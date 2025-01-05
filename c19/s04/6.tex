@@ -1,0 +1,47 @@
+\startEXERCISE\DIFFICULT
+引理 19.13 的證明以縮放勢的單位來支配 $O(s)$ 項中隱藏的常數。
+證明過程中為了更精確，
+你需要改變勢函數的定義（19.7），
+兩種情況都乘以一個常數（比如 $c$），
+來支配 $O(s)$ 中的常數。
+為了適應這個更新後的勢函數，
+分析的其餘部分要做哪些必要的變化？附引理 19.13：
+
+每個 \ALGO{FIND-SET} 的攤還代價是 $O(\alpha(n))$。
+\stopEXERCISE
+
+\startANSWER
+設隱藏因子為 $c$，修改定義（19.7）：
+
+\startformula[x]
+\phi_q(x) =\startmathcases
+\NC c\cdot \alpha(n) \cdot x.rank \NC \text{若 $x$ 是根節點或 $x.rank = 0$} \NR
+\NC c\cdot \left(\left(\alpha(n) - \ALGO{level(x)}\right)\cdot x.rank - \ALGO{iter(x)}\right) \NC \text{若 $x$ 不是根節點且 $x.rank \ge 1$} \NR
+\stopmathcases\stopformula
+
+令 $T(n)=O(s)$，即 $T(n)=\le cs$。
+
+\startformula\startmathalignment
+\NC T(n)-c(s-(\alpha(n)+2)) \NC \le cs - c(s-(\alpha(n)+2)) \NR
+\NC \NC = c(\alpha(n)+2) \NR
+\NC \NC = O(\alpha(n)) \NR
+\stopmathalignment\stopformula
+相關引理和推論中運用定義（19.7）的部分也要乘以 $c$。
+
+\noindentation\emph{引理 19.8}：
+
+對於每個節點 $x$ 和所有操作計數 $q$，有 $0\le \phi_q(x)\le c\cdot \alpha(n)\cdot x.rank$。
+
+\noindentation\emph{引理 19.9}：
+
+若 $x$ 不是根節點且 $x.rank \ge 1$，則 $\phi_q(x) < c \cdot \alpha(n) \cdot x.rank$。
+
+\noindentation\emph{引理 19.10}：
+
+如果 $x$ 不是根節點且第 $q$ 個操作是 \ALGO{LINK} 或 \ALGO{FIND-SET}，
+則在這個操作之後， $\phi_q(x)\le \phi_{q-1}(x)$。
+此外，如 $x.rank\ge 1$，
+並且 \ALGO{level(x)} 或 \ALGO{iter(x)} 是由於第 $q$ 個操作而發生了改變，
+則 $\phi_q(x)\le \phi_{q-1}(x) - c$。
+
+\stopANSWER
