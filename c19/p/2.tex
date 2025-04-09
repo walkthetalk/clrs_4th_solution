@@ -1,0 +1,134 @@
+\startPROBLEM
+（Depth determination）
+在\emph{深度測定}（Depth determination）問題中，
+我們通過以下三個操作來維護一個有根樹的森林 $\cal{F} = \{T_i\}$：
+
+\ALGO{MAKE-TREE(v)}：創建一棵樹，只包含一個節點 $v$。
+
+\ALGO{FIND-DEPTH(v)}：返回節點 $v$ 在樹中的深度。
+
+\ALGO{GRAFT(r, v)}：使得節點 $r$ （假定他爲一棵樹的樹根）成爲節點 $v$ 的孩子
+（假定他在另一棵樹中，但是他本身可能是、也可能不是一棵樹的根）
+
+% a
+\startigBase[a]\startitem
+假設採用類似於不相交集合森林的樹表示：
+ $v.p$ 是節點 $v$ 的父節點，
+除了 $v$ 是根時 $v.p = v$ 的這種情況。
+進一步假設，我們可以通過置 $r.p=v$ 來實現 \ALGO{GRAFT(r,v)}，
+並且可以通過沿着查找路徑上升至根，
+返回一個除 $v$ 以外的節點樹來實現 \ALGO{FIND-PATH(v)}。
+證明：一組 $m$ 個 \ALGO{MAKE-TREE}、 \ALGO{FIND-DEPTH} 和 \ALGO{GRAFT} 操作
+序列的最壞情況運行時間是 \m{\Theta(m^2)}。
+\stopitem\stopigBase
+
+\startANSWER
+\ALGO{MAKE-TREE} 和 \ALGO{GRAFT} 的運行時間都是 $O(1)$。
+\ALGO{FIND-DEPTH} 的運行時間与深度成線性關係。
+$m$ 個操作，最大深度為 $m/2$，
+所以 \ALGO{FIND-DEPTH} 的運行時間是 $O(m)$。
+總運行時間為 $O(m^2)$。
+
+先創建 $m/3$ 棵樹，然後調用 $m/3$ 次 \ALGO{GRAFT} 將其串在一起。
+最後針對最深的節點調用 $m/3$ 次 \ALGO{FIND-DEPTH}，
+每次調用所需時間至少為 $m/3$。
+所以總時間為 $\Theta((m/3)^2) = \Theta(m^2)$。
+因此最壞運行時間為 $\Theta(m^2)$。
+\stopANSWER
+
+通過使用按秩合併與路徑壓縮啓發式策略，
+能減少最壞情況運行時間。
+我們使用不相交集合森林 ${\cal{S}} = \{S_i\}$，
+其中每個集合 $S_i$ （他本身是一棵樹）對應於一棵森林 $\cal{F}$ 中的樹 $T_i$。
+然而，集合 $S_i$ 中的樹結構沒有必要對應於 $T_i$ 的樹結構。
+實際上， $S_i$ 的實現並沒有記錄準確的父子關係，
+但他允許我們確定 $T_i$ 中任意節點的深度。
+
+關鍵的思想是維護每個節點 $v$ 的一個“僞距離” $v.d$，
+他倍定義爲使得沿着從 $v$ 到他的集合 $S_i$ 的根的簡單路徑上的僞距離之和等於 $T_i$ 中節點 $v$ 的深度。
+也就是說，如果從 $v$ 到他在 $S_i$ 的根的簡單路徑爲 $v_0,v_1,\ldots,v_k$（這裏 $v_0=v$ 並且 $v_k$ 是 $S_i$ 的根），
+那麼節點 $v$ 在樹 $T_i$ 上的深度爲 $\sum_{j=0}^{k}v_j\cdot d$。
+
+% b
+\startigBase[continue]\startitem
+給出 \ALGO{MAKE-TREE} 的一種實現。
+\stopitem\stopigBase
+
+\startANSWER
+新集合只含有一個節點，深度只能是 0 且其父節點就是他自己。
+這種情況下，集合和對應的樹是沒辦法區分的。
+
+\CLRSH{MAKE-TREE(v)}
+\startCLRSCODE
+v = \ALGO{ALLOCATE-NODE()}
+v.d = 0
+v.p = v
+return v
+\stopCLRSCODE
+\stopANSWER
+
+% c
+\startigBase[continue]\startitem
+說明應如何修改 \ALGO{FIND-SET} 來實現 \ALGO{FIND-DEPTH}。
+你的實現要採用路徑壓縮，
+並且他的運行時間應與查找路徑的長度呈線性關係。
+試確保你的實現能正確地更新僞距離。
+\stopitem\stopigBase
+
+\startANSWER
+修改 \ALGO{FIND-SET}，除了返回集合對象，同時返回其父節點的深度。
+更新當前節點 $v$ 的偽距 $v.d$ （加上所返回的深度）。
+由於遞歸的原因，運行時間並沒有變化，仍與查找路徑長度呈線性關係。
+要實現 \ALGO{FIND-PATH}，
+從 $v$ 向上遞歸即可。
+
+\CLRSH{FIND-SET(v)}
+\startCLRSCODE
+if v != v.p
+	(v.p, d) = \ALGO{FIND-SET(v.p)}
+	v.d = v.d + d
+	return (v.p, v.d)
+return (v, 0)
+\stopCLRSCODE
+\stopANSWER
+
+% d
+\startigBase[continue]\startitem
+通過修改 \ALGO{UNION} 和 \ALGO{LINK} 來實現 \ALGO{GRAFT(r,v)}，
+用於合併 $r$ 和 $v$ 所屬集合。
+請確保正確更新僞距離。
+注意，
+集合 $S_i$ 的根沒有必要是對應樹 $T_i$ 的根。
+\stopitem\stopigBase
+
+\startANSWER
+要實現 \ALGO{GRAFT}，需要找到 $v$ 的實際深度，
+並將其加到 $r$ 所屬樹 $S_i$ 的根節點的偽距上。 
+
+\CLRSH{GRAFT(r, v)}
+\startCLRSCODE
+(x, d_1) = \ALGO{FIND-SET(r)}
+(y, d_2) = \ALGO{FIND-SET(v)}
+if x.rank > y.rank
+	y.p = x
+	x.d = x.d + d_2 + y.d
+else
+	x.p = y
+	x.d = x.d + d_2
+	if x.rank == y.rank
+		y.rank = y.rank + 1
+\stopCLRSCODE
+\stopANSWER
+
+\startigBase[continue]\startitem
+有一操作序列，內含 $m$ 個 \ALGO{MAKE-TREE}、 \ALGO{FIND-DEPTH} 和 \ALGO{GRAFT}，
+其中 \ALGO{MAKE-TREE} 有 $n$ 個。
+請給出此操作序列最壞情況運行時間的緊確界。
+\stopitem\stopigBase
+
+\startANSWER
+這三個操作與離散集合上的 \ALGO{MAKE}、 \ALGO{FIND} 和 \ALGO{UNION} 具有相同的漸進時間。
+最壞運行時間是 $O(m\alpha(n))$。
+\stopANSWER
+
+\stopPROBLEM
