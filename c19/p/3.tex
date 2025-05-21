@@ -1,0 +1,104 @@
+\startPROBLEM
+（Tarjan’s offline least-common-ancestors algorithm）
+在一棵有根樹 $T$ 中，
+兩個節點 $u$ 和 $v$ 的\emph{最小公共祖先}
+（leat common ancestor） $w$ 是節點 $u$ 和 $v$ 的共同祖先，
+且深度最大。
+在\emph{脫機最小公共祖先問題}（offline least-common-ancestors problem）中，
+給定一棵有根樹 $T$ 及任一集合 $P=\{\{u,v\}\}$ （$T$ 中節點的無序對），
+我們希望確定 $P$ 中每對節點的最小公共祖先。
+
+爲了解決脫機最小公共祖先問題，
+下面的過程通過調用 \ALGO{LCA(T.root)}，
+對 $T$ 進行遍歷。
+假設在執行遍歷之前，每個節點被着色爲白色。
+
+\CLRSH{LCA(u)}
+\startCLRSCODE
+\ALGO{MAKE-SET(u)}
+\ALGO{FIND-SET(u)}.ancestor = u
+for \text{$T$ 中節點 $u$ 的每個孩子 $v$}
+	\ALGO{LCA(v)}
+	\ALGO{UNION(u,v)}
+	\ALGO{FIND-SET(u)}.ancestor = u
+u.color = BLACK
+for \text{每個節點 $v$ ($\{u,v\} \in P$)}
+	if v.color == BLACK
+		\text{\ALGO{print} $u$ 和 $v$ 的最小公共祖先是 \ALGO{FIND-SET(v).ancestor}}
+\stopCLRSCODE
+
+\startigBase[a]\startitem
+證明：對每對 $\{u,v\}\in P$，第 10 行恰好只執行一次。
+\stopitem\stopigBase
+
+\startANSWER
+令 $\le_{LCA}$ 是一個全序關係，
+如果先執行 \ALGO{LCA(u)} 的第 7 行再執行 \ALGO{LCA(v)} 的第 7 行，則 $u \le_{LCA} v$。
+
+當我們執行 \emph{for} 循環時，還未執行第 7 行。
+這意味著 $v.color$ 仍然是白色。
+因此，執行 \ALGO{LCA(u)} 時會跳過節點對 $\{u, v\}$。
+但是，在執行 \ALGO{LCA(v)} 的 \emph{for} 循環時，
+由於已經執行過 \ALGO{LCA(u)} 的第 7 行，
+ $u.color$ 變成了黑色。
+也就是說，執行 \ALGO{LCA(v)} 時，會處理節點對 $\{u, v\}$。
+
+$\le_{LCA}$ 的順序可能不太明顯，這依賴於具體實現。
+他取決於第 3 行 \emph{for} 循環遍歷子節點的順序。
+也就是說，他不只是跟圖的結構有關。
+\stopANSWER
+
+\startigBase[continue]\startitem
+證明：在調用 \ALGO{LCA(u)} 時，並查集數據結構的集合數等於 $T$ 中 $u$ 的深度。
+\stopitem\stopigBase
+
+\startANSWER
+假設在調用 \ALGO{LCA} 之前是成立的，
+我們來證明執行了 \ALGO{LCA} 之後這個性質仍然成立，
+在 \ALGO{LCA} 最後並查集的數目增加了 1。
+
+假設 $u$ 的深度是 $d$，
+則在調用 \ALGO{LCA(u)} 前，並查集數目為 $d$（根據假設）。
+第 1 行會使並查集數目變為 $d+1$。
+第 4 行，會針對子節點 $u$ 調用 \ALGO{LCA}，
+此時，並查集數目 $d+1$ 正好是 $u$ 的深度，即假設仍然成立。
+第 4 行之後，並查集數目變為 $d+2$，
+而第 5 行又將使並查集數目變回 $d$，
+即下一次迭代假設仍然成立。
+循環結束後，並查集數目不再發生變化，即函數結束時並查集數目為 $d+1$。
+\stopANSWER
+
+\startigBase[continue]\startitem
+證明：對於每對 $\{u,v\}\in P$， \ALGO{LCA} 能正確地輸出 $u$ 和 $v$ 的最小公共祖先。
+\stopitem\stopigBase
+
+\startANSWER
+假設 $u$ 和 $v$ 的最小公共祖先是 $w$，
+當運行 \ALGO{LCA(w)} 時， $u$ 所在子樹的根節點是 $w$ 的某個孩子，
+ $v$ 所在子樹的根節點是 $w$ 的另一個孩子。
+不失一般性，我們可以假設先處理包含 $u$ 的子樹。
+
+當處理完包含 $u$ 的子樹後，
+子樹中所有節點的 ancestor 都指向了 $w$，
+且均為黑色。在 \ALGO{LCA(w)} 返回前，這些都不會改變。
+但是 \ALGO{LCA(w)} 返回前會先調用 \ALGO{LCA(v)}，
+所以在 \ALGO{LCA(v)} 的第 8 行，因為 $u$ 是黑色的，
+我們會處理 $(u, v)$。
+而 $u$ 的 ancestor 仍然是 $w$，我們會將其打印出來，這也是 \ALGO{LCA} 的正確結果。
+\stopANSWER
+
+\startigBase[continue]\startitem
+假設使用\insection[disjoint_set_forests] 中的並查集數據結構實現，試分析 \ALGO{LCA} 的運行時間。
+\stopitem\stopigBase
+
+\startANSWER
+前兩行的運行時間是常數，
+對於每個子節點，我們都會調用 \ALGO{LCA}，
+\ALGO{UNION} 所用時間也是常數，
+\ALGO{FIND-SET} 則是逆 Ackerman 函數的攤還時間。
+我們會檢查所有與 $u$ 相鄰的節點是否是黑色，
+也就是說在第 8~10 行， $P$ 中的每個節點對最多也就檢查兩次，
+總時間為 $O(|T|\alpha(|T|) + |P|)$。
+\stopANSWER
+
+\stopPROBLEM
