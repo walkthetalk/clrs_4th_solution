@@ -1,0 +1,14 @@
+\startEXERCISE
+有向圖 $G=(V,E)$ 的\emph{轉置}是圖 $G^T=(V,E^T)$，
+其中 $E^T=\{(v,u)\in V \times V:(u,v)\in E\}$。
+即 $G^T$ 是將 $G$ 中所有邊反向。
+設計一個高效算法由 $G$ 計算 $G^T$，
+用鄰接鏈表和鄰接矩陣兩種方法表示 $G$。
+並分析算法的複雜度。
+\stopEXERCISE
+
+\startANSWER
+鄰接鏈表表示法：$O(V+E)$，需要額外大小爲 $O(V)$ 的指針數列。
+
+鄰接矩陣表示法：轉置矩陣即可， $O(|V|^2)$。
+\stopANSWER
