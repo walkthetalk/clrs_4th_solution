@@ -9,4 +9,19 @@
 遍歷所有頂點 $V_i$，新建一個空數列，用來記錄是否有 $V_i$ 到其他節點的邊，
 遍歷 $V_i$ 的鄰接鏈表中所有元素 $V_j$，如果 $V_j$ 在新數列中沒有被標記過，則標記，
 如果已被標記過，則刪除當前節點。然後清空新數列，遍歷下一個頂點的鄰接鏈表。
+
+\CLRSH{EQUIVALENT-UNDIRECTED-GRAPH(A)}
+\startCLRSCODE
+A = Adj[1 : |V|]
+A' = \ALGO{NEW(Adj'[1 : |V|])}
+T = \ALGO{NewArray(1:|V|)}
+for u = 1 to |V|
+	for v = 1 to |V|
+		T[v] = FALSE
+	for \text{vertex} v in G.Adj[u]
+		if v \ne u and T[v] == FALSE
+			\ALGO{INSERT}(Adj'[u], v)
+			T[v] = TRUE
+return A'
+\stopCLRSCODE
 \stopANSWER

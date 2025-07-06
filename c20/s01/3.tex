@@ -10,5 +10,26 @@
 \startANSWER
 鄰接鏈表表示法：$O(V+E)$，需要額外大小爲 $O(V)$ 的指針數列。
 
+\CLRSH{TRASPOSE(A)}
+\startCLRSCODE
+A = Adj[1 : |V|]
+A' = \ALGO{NEW(Adj'[1 : |V|])}
+for u = 1 to |V|
+	for \text{顶点} v in G.Adj[u]
+		\ALGO{INSERT(Adj'[v], u)}
+return A'
+\stopCLRSCODE
+
 鄰接矩陣表示法：轉置矩陣即可， $O(|V|^2)$。
+
+\CLRSH{TRASPOSE(A)}
+\startCLRSCODE
+A = |V| \times |V|
+A' = \ALGO{NewMatrix(|V| \times |V|)}
+for i = 1 to |V|
+	for j = 1 to |V|
+		A'[j][i] = A[i][j]
+return A'
+\stopCLRSCODE
+
 \stopANSWER

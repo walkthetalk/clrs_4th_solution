@@ -1,0 +1,30 @@
+\startEXERCISE
+多數以鄰接矩陣作爲輸入的圖算法的運行時間爲 $\Omega(V^2)$，但也有例外。
+給定圖 $G$ 的鄰接矩陣表示，
+請給出一個 $O(V)$ 時間的算法來判斷有向圖 $G$ 是否存在一個 \emph{通用匯點}（universal sink）。
+通用匯點指的是入度爲 $|V|-1$ 但出度爲 0 的節點。
+\stopEXERCISE
+
+\startANSWER
+只需判斷一行加一列元素。 $O(|V|)$。
+
+\CLRSH{UNIVERSAL-SINK(A)}
+\startCLRSCODE
+i = j = 1
+while i <= |V| and j <= |V|
+	if A[i][j] == 1		// i 不可能是通用匯點
+		i = i + 1
+	else			// j 不可能是通用匯點
+		j = j + 1
+if i > |V|
+	return 0		// 沒有通用匯點
+
+for j = 1 to |V|
+	if A[i][j] == 1
+		return 0	// i 有出度
+for j = 1 to |V|
+	if A[j][i] == 0 and j \ne i
+		return 0	// i 入度不全
+return i			// i 是通用匯點（最多只能有一個通用匯點）
+\stopCLRSCODE
+\stopANSWER
